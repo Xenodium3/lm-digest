@@ -602,47 +602,53 @@ let currentData=null, selectedFreq='weekly';
 
 /* ── SURVEY ── */
 function buildTopicsGrid(){
-  // Each SVG carries its own defs — no cross-element gradient references needed
-  function dropSVG(id){
-    return `<svg class="chip-drop" width="10" height="13" viewBox="0 0 10 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <radialGradient id="ds${id}" cx="35%" cy="28%" r="70%">
-          <stop offset="0%" stop-color="#efefef"/>
-          <stop offset="35%" stop-color="#c0c0c8"/>
-          <stop offset="70%" stop-color="#7a7a82"/>
-          <stop offset="100%" stop-color="#2e2e34"/>
-        </radialGradient>
-        <radialGradient id="dh${id}" cx="55%" cy="22%" r="45%">
-          <stop offset="0%" stop-color="rgba(255,255,255,0.88)"/>
-          <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
-        </radialGradient>
-      </defs>
-      <path class="chip-drop-body" d="M5 0.5 C5 0.5,0.5 5.5,0.5 8.5 C0.5 11.04 2.51 13 5 13 C7.49 13 9.5 11.04 9.5 8.5 C9.5 5.5 5 0.5 5 0.5Z"
-        fill="transparent" stroke="rgba(255,255,255,0.5)" stroke-width="0.8"/>
-      <path class="chip-drop-shine" d="M5 2 C5 2,2 6.5,2 8.5 C2 9.3 2.35 10 2.9 10.5 C2.65 9.9 2.9 8 3.2 6.8 C3.7 5.2 5 3.2 5 2Z"
-        fill="none"/>
-      <ellipse class="chip-drop-glint" cx="3.6" cy="7.2" rx="0.7" ry="0.42"
-        fill="none" transform="rotate(-20,3.6,7.2)"/>
-    </svg>`;
-  }
-  document.getElementById('topics-grid').innerHTML=TOPICS.map((t,i)=>`
-    <div class="topic-chip ${['nuclear','planetary'].includes(t.id)?'checked':''}" onclick="toggleChip(this,${i})">
-      <input type="checkbox" value="${t.id}" ${['nuclear','planetary'].includes(t.id)?'checked':''} style="display:none">
-      ${dropSVG(i)}<span>${t.label}</span>
-    </div>`).join('');
-  // Apply silver fill to pre-checked chips
-  document.querySelectorAll('.topic-chip.checked').forEach((el,i)=>applyDropFill(el,true));
+  const DEFAULT_CHECKED = ['nuclear','planetary'];
+
+  document.getElementById('topics-grid').innerHTML = TOPICS.map((t,i) => {
+    const isChecked = DEFAULT_CHECKED.includes(t.id);
+    // Each SVG carries its own uniquely-IDed gradient defs
+    const silverFill = isChecked ? `url(#ds${i})` : 'transparent';
+    const silverStroke = isChecked ? 'none' : 'rgba(255,255,255,0.5)';
+    const shineFill = isChecked ? `url(#dh${i})` : 'none';
+    const glintFill = isChecked ? 'rgba(255,255,255,0.75)' : 'none';
+    return `<div class="topic-chip ${isChecked?'checked':''}" data-idx="${i}" onclick="toggleChip(this)">
+      <input type="checkbox" value="${t.id}" ${isChecked?'checked':''} style="display:none">
+      <svg class="chip-drop" width="10" height="13" viewBox="0 0 10 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="ds${i}" cx="35%" cy="28%" r="70%">
+            <stop offset="0%" stop-color="#efefef"/>
+            <stop offset="35%" stop-color="#c0c0c8"/>
+            <stop offset="70%" stop-color="#7a7a82"/>
+            <stop offset="100%" stop-color="#2e2e34"/>
+          </radialGradient>
+          <radialGradient id="dh${i}" cx="55%" cy="22%" r="45%">
+            <stop offset="0%" stop-color="rgba(255,255,255,0.88)"/>
+            <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+          </radialGradient>
+        </defs>
+        <path class="chip-drop-body"
+          d="M5 0.5 C5 0.5,0.5 5.5,0.5 8.5 C0.5 11.04 2.51 13 5 13 C7.49 13 9.5 11.04 9.5 8.5 C9.5 5.5 5 0.5 5 0.5Z"
+          fill="${silverFill}" stroke="${silverStroke}" stroke-width="0.8"/>
+        <path class="chip-drop-shine"
+          d="M5 2 C5 2,2 6.5,2 8.5 C2 9.3 2.35 10 2.9 10.5 C2.65 9.9 2.9 8 3.2 6.8 C3.7 5.2 5 3.2 5 2Z"
+          fill="${shineFill}"/>
+        <ellipse class="chip-drop-glint" cx="3.6" cy="7.2" rx="0.7" ry="0.42"
+          fill="${glintFill}" transform="rotate(-20,3.6,7.2)"/>
+      </svg>
+      <span>${t.label}</span>
+    </div>`;
+  }).join('');
 }
 
 function applyDropFill(el, checked){
-  const idx = Array.from(document.querySelectorAll('.topic-chip')).indexOf(el);
+  const i = el.dataset.idx;
   const body  = el.querySelector('.chip-drop-body');
   const shine = el.querySelector('.chip-drop-shine');
   const glint = el.querySelector('.chip-drop-glint');
   if(checked){
-    body.setAttribute('fill', `url(#ds${idx})`);
+    body.setAttribute('fill', `url(#ds${i})`);
     body.setAttribute('stroke', 'none');
-    shine.setAttribute('fill', `url(#dh${idx})`);
+    shine.setAttribute('fill', `url(#dh${i})`);
     glint.setAttribute('fill', 'rgba(255,255,255,0.75)');
   } else {
     body.setAttribute('fill', 'transparent');
@@ -680,7 +686,7 @@ function isValidName(v){
   return v.length>=1 && /^[A-Za-zÀ-ÖØ-öø-ÿ\s'\-]+$/.test(v);
 }
 
-function submitSurvey(){
+async function submitSurvey(){
   let valid=true;
 
   // Clear previous topic error
