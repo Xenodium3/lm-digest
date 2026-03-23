@@ -743,7 +743,7 @@ async function submitSurvey(){
   if(!valid) return;
 
   // POST to Railway backend
-  const BACKEND = 'https://lm-digest-production.up.railway.app'; // ← update after Railway deploy
+  const BACKEND = 'https://lm-digest-backend-production.up.railway.app'; // ← update after Railway deploy
   document.getElementById('submit-btn').textContent = 'Submitting…';
   document.getElementById('submit-btn').disabled = true;
   try {
