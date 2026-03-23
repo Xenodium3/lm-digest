@@ -66,10 +66,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 .topic-chip{display:flex;align-items:center;gap:8px;padding:0.45rem 0.85rem;background:var(--dark2);border:1px solid var(--border2);border-radius:2px;font-family:var(--mono);font-size:11px;color:var(--dimmer);cursor:pointer;transition:all 0.15s;user-select:none}
 .topic-chip:hover{border-color:rgba(255,255,255,0.25);color:rgba(255,255,255,0.7)}
 .topic-chip.checked{border-color:rgba(180,180,190,0.5);color:rgba(255,255,255,0.85);background:rgba(160,160,170,0.08)}
-.chip-drop{flex-shrink:0;transition:all 0.15s}
-.topic-chip.checked .chip-drop-body{fill:url(#dropSilver);stroke:none}
-.topic-chip.checked .chip-drop-shine{fill:url(#dropShine)}
-.topic-chip.checked .chip-drop-glint{fill:rgba(255,255,255,0.75)}
+.chip-drop{flex-shrink:0;transition:all 0.2s}
 .freq-row{display:flex;gap:0.5rem}
 .freq-opt{flex:1;text-align:center;padding:0.65rem 0.5rem;background:var(--dark2);border:1px solid var(--border2);border-radius:3px;cursor:pointer;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:0.05em;color:var(--dimmer);transition:all 0.15s}
 .freq-opt:hover{border-color:rgba(0,229,255,0.3);color:rgba(255,255,255,0.6)}
@@ -232,21 +229,6 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 
 <!-- ═══════ PANEL 1 — SUBSCRIBE ═══════ -->
 <div id="panel-survey" class="panel active">
-  <!-- hidden SVG defs for chip droplet gradients -->
-  <svg width="0" height="0" style="position:absolute">
-    <defs>
-      <radialGradient id="dropSilver" cx="35%" cy="28%" r="70%">
-        <stop offset="0%" stop-color="#efefef"/>
-        <stop offset="35%" stop-color="#c0c0c8"/>
-        <stop offset="70%" stop-color="#7a7a82"/>
-        <stop offset="100%" stop-color="#2e2e34"/>
-      </radialGradient>
-      <radialGradient id="dropShine" cx="55%" cy="22%" r="45%">
-        <stop offset="0%" stop-color="rgba(255,255,255,0.88)"/>
-        <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
-      </radialGradient>
-    </defs>
-  </svg>
   <div class="survey-hero">
     <div class="hero-photo"></div>
     <div class="hero-bg"></div><div class="hero-grid"></div>
@@ -620,18 +602,62 @@ let currentData=null, selectedFreq='weekly';
 
 /* ── SURVEY ── */
 function buildTopicsGrid(){
-  const dropletSVG=`<svg class="chip-drop" width="10" height="13" viewBox="0 0 10 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path class="chip-drop-body" d="M5 0.5 C5 0.5,0.5 5.5,0.5 8.5 C0.5 11.04 2.51 13 5 13 C7.49 13 9.5 11.04 9.5 8.5 C9.5 5.5 5 0.5 5 0.5Z" fill="transparent" stroke="rgba(255,255,255,0.5)" stroke-width="0.8"/>
-    <path class="chip-drop-shine" d="M5 2 C5 2,2 6.5,2 8.5 C2 9.3 2.35 10 2.9 10.5 C2.65 9.9 2.9 8 3.2 6.8 C3.7 5.2 5 3.2 5 2Z" fill="rgba(255,255,255,0)"/>
-    <ellipse class="chip-drop-glint" cx="3.6" cy="7.2" rx="0.7" ry="0.42" fill="rgba(255,255,255,0)" transform="rotate(-20,3.6,7.2)"/>
-  </svg>`;
-  document.getElementById('topics-grid').innerHTML=TOPICS.map(t=>`
-    <div class="topic-chip ${['nuclear','planetary'].includes(t.id)?'checked':''}" onclick="toggleChip(this)">
+  // Each SVG carries its own defs — no cross-element gradient references needed
+  function dropSVG(id){
+    return `<svg class="chip-drop" width="10" height="13" viewBox="0 0 10 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="ds${id}" cx="35%" cy="28%" r="70%">
+          <stop offset="0%" stop-color="#efefef"/>
+          <stop offset="35%" stop-color="#c0c0c8"/>
+          <stop offset="70%" stop-color="#7a7a82"/>
+          <stop offset="100%" stop-color="#2e2e34"/>
+        </radialGradient>
+        <radialGradient id="dh${id}" cx="55%" cy="22%" r="45%">
+          <stop offset="0%" stop-color="rgba(255,255,255,0.88)"/>
+          <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+        </radialGradient>
+      </defs>
+      <path class="chip-drop-body" d="M5 0.5 C5 0.5,0.5 5.5,0.5 8.5 C0.5 11.04 2.51 13 5 13 C7.49 13 9.5 11.04 9.5 8.5 C9.5 5.5 5 0.5 5 0.5Z"
+        fill="transparent" stroke="rgba(255,255,255,0.5)" stroke-width="0.8"/>
+      <path class="chip-drop-shine" d="M5 2 C5 2,2 6.5,2 8.5 C2 9.3 2.35 10 2.9 10.5 C2.65 9.9 2.9 8 3.2 6.8 C3.7 5.2 5 3.2 5 2Z"
+        fill="none"/>
+      <ellipse class="chip-drop-glint" cx="3.6" cy="7.2" rx="0.7" ry="0.42"
+        fill="none" transform="rotate(-20,3.6,7.2)"/>
+    </svg>`;
+  }
+  document.getElementById('topics-grid').innerHTML=TOPICS.map((t,i)=>`
+    <div class="topic-chip ${['nuclear','planetary'].includes(t.id)?'checked':''}" onclick="toggleChip(this,${i})">
       <input type="checkbox" value="${t.id}" ${['nuclear','planetary'].includes(t.id)?'checked':''} style="display:none">
-      ${dropletSVG}<span>${t.label}</span>
+      ${dropSVG(i)}<span>${t.label}</span>
     </div>`).join('');
+  // Apply silver fill to pre-checked chips
+  document.querySelectorAll('.topic-chip.checked').forEach((el,i)=>applyDropFill(el,true));
 }
-function toggleChip(el){el.classList.toggle('checked');el.querySelector('input').checked=el.classList.contains('checked')}
+
+function applyDropFill(el, checked){
+  const idx = Array.from(document.querySelectorAll('.topic-chip')).indexOf(el);
+  const body  = el.querySelector('.chip-drop-body');
+  const shine = el.querySelector('.chip-drop-shine');
+  const glint = el.querySelector('.chip-drop-glint');
+  if(checked){
+    body.setAttribute('fill', `url(#ds${idx})`);
+    body.setAttribute('stroke', 'none');
+    shine.setAttribute('fill', `url(#dh${idx})`);
+    glint.setAttribute('fill', 'rgba(255,255,255,0.75)');
+  } else {
+    body.setAttribute('fill', 'transparent');
+    body.setAttribute('stroke', 'rgba(255,255,255,0.5)');
+    shine.setAttribute('fill', 'none');
+    glint.setAttribute('fill', 'none');
+  }
+}
+
+function toggleChip(el){
+  el.classList.toggle('checked');
+  const checked = el.classList.contains('checked');
+  el.querySelector('input').checked = checked;
+  applyDropFill(el, checked);
+}
 function setFreq(el,v){document.querySelectorAll('.freq-opt').forEach(e=>e.classList.remove('active'));el.classList.add('active');selectedFreq=v}
 function clearErr(fieldId){
   document.getElementById(fieldId).classList.remove('field-error');
