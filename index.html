@@ -99,14 +99,6 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 .btn-primary:disabled{background:var(--dark3);color:var(--dimmer);cursor:not-allowed;box-shadow:none}
 .btn-secondary{padding:0.5rem 1.1rem;background:transparent;color:var(--dim);border:1px solid var(--border2);border-radius:3px;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:all 0.15s;white-space:nowrap}
 .btn-secondary:hover{border-color:var(--cyan);color:var(--cyan)}
-.spacer{flex:1}
-.api-input-wrap{display:flex;align-items:center;gap:0.5rem;background:var(--dark2);border:1px solid var(--border2);border-radius:3px;padding:0 0.75rem}
-.api-input-wrap span{font-family:var(--mono);font-size:10px;color:var(--cyan);white-space:nowrap;font-weight:700;letter-spacing:0.08em}
-.api-input-wrap input{background:transparent;border:none;outline:none;font-family:var(--mono);font-size:12px;color:var(--text);padding:0.4rem 0;width:200px}
-.api-input-wrap input::placeholder{color:var(--dimmer)}
-.status-bar{display:none;align-items:center;gap:0.75rem;padding:0.65rem 1rem;margin-bottom:1.5rem;background:rgba(0,229,255,0.05);border:1px solid rgba(0,229,255,0.15);border-radius:3px;font-family:var(--mono);font-size:11px;color:var(--cyan);letter-spacing:0.05em}
-.status-bar.show{display:flex}
-.status-spinner{width:14px;height:14px;border:1.5px solid rgba(0,229,255,0.2);border-top-color:var(--cyan);border-radius:50%;animation:spin 0.6s linear infinite;flex-shrink:0}
 @keyframes spin{to{transform:rotate(360deg)}}
 .cat-section{margin-bottom:2.5rem}
 .cat-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.25rem;padding-bottom:0.6rem;border-bottom:1px solid var(--border)}
@@ -139,8 +131,6 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 .more-list.open{display:block}
 .paper-row{background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:1.1rem 1.35rem;margin-bottom:0.5rem;transition:border-color 0.15s}
 .paper-row:hover{border-color:var(--border2)}
-.state-box{text-align:center;padding:4rem 2rem;color:var(--dimmer);font-family:var(--mono);font-size:12px;letter-spacing:0.08em}
-.state-box .icon{font-size:2rem;margin-bottom:1rem;opacity:0.4}
 .recommend-box{background:var(--panel);border:1px solid var(--border2);border-radius:4px;padding:1.5rem 1.75rem;margin-top:2.5rem}
 .recommend-box .section-tag{margin-bottom:1rem}
 .recommend-entries{display:flex;flex-direction:column;gap:0.6rem;margin-bottom:1rem}
@@ -162,51 +152,12 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 .recommend-success{display:none;margin-top:0.75rem;padding:0.75rem 1rem;background:rgba(0,229,138,0.06);border:1px solid rgba(0,229,138,0.2);border-radius:3px;font-family:var(--mono);font-size:11px;color:var(--green);letter-spacing:0.04em}
 .recommend-success.show{display:block}
 
-/* ═══ EMAIL ═══ */
-.email-wrap{max-width:680px;margin:0 auto;padding:2.5rem 1.5rem 5rem}
-.email-toolbar{display:flex;gap:0.5rem;margin-bottom:1.5rem;flex-wrap:wrap;align-items:center}
-.email-toolbar span{font-family:var(--mono);font-size:10px;color:var(--dimmer);letter-spacing:0.08em;margin-right:auto}
-.email-card{background:#ffffff;color:#111;border-radius:4px;overflow:hidden;box-shadow:0 0 0 1px rgba(255,255,255,0.08),0 24px 64px rgba(0,0,0,0.5)}
-.ec-header{background:#080e18;color:#fff;padding:2.5rem}
-.ec-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(0,229,255,0.7);margin-bottom:0.5rem}
-.ec-date{font-family:'Space Mono',monospace;font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:0.75rem}
-.ec-header h1{font-family:'Georgia',serif;font-size:1.6rem;font-weight:400;color:#fff;line-height:1.2;margin-bottom:0.4rem}
-.ec-header p{font-size:13px;color:rgba(255,255,255,0.5);font-family:sans-serif}
-.ec-body{padding:2rem 2.5rem}
-.ec-cat{font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:#0077aa;border-bottom:2px solid #eee;padding-bottom:0.4rem;margin:2rem 0 1rem}
-.ec-cat:first-child{margin-top:0}
-.ec-paper{margin-bottom:1.25rem;padding-bottom:1.25rem;border-bottom:1px solid #f0f0f0}
-.ec-paper:last-child{border-bottom:none}
-.ec-paper-title{font-family:'Georgia',serif;font-size:1rem;font-weight:400;color:#111;margin-bottom:0.25rem;line-height:1.35}
-.ec-paper-meta{font-family:'Space Mono',monospace;font-size:10px;color:#888;margin-bottom:0.5rem}
-.ec-paper-meta a{color:#0055cc;text-decoration:none}
-.ec-abstract{font-size:13px;color:#444;line-height:1.65;font-family:sans-serif}
-.ec-badge{display:inline-block;font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:2px 7px;border-radius:2px;margin-bottom:0.35rem}
-.ec-badge.pub{background:#e8f4ff;color:#0066aa}
-.ec-badge.pre{background:#fff8e8;color:#8a6200}
-.ec-badge.feat{background:#f0f0f0;color:#666}
-.ec-footer{background:#f7f7f7;padding:1.25rem 2.5rem;font-family:'Space Mono',monospace;font-size:10px;color:#aaa;text-align:center;border-top:1px solid #eee}
-.ec-footer a{color:#0055cc;text-decoration:none}
-
-/* ═══ BACKEND ═══ */
-.backend-wrap{max-width:860px;margin:0 auto;padding:2.5rem 1.5rem 5rem}
-.backend-wrap h2{font-family:var(--serif);font-size:2rem;font-weight:400;margin-bottom:0.3rem}
-.backend-wrap>p{color:var(--dim);font-size:14px;margin-bottom:2rem}
-.arch-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:2rem}
-.arch-card{background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:1.1rem 1.35rem}
-.arch-card h4{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.5rem}
-.arch-card p{font-size:13px;color:var(--dim);line-height:1.6}
-.arch-card code{font-family:var(--mono);font-size:11px;background:var(--dark3);color:var(--gold);padding:1px 5px;border-radius:2px}
-.code-block{background:#080b10;border:1px solid var(--border);border-radius:4px;padding:1.5rem;font-family:var(--mono);font-size:12px;line-height:1.8;overflow-x:auto;margin-bottom:1.25rem;color:rgba(255,255,255,0.7)}
-.code-block .cm{color:rgba(255,255,255,0.25)}.code-block .ck{color:#79b8ff}.code-block .cs{color:#9ecbff}
-.code-block .cn{color:var(--gold)}.code-block .cf{color:#b392f0}.code-block .cc{color:var(--cyan)}
 
 @media(max-width:640px){
   .two-col,.arch-grid{grid-template-columns:1fr}
   .form-section{padding:1.5rem}
   .hero-title{font-size:2rem}
   .nav-pill{padding:0 0.75rem;font-size:12px}
-  .api-input-wrap input{width:120px}
   .ec-body,.ec-header,.ec-footer{padding-left:1.25rem;padding-right:1.25rem}
 }
 </style>
@@ -313,6 +264,19 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
         <button class="submit-btn" id="submit-btn" onclick="submitSurvey()">Activate Subscription →</button>
         <div class="submit-success" id="submit-success">✓ &nbsp;Subscription confirmed. Your digest arrives every Monday at 8am ET, with your primary focus area shown first. Weekly subscribers also receive a Sunday preview.</div>
       </div>
+    </div>
+  </div>
+  <div style="max-width:680px;margin:0 auto;padding:0 1.5rem 1.5rem;text-align:center">
+    <p style="font-family:var(--mono);font-size:11px;color:var(--dimmer);line-height:1.7">
+      Already subscribed? You can <button onclick="showUnsubscribe()" style="background:none;border:none;font-family:var(--mono);font-size:11px;color:var(--cyan);cursor:pointer;padding:0;text-decoration:underline">update your preferences</button> by resubmitting the form, or
+      <button onclick="showUnsubscribe()" style="background:none;border:none;font-family:var(--mono);font-size:11px;color:var(--dimmer);cursor:pointer;padding:0;text-decoration:underline">unsubscribe</button>.
+    </p>
+    <div id="unsub-form" style="display:none;margin-top:1rem;display:none">
+      <div style="display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap">
+        <input type="email" id="unsub-email" placeholder="your@email.com" style="padding:0.5rem 0.85rem;background:var(--dark2);border:1px solid var(--border2);border-radius:3px;font-family:var(--mono);font-size:12px;color:var(--text);outline:none;width:220px">
+        <button onclick="submitUnsubscribe()" style="padding:0.5rem 1rem;background:transparent;border:1px solid var(--red);border-radius:3px;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--red);cursor:pointer">Unsubscribe</button>
+      </div>
+      <div id="unsub-msg" style="font-family:var(--mono);font-size:11px;color:var(--green);margin-top:0.5rem;display:none"></div>
     </div>
   </div>
 </div>
@@ -819,7 +783,6 @@ async function submitSurvey(){
   if(!valid) return;
 
   // POST to Railway backend
-  const BACKEND = 'https://lm-digest-backend-production.up.railway.app';
   document.getElementById('submit-btn').textContent = 'Submitting…';
   document.getElementById('submit-btn').disabled = true;
   try {
@@ -848,204 +811,6 @@ async function submitSurvey(){
 }
 
 /* ── DIGEST ── */
-async function runSearch(){
-  const rawKey=document.getElementById('api-key').value.trim();
-  if(!rawKey){alert('Please enter your Anthropic API key. Or click "Load demo data" to preview.');return}
-  const apiKey='sk-ant-'+rawKey;
-  const focus='all';
-  setStatus(true,'Searching arXiv, journals, and scholar…');
-
-  document.getElementById('digest-output').innerHTML='';
-  const prompt=buildPrompt(focus);
-  try{
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-beta':'web-search-2025-03-05'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:6000,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:prompt}]})
-    });
-    if(!resp.ok){const e=await resp.json();throw new Error(e.error?.message||`HTTP ${resp.status}`)}
-    setStatus(true,'Processing results…');
-    const data=await resp.json();
-    const text=data.content.filter(b=>b.type==='text').map(b=>b.text).join('\n');
-    let papers;
-    try{
-      const m=text.match(/```json\s*([\s\S]*?)\s*```/)||text.match(/\[\s*\{[\s\S]*\}\s*\]/);
-      papers=JSON.parse(m?(m[1]||m[0]):text.trim());
-    }catch(e){
-      const m=text.match(/\[\s*\{[\s\S]*\}\s*\]/);
-      if(m)papers=JSON.parse(m[0]);
-      else throw new Error('Could not parse paper list from AI response. Try again or load demo data.');
-    }
-    currentData=renderDigest(papers,focus);
-    renderEmailBody(currentData,focus);
-    setStatus(false);
-  }catch(err){
-    setStatus(false);
-    document.getElementById('digest-output').innerHTML=`<div class="state-box"><div class="icon" style="color:var(--red)">⚠</div><strong style="color:var(--red)">Error: ${err.message}</strong><br><br>Check your API key or click <strong style="color:var(--text)">Load demo data</strong> to preview.</div>`;
-  }
-
-}
-
-function buildPrompt(focus){
-  const fm={
-    nuclear:'nuclear fusion blankets, liquid lithium, PbLi, MHD flows in fusion reactors, tritium breeding, plasma-facing components, divertor liquid metal',
-    mhd:'planetary core convection, rotating magnetoconvection, geophysical fluid dynamics, turbulent convection in liquid metals, geodynamo, astrophysical flows',
-    electronics:'flexible electronics, stretchable devices, wearable sensors, GaInSn, gallium-based electronics, soft electronics',
-    biomedical:'biomedical applications, drug delivery, cancer therapy, soft robotics, autonomous droplets',
-    all:'all liquid metal research areas equally'
-  };
-  const schema = '[{\n  "category": "Nuclear & Fusion Applications",\n  "title": "Full paper title exactly as published",\n  "authors": "Last, F., Last2, F2., Last3, F3. et al.",\n  "journal": "Journal name or arXiv",\n  "date": "Published Month Day, YYYY or Posted Month Day, YYYY",\n  "doi": "10.xxxx/xxxxx",\n  "badge": "Published or Preprint",\n  "feat": "true or false",\n  "abstract": "3-4 sentence plain-language summary. Mention key authors by name. No jargon."\n}]';
-  return 'You are a specialist research librarian. Search the web comprehensively for academic papers on liquid metal published or posted in the past 7 days. Search: arXiv (physics.flu-dyn, cond-mat, astro-ph.EP, astro-ph.SR), Google Scholar, ACS Publications, Nature journals, Wiley Online Library, Physical Review journals, Journal of Fluid Mechanics, Fusion Engineering and Design, Nuclear Fusion, ORNL publications, ScienceDirect, Taylor & Francis.\n\n'
-    + 'CRITICAL: Search for papers where "liquid metal" appears in the ABSTRACT not just the title — this catches geophysics, planetary science, turbulent convection, magnetoconvection, magnetohydrodynamics, and fusion blanket papers.\n\n'
-    + 'PRIORITY AUTHOR WATCH LIST — search specifically for recent papers by:\n'
-    + 'Fusion/MHD: Mingjiu Ni (UCAS), Sergey Smolentsev (ORNL), Mohamed Abdou (UCLA), Yuchen Jiang (ORNL), Andrei Khodak (PPPL), Egemen Kolemen (Princeton), Xiujie Zhang, Junhua Pan, Yin Wang, Juanchen Yang, Zhen Sun, Atilla Altıntaş (free-surface LM PFC)\n'
-    + 'Geo/Astro/Planetary: Jon Aurnou (UCLA), Jewel Abbate (UCLA), Yufan Xu (Princeton), Tao Liu, Jingqiang Zhong, Susanne Horn (Coventry), Tobias Vogt (HZDR), Yichao Xie\n\n'
-    + 'Subscriber primary focus (list this category first): ' + (fm[focus]||fm.all) + '\n\n'
-    + 'Return ONLY a valid JSON array — no surrounding text, no markdown fences, no preamble. If papers are behind paywalls, use abstract-only information but provide correct titles, authors, dates, and DOIs. Structure:\n'
-    + schema + '\n\n'
-    + 'Use EXACTLY these consolidated category names:\n'
-    + '- Nuclear & Fusion Applications\n'
-    + '- Planetary & Geo/Astrophysics\n'
-    + '- Flexible Electronics, Wearables & Soft Matter\n'
-    + '- Biomedical, Robotics & Energy\n\n'
-    + 'Rules: Real author names only (never "researchers" or "the team"). Specific dates. Real DOIs. Plain language abstracts.\n'
-    + 'Paper ordering within each category: sort by (1) Published before Preprint, (2) most recent date first, (3) higher-impact journal before lower-impact.\n'
-    + 'Featured paper selection: mark feat:true for the most recent PUBLISHED paper in each category. The featured paper MUST have been published within the last 30 days. If no published paper exists within 30 days, mark the most recent preprint as feat:true instead. Never feature a paper older than 30 days if a newer one exists in that category.';
-}
-
-function buildDigestSummary(papers, groups, sortedCats){
-  const total=papers.length;
-
-  return `<div style="background:rgba(0,229,255,0.05);border:1px solid rgba(0,229,255,0.15);border-radius:4px;padding:1.35rem 1.6rem;margin-bottom:2rem">
-    <div style="font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.85rem">This week in liquid metal research</div>
-    <p style="font-size:13.5px;line-height:1.8;color:rgba(255,255,255,0.72);margin:0 0 0.75rem 0">This week's ${total} papers share a unifying thread: understanding how liquid metals behave under the extreme electromagnetic and thermal conditions found in fusion reactors and planetary interiors. Laboratory experiments are now reaching the dynamical regimes — magnetostrophic balance, diffusivity-free turbulence — once only accessible through theory and simulation, providing the first direct empirical benchmarks for models of Earth's core and stellar convection zones.</p>
-    <p style="font-size:13.5px;line-height:1.8;color:rgba(255,255,255,0.72);margin:0">On the applied side, the key challenge remains controlling free-surface and duct flows under strong magnetic fields: new simulation tools and engineering correlations are steadily closing the gap between idealised MHD models and the complex geometries of real blanket and plasma-facing component designs. Beyond fusion and geophysics, gallium-based liquid metals continue to find unexpected roles — from injectable cardiovascular agents and autonomous micro-robots to wave-energy generators and near-ambient superconductor synthesis — reflecting how broadly the unique physical properties of room-temperature liquid metals are now being exploited across science and engineering.</p>
-  </div>`;
-}
-
-// Parse a date string from a paper into a JS Date, returns null if unparseable
-function parseDate(dateStr){
-  if(!dateStr) return null;
-  // Strip prefixes like "Published", "Posted", "Updated"
-  const cleaned = dateStr.replace(/^(Published|Posted|Submitted|Updated|Accepted)\s*/i,'')
-                         .replace(/\(.*?\)/g,'')   // remove parenthetical notes
-                         .trim();
-  const d = new Date(cleaned);
-  return isNaN(d.getTime()) ? null : d;
-}
-
-// Score a paper for display priority:
-//   +40 if badge==='Published', 0 if Preprint
-//   +30 if published within last 7 days
-//   +20 if published within last 30 days
-//   +10 if published within last 90 days
-//   +5  if feat flag already set (original AI suggestion)
-function scorePaper(p){
-  let score = 0;
-  if(p.badge==='Published') score += 40;
-  const d = parseDate(p.date);
-  const now = Date.now();
-  if(d){
-    const ageDays = (now - d.getTime()) / 86400000;
-    if(ageDays <= 7)  score += 30;
-    else if(ageDays <= 30) score += 20;
-    else if(ageDays <= 90) score += 10;
-  }
-  if(p.feat) score += 5;
-  return score;
-}
-
-function renderDigest(papers, focus){
-  const groups={};
-  for(const p of papers){const c=p.category||'Other';if(!groups[c])groups[c]=[];groups[c].push(p)}
-  const order=FOCUS_ORDER[focus]||FOCUS_ORDER.all;
-  const sortedCats=[...new Set([...order,...Object.keys(groups)])].filter(c=>groups[c]);
-
-  // Sort each category's papers by priority score descending
-  const oneMonthAgo = Date.now() - 30*86400000;
-  for(const cat of sortedCats){
-    groups[cat].sort((a,b) => scorePaper(b) - scorePaper(a));
-
-    // Choose featured: highest-scoring paper published within last month.
-    // Fall back to highest-scoring overall if none qualifies.
-    const recentPublished = groups[cat].find(p => {
-      if(p.badge !== 'Published') return false;
-      const d = parseDate(p.date);
-      return d && d.getTime() >= oneMonthAgo;
-    });
-    const featPaper = recentPublished || groups[cat][0];
-
-    // Mark exactly one paper as featured, clear others
-    groups[cat].forEach(p => { p.feat = (p === featPaper); });
-  }
-
-  document.getElementById('digest-output').innerHTML=sortedCats.map(cat=>{
-    const list=groups[cat];
-    const feat=list.find(p=>p.feat);
-    const more=list.filter(p=>p!==feat);
-    return `<div class="cat-section">
-      <div class="cat-header"><span class="cat-name">${cat}</span><div class="cat-rule"></div><span class="cat-count">${list.length} paper${list.length!==1?'s':''}</span></div>
-      ${featuredHTML(feat)}
-      ${more.length?`<button class="see-more-btn" onclick="toggleMore(this)"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3.5L5 6.5L8 3.5"/></svg>See ${more.length} more paper${more.length!==1?'s':''}</button><div class="more-list">${more.map(p=>rowHTML(p)).join('')}</div>`:''}
-    </div>`;
-  }).join('');
-  return {groups,sortedCats,papers};
-}
-
-function doiHref(doi){return doi.startsWith('10.')?`https://doi.org/${doi}`:`https://arxiv.org/abs/${doi.replace('arXiv:','').replace('10.48550/arXiv.','')}`}
-
-function thumbHTML(p){
-  const rated=ratings.has(p.doi);
-  return`<button class="thumb-btn${rated?' active':''}" onclick="toggleRating(this,'${p.doi.replace(/'/g,"\'")}','${(p.title||'').slice(0,60).replace(/'/g,"\'")}')">
-    <svg viewBox="0 0 12 12" fill="${rated?'currentColor':'none'}" stroke="currentColor" stroke-width="1.5"><path d="M1 7l2-4 5 0 0 5-4 0M1 7l0 3 1.5 0L3 7"/></svg>
-    ${rated?'Relevant':'Mark relevant'}
-  </button>`;
-}
-function featuredHTML(p){return`<div class="featured-paper"><div class="paper-badges"><span class="badge ${p.badge==='Preprint'?'badge-pre':'badge-pub'}">${p.badge}</span><span class="badge badge-feat">Featured</span>${p._demo?'<span class="badge" style="background:rgba(240,192,96,0.12);color:var(--gold);border:1px solid rgba(240,192,96,0.25)">Demo</span>':''}</div><a class="paper-title" href="${doiHref(p.doi)}" target="_blank">${p.title}</a><div class="paper-meta"><span>${p.authors}</span><span>${p.journal}</span><span>${p.date}</span><a href="${doiHref(p.doi)}" target="_blank">DOI: ${p.doi}</a></div><div class="paper-abstract">${p.abstract}</div><div class="paper-footer">${thumbHTML(p)}</div></div>`}
-function rowHTML(p){return`<div class="paper-row"><div class="paper-badges"><span class="badge ${p.badge==='Preprint'?'badge-pre':'badge-pub'}">${p.badge}</span>${p._demo?'<span class="badge" style="background:rgba(240,192,96,0.12);color:var(--gold);border:1px solid rgba(240,192,96,0.25)">Demo</span>':''}</div><a class="paper-title" href="${doiHref(p.doi)}" target="_blank">${p.title}</a><div class="paper-meta"><span>${p.authors}</span><span>${p.journal}</span><span>${p.date}</span><a href="${doiHref(p.doi)}" target="_blank">DOI: ${p.doi}</a></div><div class="paper-abstract">${p.abstract}</div><div class="paper-footer">${thumbHTML(p)}</div></div>`}
-
-function toggleMore(btn){
-  btn.classList.toggle('open');
-  const list=btn.nextElementSibling;list.classList.toggle('open');
-  const open=btn.classList.contains('open');
-  const n=list.querySelectorAll('.paper-row').length;
-  btn.innerHTML=`<svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" style="transform:${open?'rotate(180deg)':'none'};transition:transform 0.2s"><path d="M2 3.5L5 6.5L8 3.5"/></svg>${open?'Collapse':`See ${n} more paper${n!==1?'s':''}`}`;
-}
-
-function loadDemo(){
-  const demoPapers=DEMO_PAPERS.map(p=>({...p,_demo:true}));
-  currentData=renderDigest(demoPapers,'all');
-}
-
-function setStatus(show,msg=''){const b=document.getElementById('status-bar');if(show){b.classList.add('show');document.getElementById('status-text').textContent=msg}else b.classList.remove('show')}
-
-/* ── EMAIL ── */
-function renderEmailBody(data,focus){
-  if(!data)return;
-  const {groups,sortedCats,papers}=data;
-  const now=new Date();const end=new Date(now.getTime()+6*86400000);
-  document.getElementById('ec-date').textContent=`Week of ${now.toLocaleDateString('en-US',{month:'long',day:'numeric'})} – ${end.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}`;
-  document.getElementById('ec-subtitle').textContent=`Your weekly roundup — ${papers.length} new papers across ${sortedCats.length} areas`;
-
-  // Build summary paragraph for email
-  const emailSummary=`This week's ${papers.length} papers share a common thread: understanding and controlling liquid metal flows under extreme electromagnetic and thermal conditions. Laboratory experiments are reaching the dynamical regimes once only accessible through theory — magnetostrophic balance, diffusivity-free turbulence — while new simulation tools and engineering correlations are closing the gap between idealised MHD models and real fusion reactor geometries. Beyond fusion and geophysics, the same physical properties are now being exploited in injectable biomedical agents, autonomous soft robots, and ocean wave-energy converters.`;
-
-  const summaryHTML=`<div style="background:#f4f8ff;border-left:3px solid #0055aa;padding:1rem 1.25rem;margin-bottom:1.5rem;border-radius:0 4px 4px 0">
-    <div style="font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:#0055aa;margin-bottom:0.5rem">This week in liquid metal research</div>
-    <p style="font-family:sans-serif;font-size:13px;line-height:1.75;color:#333;margin:0">${emailSummary}</p>
-  </div>`;
-
-  document.getElementById('ec-body').innerHTML=summaryHTML+sortedCats.map(cat=>{
-    const list=groups[cat];const feat=list.find(p=>p.feat)||list[0];const more=list.filter(p=>p!==feat);
-    return`<div class="ec-cat">${cat}</div>${ecPaper(feat,true)}${more.map(p=>ecPaper(p,false)).join('')}`;
-  }).join('');
-}
-function ecPaper(p,isFeat){
-  const bc=p.badge==='Preprint'?'pre':'pub';
-  const href=doiHref(p.doi);
-  return`<div class="ec-paper" ${isFeat?'style="border-left:3px solid #0055aa;padding-left:1rem"':''}><span class="ec-badge ${bc}">${p.badge}</span>${isFeat?' <span class="ec-badge feat">Featured</span>':''}<div class="ec-paper-title">${p.title}</div><div class="ec-paper-meta">${p.authors} · ${p.journal} · ${p.date} · <a href="${href}">DOI: ${p.doi}</a></div><div class="ec-abstract">${p.abstract}</div></div>`;
-}
-
 
 
 /* ── NAV ── */
@@ -1307,6 +1072,39 @@ async function submitContact() {
   } finally {
     btn.disabled = false;
     btn.textContent = 'Send message →';
+  }
+}
+
+/* ── UNSUBSCRIBE ── */
+function showUnsubscribe() {
+  const f = document.getElementById('unsub-form');
+  f.style.display = f.style.display === 'none' ? 'block' : 'none';
+}
+
+async function submitUnsubscribe() {
+  const email = document.getElementById('unsub-email').value.trim();
+  const msg   = document.getElementById('unsub-msg');
+  if (!email || !isValidEmail(email)) {
+    msg.style.color = 'var(--red)';
+    msg.textContent = 'Please enter a valid email address.';
+    msg.style.display = 'block';
+    return;
+  }
+  try {
+    const resp = await fetch(BACKEND + '/unsubscribe', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ email })
+    });
+    if (!resp.ok) throw new Error();
+    msg.style.color = 'var(--green)';
+    msg.textContent = '✓ Unsubscribed. You will no longer receive digests.';
+    msg.style.display = 'block';
+    document.getElementById('unsub-email').value = '';
+  } catch {
+    msg.style.color = 'var(--red)';
+    msg.textContent = 'Could not unsubscribe — please try again.';
+    msg.style.display = 'block';
   }
 }
 </script>
