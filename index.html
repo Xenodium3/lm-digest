@@ -372,9 +372,8 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
       <div class="field"><label>Your name</label><input type="text" id="c-name" placeholder="Your name"></div>
       <div class="field"><label>Your email</label><input type="email" id="c-email" placeholder="you@institution.edu"></div>
       <div class="field"><label>Message</label><textarea id="c-message" placeholder="Your message…" style="min-height:140px"></textarea></div>
-      <button class="submit-btn" id="contact-btn" onclick="submitContact()">Send message →</button>
-      <div id="contact-success" style="display:none;padding:0.85rem 1.25rem;background:rgba(0,229,255,0.06);border:1px solid rgba(0,229,255,0.2);border-radius:3px;font-family:var(--display);font-size:13px;color:var(--dim);line-height:1.6">Your email client should have opened with the message pre-filled. If it did not, you can email directly at <a id="contact-fallback-link" href="#" style="color:var(--cyan)">yufanxu94@gmail.com</a></div>
-      <div id="contact-error" style="display:none;padding:0.85rem 1.25rem;background:rgba(255,68,88,0.08);border:1px solid rgba(255,68,88,0.2);border-radius:3px;font-family:var(--serif);font-size:14px;color:var(--red)">Could not send — please email us directly at <a href="mailto:yufanxu94@gmail.com" style="color:var(--cyan)">yufanxu94@gmail.com</a></div>
+      <a id="contact-btn" class="submit-btn" href="#" onclick="return buildMailto(event)" style="display:block;text-align:center;text-decoration:none">Send message →</a>
+      <div id="contact-err-msg" style="display:none;padding:0.85rem 1.25rem;background:rgba(255,68,88,0.08);border:1px solid rgba(255,68,88,0.2);border-radius:3px;font-family:var(--display);font-size:13px;color:var(--red)">Please fill in all fields with a valid email address.</div>
     </div>
 
     <div style="margin-top:3rem;padding-top:2.5rem;border-top:1px solid var(--border)">
@@ -1271,25 +1270,22 @@ function renderSummaryBlock(summary, createdAt, paperCount) {
 })();
 
 /* ── CONTACT ── */
-function submitContact() {
+function buildMailto(e) {
   const name    = document.getElementById('c-name').value.trim();
   const email   = document.getElementById('c-email').value.trim();
   const message = document.getElementById('c-message').value.trim();
+  const errDiv  = document.getElementById('contact-err-msg');
 
-  if (!name || !email || !message) { alert('Please fill in all fields.'); return; }
-  if (!isValidEmail(email)) { alert('Please enter a valid email address.'); return; }
+  if (!name || !email || !message || !isValidEmail(email)) {
+    errDiv.style.display = 'block';
+    return false;
+  }
+  errDiv.style.display = 'none';
 
-  const subject  = encodeURIComponent('LM Digest contact from ' + name);
-  const body     = encodeURIComponent('From: ' + name + ' <' + email + '>\n\n' + message);
-  const mailto   = 'mailto:yufanxu94@gmail.com?subject=' + subject + '&body=' + body;
-
-  // Open mailto in a new tab so the page does not navigate away
-  window.open(mailto, '_blank');
-
-  // Show the info box with a direct fallback link pre-filled
-  const fallback = document.getElementById('contact-fallback-link');
-  if (fallback) fallback.href = mailto;
-  document.getElementById('contact-success').style.display = 'block';
+  const subject = encodeURIComponent('LM Digest contact from ' + name);
+  const body    = encodeURIComponent('From: ' + name + ' <' + email + '>\n\n' + message);
+  e.currentTarget.href = 'mailto:yufanxu94@gmail.com?subject=' + subject + '&body=' + body;
+  return true; // let the browser follow the href naturally
 }
 </script>
 </body>
