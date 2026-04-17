@@ -1263,8 +1263,9 @@ function renderSummaryBlock(summary, createdAt, paperCount) {
     setStatus(false);
     console.log(`Loaded live digest: ${data.papers.length} papers (${freq}, id=${data.id})`);
     const dateLoaded = new Date(data.created_at).toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
+    const sourceLabel = data.served_freq === 'preview' ? 'Sunday preview' : 'Weekly digest';
     document.getElementById('digest-source-label').textContent =
-      `Latest digest · ${dateLoaded} · ${data.papers.length} papers · arXiv · ACS · Nature · Wiley`;
+      `${sourceLabel} · ${dateLoaded} · ${data.papers.length} papers · arXiv · ACS · Nature · Wiley`;
 
   } catch(e) {
     // Fall back to demo data — no error shown, just quiet fallback
