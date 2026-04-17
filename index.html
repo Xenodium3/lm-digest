@@ -372,7 +372,8 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
       <div class="field"><label>Your name</label><input type="text" id="c-name" placeholder="Your name"></div>
       <div class="field"><label>Your email</label><input type="email" id="c-email" placeholder="you@institution.edu"></div>
       <div class="field"><label>Message</label><textarea id="c-message" placeholder="Your message…" style="min-height:140px"></textarea></div>
-      <a id="contact-btn" class="submit-btn" href="#" onclick="return buildMailto(event)" style="display:block;text-align:center;text-decoration:none">Send message →</a>
+      <button class="submit-btn" id="contact-btn" onclick="submitContact()">Send message →</button>
+      <div id="contact-success" style="display:none;padding:0.85rem 1.25rem;background:rgba(0,229,138,0.08);border:1px solid rgba(0,229,138,0.25);border-radius:3px;font-family:var(--display);font-size:13px;color:var(--green)">✓ &nbsp;Message received — thank you. We'll get back to you soon.</div>
       <div id="contact-err-msg" style="display:none;padding:0.85rem 1.25rem;background:rgba(255,68,88,0.08);border:1px solid rgba(255,68,88,0.2);border-radius:3px;font-family:var(--display);font-size:13px;color:var(--red)">Please fill in all fields with a valid email address.</div>
     </div>
 
@@ -1270,22 +1271,43 @@ function renderSummaryBlock(summary, createdAt, paperCount) {
 })();
 
 /* ── CONTACT ── */
-function buildMailto(e) {
+async function submitContact() {
   const name    = document.getElementById('c-name').value.trim();
   const email   = document.getElementById('c-email').value.trim();
   const message = document.getElementById('c-message').value.trim();
   const errDiv  = document.getElementById('contact-err-msg');
+  const success = document.getElementById('contact-success');
+
+  errDiv.style.display = 'none';
+  success.style.display = 'none';
 
   if (!name || !email || !message || !isValidEmail(email)) {
     errDiv.style.display = 'block';
-    return false;
+    return;
   }
-  errDiv.style.display = 'none';
 
-  const subject = encodeURIComponent('LM Digest contact from ' + name);
-  const body    = encodeURIComponent('From: ' + name + ' <' + email + '>\n\n' + message);
-  e.currentTarget.href = 'mailto:yufanxu94@gmail.com?subject=' + subject + '&body=' + body;
-  return true; // let the browser follow the href naturally
+  const btn = document.getElementById('contact-btn');
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+
+  try {
+    const resp = await fetch(BACKEND + '/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, message })
+    });
+    if (!resp.ok) throw new Error('Server error');
+    success.style.display = 'block';
+    document.getElementById('c-name').value = '';
+    document.getElementById('c-email').value = '';
+    document.getElementById('c-message').value = '';
+  } catch {
+    errDiv.textContent = 'Could not send — please try again later.';
+    errDiv.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Send message →';
+  }
 }
 </script>
 </body>
