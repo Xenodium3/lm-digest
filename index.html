@@ -127,6 +127,13 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 .paper-meta a{color:var(--cyan2);text-decoration:none;font-size:10px;letter-spacing:0.05em}
 .paper-meta a:hover{color:var(--cyan);text-decoration:underline}
 .paper-abstract{font-size:13.5px;line-height:1.7;color:rgba(255,255,255,0.62);font-weight:400}
+.paper-footer{display:flex;align-items:center;justify-content:space-between;margin-top:0.85rem}
+.thumb-btn{display:flex;align-items:center;gap:5px;background:none;border:1px solid var(--border);border-radius:3px;padding:3px 10px;font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--dimmer);cursor:pointer;transition:all 0.15s}
+.thumb-btn:hover{border-color:rgba(0,229,255,0.4);color:var(--cyan)}
+.thumb-btn.active{border-color:var(--cyan);color:var(--cyan);background:rgba(0,229,255,0.08)}
+.thumb-btn svg{width:12px;height:12px;flex-shrink:0}
+.rating-toast{position:fixed;bottom:2rem;right:2rem;background:var(--panel);border:1px solid rgba(0,229,255,0.3);border-radius:4px;padding:0.75rem 1.25rem;font-family:var(--mono);font-size:11px;color:var(--cyan);letter-spacing:0.05em;opacity:0;transition:opacity 0.3s;pointer-events:none;z-index:999}
+.rating-toast.show{opacity:1}
 .see-more-btn{display:flex;align-items:center;gap:0.5rem;background:none;border:1px solid var(--border);border-radius:3px;padding:0.4rem 0.85rem;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--dimmer);cursor:pointer;transition:all 0.15s;margin-bottom:0.5rem}
 .see-more-btn:hover{border-color:var(--cyan);color:var(--cyan)}
 .more-list{display:none}
@@ -135,6 +142,26 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 .paper-row:hover{border-color:var(--border2)}
 .state-box{text-align:center;padding:4rem 2rem;color:var(--dimmer);font-family:var(--mono);font-size:12px;letter-spacing:0.08em}
 .state-box .icon{font-size:2rem;margin-bottom:1rem;opacity:0.4}
+.recommend-box{background:var(--panel);border:1px solid var(--border2);border-radius:4px;padding:1.5rem 1.75rem;margin-top:2.5rem}
+.recommend-box .section-tag{margin-bottom:1rem}
+.recommend-entries{display:flex;flex-direction:column;gap:0.6rem;margin-bottom:1rem}
+.recommend-entry{display:flex;gap:0.5rem;align-items:center}
+.recommend-entry input{flex:1;padding:0.5rem 0.85rem;background:var(--dark2);border:1px solid var(--border2);border-radius:3px;font-family:var(--mono);font-size:12px;color:var(--text);outline:none;transition:border-color 0.15s}
+.recommend-entry input:focus{border-color:var(--cyan)}
+.recommend-entry input::placeholder{color:var(--dimmer)}
+.recommend-entry input.valid{border-color:rgba(0,229,138,0.5)}
+.recommend-entry input.invalid{border-color:rgba(255,68,88,0.5)}
+.recommend-remove{background:none;border:none;color:var(--dimmer);font-size:16px;cursor:pointer;line-height:1;padding:0 4px;transition:color 0.15s}
+.recommend-remove:hover{color:var(--red)}
+.recommend-actions{display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap}
+.recommend-add-btn{background:none;border:1px dashed var(--border2);border-radius:3px;padding:0.4rem 1rem;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--dimmer);cursor:pointer;transition:all 0.15s}
+.recommend-add-btn:hover{border-color:rgba(0,229,255,0.4);color:var(--cyan)}
+.recommend-submit{padding:0.5rem 1.25rem;background:var(--cyan);color:#050508;border:none;border-radius:3px;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:all 0.15s}
+.recommend-submit:hover{background:#22f0ff}
+.recommend-submit:disabled{background:var(--dark3);color:var(--dimmer);cursor:not-allowed}
+.recommend-note{font-family:var(--mono);font-size:10px;color:var(--dimmer);line-height:1.6;margin-top:0.75rem}
+.recommend-success{display:none;margin-top:0.75rem;padding:0.75rem 1rem;background:rgba(0,229,138,0.06);border:1px solid rgba(0,229,138,0.2);border-radius:3px;font-family:var(--mono);font-size:11px;color:var(--green);letter-spacing:0.04em}
+.recommend-success.show{display:block}
 
 /* ═══ EMAIL ═══ */
 .email-wrap{max-width:680px;margin:0 auto;padding:2.5rem 1.5rem 5rem}
@@ -234,7 +261,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
     <div class="hero-bg"></div><div class="hero-grid"></div>
     <div class="hero-tag">Research Intelligence · Est. 2025</div>
     <h1 class="hero-title">Liquid Metals Research Newsletter<br><em>delivered to your inbox</em></h1>
-    <p class="hero-sub">Weekly or monthly digests of newly published papers and preprints — ranked by your research focus, written in plain language.</p>
+    <p class="hero-sub">Weekly or monthly digests of newly published papers and preprints — ranked by your research focus, written in plain language. Delivered every Monday at 8am ET.</p>
   </div>
   <div class="survey-wrap">
     <div class="form-card">
@@ -259,10 +286,23 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
       <div class="form-section">
         <div class="section-tag">03 — Delivery frequency</div>
         <div class="freq-row" id="freq-row">
-          <div class="freq-opt active" onclick="setFreq(this,'weekly')">Weekly</div>
-          <div class="freq-opt" onclick="setFreq(this,'biweekly')">Every 2 weeks</div>
-          <div class="freq-opt" onclick="setFreq(this,'monthly')">Monthly</div>
+          <div class="freq-opt active" onclick="setFreq(this,'weekly')">
+            <div>Weekly</div>
+            <div style="font-size:9px;font-weight:400;opacity:0.6;margin-top:2px">Every Monday · 8am ET</div>
+          </div>
+          <div class="freq-opt" onclick="setFreq(this,'biweekly')">
+            <div>Every 2 weeks</div>
+            <div style="font-size:9px;font-weight:400;opacity:0.6;margin-top:2px">Alternating Mondays · 8am ET</div>
+          </div>
+          <div class="freq-opt" onclick="setFreq(this,'monthly')">
+            <div>Monthly</div>
+            <div style="font-size:9px;font-weight:400;opacity:0.6;margin-top:2px">1st of month · 8am ET</div>
+          </div>
         </div>
+        <p style="font-family:var(--mono);font-size:10px;color:var(--dimmer);margin-top:0.65rem;line-height:1.6">
+          All digests are sent at <strong style="color:rgba(255,255,255,0.5)">8am Eastern Time</strong> (1pm UTC).
+          Weekly subscribers also receive a Sunday 8am ET preview of that week's papers — giving you a chance to recommend any missing papers before Monday's full digest.
+        </p>
       </div>
       <div class="form-section">
         <div class="section-tag">04 — Anything else</div>
@@ -273,7 +313,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
       </div>
       <div class="submit-row">
         <button class="submit-btn" id="submit-btn" onclick="submitSurvey()">Activate Subscription →</button>
-        <div class="submit-success" id="submit-success">✓ &nbsp;Subscription confirmed. Your digest arrives at your stated frequency, with your primary focus area shown first.</div>
+        <div class="submit-success" id="submit-success">✓ &nbsp;Subscription confirmed. Your digest arrives every Monday at 8am ET, with your primary focus area shown first. Weekly subscribers also receive a Sunday preview.</div>
       </div>
     </div>
   </div>
@@ -287,7 +327,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
     <div class="digest-topbar">
       <div>
         <h2>Liquid Metal <span>Research Digest</span></h2>
-        <p style="color:var(--dimmer);font-family:var(--mono);font-size:11px;margin-top:0.3rem;letter-spacing:0.06em">LIVE AI SEARCH · arXiv · ACS · Nature · Wiley · Elsevier · Physical Review</p>
+        <p id="digest-source-label" style="color:var(--dimmer);font-family:var(--mono);font-size:11px;margin-top:0.3rem;letter-spacing:0.06em">Loading latest digest…</p>
       </div>
       <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
         <button class="btn-secondary" onclick="copyToEmail()">→ Email preview</button>
@@ -323,6 +363,31 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
         Enter your Anthropic API key and click <strong style="color:var(--text)">Generate digest</strong> for a live AI search,<br>or click <strong style="color:var(--text)">Load demo data</strong> to preview with real recent papers.
       </div>
     </div>
+
+    <!-- ── Paper recommendation box ── -->
+    <div class="recommend-box">
+      <div class="section-tag">Recommend a paper for next week's digest</div>
+      <p style="font-size:13px;color:var(--dim);line-height:1.65;margin-bottom:1.25rem">
+        Know a paper that should be included? Paste its DOI link below — it will be prioritised in next week's search.
+        Please attach the DOI link here for any recommended paper (e.g. <span style="font-family:var(--mono);color:var(--dimmer);font-size:11px">10.1017/jfm.2025.123</span> or <span style="font-family:var(--mono);color:var(--dimmer);font-size:11px">arXiv:2501.12345</span>).
+      </p>
+      <div class="recommend-entries" id="recommend-entries">
+        <div class="recommend-entry">
+          <input type="text" placeholder="DOI or arXiv ID — e.g. 10.1017/jfm.2025.123" oninput="validateDoiInput(this)">
+          <button class="recommend-remove" onclick="removeEntry(this)" title="Remove">×</button>
+        </div>
+      </div>
+      <div class="recommend-actions">
+        <button class="recommend-add-btn" onclick="addDoiEntry()">+ Add another DOI</button>
+        <div style="flex:1"></div>
+        <button class="recommend-submit" id="recommend-submit-btn" onclick="submitRecommendations()">Submit recommendations →</button>
+      </div>
+      <div class="recommend-note" id="recommend-note">
+        Subscribe first to attach recommendations to your profile. Not subscribed yet? Recommendations from anonymous users are still collected.
+      </div>
+      <div class="recommend-success" id="recommend-success">✓ &nbsp;Recommendations received — these papers will be prioritised in the next digest search.</div>
+    </div>
+
   </div>
 </div>
 
@@ -361,7 +426,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
     <div class="arch-grid">
       <div class="arch-card"><h4>01 — Serve the page</h4><p>Host this HTML file via Nginx or Caddy. Expose <code>POST /subscribe</code> to save subscribers and <code>GET /digest/send</code> to trigger manually.</p></div>
       <div class="arch-card"><h4>02 — Store subscribers</h4><p>Each POST writes to <code>subscribers.json</code> (or SQLite). Fields: name, email, topics[], focus_text, frequency, created_at.</p></div>
-      <div class="arch-card"><h4>03 — Cron job</h4><p>Weekly: <code>0 8 * * 1</code> &nbsp; Monthly: <code>0 8 1 * *</code>. Calls Anthropic API with web_search, generates personalised HTML, sends via SMTP.</p></div>
+      <div class="arch-card"><h4>03 — Cron job</h4><p>Weekly: <code>0 13 * * 1</code> &nbsp; Monthly: <code>0 13 1 * *</code> &nbsp; Preview: <code>0 13 * * 0</code>. All run at 1pm UTC (8am ET). Calls Anthropic API with web_search, generates personalised HTML, sends via SMTP.</p></div>
       <div class="arch-card"><h4>04 — SMTP config</h4><p>Set <code>SMTP_HOST</code>, <code>SMTP_USER</code>, <code>SMTP_PASS</code>, <code>FROM_EMAIL</code> in <code>.env</code>. Works with Postfix, Gmail SMTP, SendGrid, Mailgun relay.</p></div>
     </div>
 
@@ -580,7 +645,7 @@ const DEMO_PAPERS=[
    journal:'Advanced Functional Materials (Wiley)',
    date:'Published July 2025',
    doi:'10.1002/adfm.202511943',
-   abstract:'Tang, Zhang, Sitti and colleagues at Shenzhen/Tsinghua/Max Planck show that EGaIn droplets in copper-chloride solution autonomously deform and roll by harvesting ion-diffusion chemical energy — zero external power. Steering via reservoir height adjustment sustains locomotion for hours, pointing toward genuinely untethered soft robots and autonomous drug-delivery microcarriers.'},
+   abstract:'Tang, Zhang, Sitti and colleagues at Shenzhen/Tsinghua/Max Planck show that GaInSn droplets in copper-chloride solution autonomously deform and roll by harvesting ion-diffusion chemical energy — zero external power. Steering via reservoir height adjustment sustains locomotion for hours, pointing toward genuinely untethered soft robots and autonomous drug-delivery microcarriers.'},
   {category:'Biomedical, Robotics & Energy',feat:false,badge:'Published',
    title:'Wave energy conversion technology based on liquid metal magnetohydrodynamic generators',
    authors:'Fu, H., Chen, J., Tong, Y., Peng, S., Liu, F., Lyu, X. & Zhao, H.',
@@ -743,7 +808,7 @@ async function submitSurvey(){
   if(!valid) return;
 
   // POST to Railway backend
-  const BACKEND = 'https://lm-digest-backend-production.up.railway.app'; // ← update after Railway deploy
+  const BACKEND = 'https://lm-digest-backend-production.up.railway.app';
   document.getElementById('submit-btn').textContent = 'Submitting…';
   document.getElementById('submit-btn').disabled = true;
   try {
@@ -814,7 +879,7 @@ function buildPrompt(focus){
   const fm={
     nuclear:'nuclear fusion blankets, liquid lithium, PbLi, MHD flows in fusion reactors, tritium breeding, plasma-facing components, divertor liquid metal',
     mhd:'planetary core convection, rotating magnetoconvection, geophysical fluid dynamics, turbulent convection in liquid metals, geodynamo, astrophysical flows',
-    electronics:'flexible electronics, stretchable devices, wearable sensors, EGaIn, gallium-based electronics, soft electronics',
+    electronics:'flexible electronics, stretchable devices, wearable sensors, GaInSn, gallium-based electronics, soft electronics',
     biomedical:'biomedical applications, drug delivery, cancer therapy, soft robotics, autonomous droplets',
     all:'all liquid metal research areas equally'
   };
@@ -919,8 +984,15 @@ function renderDigest(papers, focus){
 
 function doiHref(doi){return doi.startsWith('10.')?`https://doi.org/${doi}`:`https://arxiv.org/abs/${doi.replace('arXiv:','').replace('10.48550/arXiv.','')}`}
 
-function featuredHTML(p){return`<div class="featured-paper"><div class="paper-badges"><span class="badge ${p.badge==='Preprint'?'badge-pre':'badge-pub'}">${p.badge}</span><span class="badge badge-feat">Featured</span></div><a class="paper-title" href="${doiHref(p.doi)}" target="_blank">${p.title}</a><div class="paper-meta"><span>${p.authors}</span><span>${p.journal}</span><span>${p.date}</span><a href="${doiHref(p.doi)}" target="_blank">DOI: ${p.doi}</a></div><div class="paper-abstract">${p.abstract}</div></div>`}
-function rowHTML(p){return`<div class="paper-row"><div class="paper-badges"><span class="badge ${p.badge==='Preprint'?'badge-pre':'badge-pub'}">${p.badge}</span></div><a class="paper-title" href="${doiHref(p.doi)}" target="_blank">${p.title}</a><div class="paper-meta"><span>${p.authors}</span><span>${p.journal}</span><span>${p.date}</span><a href="${doiHref(p.doi)}" target="_blank">DOI: ${p.doi}</a></div><div class="paper-abstract">${p.abstract}</div></div>`}
+function thumbHTML(p){
+  const rated=ratings.has(p.doi);
+  return`<button class="thumb-btn${rated?' active':''}" onclick="toggleRating(this,'${p.doi.replace(/'/g,"\'")}','${(p.title||'').slice(0,60).replace(/'/g,"\'")}')">
+    <svg viewBox="0 0 12 12" fill="${rated?'currentColor':'none'}" stroke="currentColor" stroke-width="1.5"><path d="M1 7l2-4 5 0 0 5-4 0M1 7l0 3 1.5 0L3 7"/></svg>
+    ${rated?'Relevant':'Mark relevant'}
+  </button>`;
+}
+function featuredHTML(p){return`<div class="featured-paper"><div class="paper-badges"><span class="badge ${p.badge==='Preprint'?'badge-pre':'badge-pub'}">${p.badge}</span><span class="badge badge-feat">Featured</span></div><a class="paper-title" href="${doiHref(p.doi)}" target="_blank">${p.title}</a><div class="paper-meta"><span>${p.authors}</span><span>${p.journal}</span><span>${p.date}</span><a href="${doiHref(p.doi)}" target="_blank">DOI: ${p.doi}</a></div><div class="paper-abstract">${p.abstract}</div><div class="paper-footer">${thumbHTML(p)}</div></div>`}
+function rowHTML(p){return`<div class="paper-row"><div class="paper-badges"><span class="badge ${p.badge==='Preprint'?'badge-pre':'badge-pub'}">${p.badge}</span></div><a class="paper-title" href="${doiHref(p.doi)}" target="_blank">${p.title}</a><div class="paper-meta"><span>${p.authors}</span><span>${p.journal}</span><span>${p.date}</span><a href="${doiHref(p.doi)}" target="_blank">DOI: ${p.doi}</a></div><div class="paper-abstract">${p.abstract}</div><div class="paper-footer">${thumbHTML(p)}</div></div>`}
 
 function toggleMore(btn){
   btn.classList.toggle('open');
@@ -981,9 +1053,231 @@ function switchPanel(name,btn){
   btn.classList.add('active');
 }
 
+/* ── RECOMMENDATIONS ── */
+
+function validateDoiInput(input) {
+  const v = input.value.trim();
+  if (!v) { input.classList.remove('valid','invalid'); return false; }
+  // Accept: 10.xxxx/xxx  |  arXiv:XXXX.XXXX  |  bare XXXX.XXXX  |  https://doi.org/...  |  https://arxiv.org/abs/...
+  const doi = normaliseDoi(v);
+  const ok  = doi !== null;
+  input.classList.toggle('valid',   ok);
+  input.classList.toggle('invalid', !ok);
+  return ok;
+}
+
+function normaliseDoi(raw) {
+  const v = raw.trim();
+  // Strip URL prefixes
+  const stripped = v
+    .replace(/^https?:\/\/doi\.org\//i, '')
+    .replace(/^https?:\/\/arxiv\.org\/abs\//i, 'arXiv:')
+    .trim();
+  if (/^10\.\d{4,}\/\S+$/.test(stripped)) return stripped;
+  if (/^arXiv:\d{4}\.\d{4,}/i.test(stripped)) return stripped.replace(/^arXiv:/i,'arXiv:');
+  if (/^\d{4}\.\d{4,}(v\d+)?$/.test(stripped)) return 'arXiv:' + stripped;
+  return null;
+}
+
+function addDoiEntry() {
+  const container = document.getElementById('recommend-entries');
+  const entry = document.createElement('div');
+  entry.className = 'recommend-entry';
+  entry.innerHTML = '<input type="text" placeholder="DOI or arXiv ID — e.g. 10.1017/jfm.2025.123" oninput="validateDoiInput(this)"><button class="recommend-remove" onclick="removeEntry(this)" title="Remove">×</button>';
+  container.appendChild(entry);
+  entry.querySelector('input').focus();
+}
+
+function removeEntry(btn) {
+  const container = document.getElementById('recommend-entries');
+  if (container.children.length === 1) {
+    btn.previousElementSibling.value = '';
+    btn.previousElementSibling.classList.remove('valid','invalid');
+    return;
+  }
+  btn.parentElement.remove();
+}
+
+async function submitRecommendations() {
+  const inputs  = document.querySelectorAll('#recommend-entries input');
+  const dois    = [];
+  let   hasInvalid = false;
+
+  for (const input of inputs) {
+    const v = input.value.trim();
+    if (!v) continue;
+    const doi = normaliseDoi(v);
+    if (!doi) { input.classList.add('invalid'); hasInvalid = true; continue; }
+    dois.push(doi);
+  }
+
+  if (hasInvalid) return;
+  if (dois.length === 0) { alert('Please enter at least one DOI.'); return; }
+
+  const btn = document.getElementById('recommend-submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'Submitting…';
+
+  try {
+    const resp = await fetch(BACKEND + '/papers/recommend', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: ratingEmail || null, dois })
+    });
+    if (!resp.ok) throw new Error('Server error ' + resp.status);
+
+    // Clear entries
+    const container = document.getElementById('recommend-entries');
+    container.innerHTML = '<div class="recommend-entry"><input type="text" placeholder="DOI or arXiv ID — e.g. 10.1017/jfm.2025.123" oninput="validateDoiInput(this)"><button class="recommend-remove" onclick="removeEntry(this)" title="Remove">×</button></div>';
+
+    document.getElementById('recommend-success').classList.add('show');
+    setTimeout(() => document.getElementById('recommend-success').classList.remove('show'), 5000);
+  } catch (e) {
+    alert('Could not submit recommendations — please try again. (' + e.message + ')');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Submit recommendations →';
+  }
+}
+
+/* ── RATINGS ── */
+const BACKEND='https://lm-digest-backend-production.up.railway.app';
+const ratings=new Set(); // doi strings rated by current user
+let ratingEmail=''; // set when user subscribes or from localStorage
+
+function setRatingEmail(email){
+  ratingEmail=email;
+  if(email) localStorage.setItem('lmd_email',email);
+}
+
+// Restore email from previous session
+(function(){
+  const e=localStorage.getItem('lmd_email');
+  if(e) ratingEmail=e;
+  // Restore locally-known ratings (optimistic, synced on load)
+  const r=localStorage.getItem('lmd_ratings');
+  if(r) JSON.parse(r).forEach(d=>ratings.add(d));
+})();
+
+function showToast(msg){
+  let t=document.getElementById('rating-toast');
+  if(!t){t=document.createElement('div');t.id='rating-toast';t.className='rating-toast';document.body.appendChild(t);}
+  t.textContent=msg;t.classList.add('show');
+  clearTimeout(t._to);t._to=setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+async function toggleRating(btn, doi, title){
+  if(!ratingEmail){
+    showToast('Subscribe first to save ratings to your profile');
+    return;
+  }
+  const wasRated=ratings.has(doi);
+  const rating=wasRated?0:1; // toggle
+
+  // Optimistic UI
+  if(rating===1){ratings.add(doi);} else {ratings.delete(doi);}
+  localStorage.setItem('lmd_ratings',JSON.stringify([...ratings]));
+
+  // Update ALL thumb buttons for this DOI on the page
+  document.querySelectorAll('.thumb-btn').forEach(b=>{
+    if(b.getAttribute('onclick')&&b.getAttribute('onclick').includes(doi.replace(/'/g,"\'"))) {
+      b.classList.toggle('active', rating===1);
+      b.querySelector('svg').setAttribute('fill', rating===1?'currentColor':'none');
+      b.childNodes[b.childNodes.length-1].textContent=' '+(rating===1?'Relevant':'Mark relevant');
+    }
+  });
+
+  showToast(rating===1?'Saved — helps improve your digest':'Removed from relevant papers');
+
+  // Persist to Railway
+  try {
+    await fetch(BACKEND+'/papers/rate',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email:ratingEmail, doi, title, rating})
+    });
+  } catch(e) {
+    console.warn('Rating sync failed (will retry next session):', e.message);
+  }
+}
+
 /* ── INIT ── */
 buildTopicsGrid();
-loadDemo();
+
+// ── Render summary block above digest output
+function renderSummaryBlock(summary, createdAt, paperCount) {
+  const existing = document.getElementById('digest-summary-block');
+  if (existing) existing.remove();
+
+  const dateStr = new Date(createdAt).toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
+  const div = document.createElement('div');
+  div.id = 'digest-summary-block';
+  div.style.cssText = 'background:rgba(0,229,255,0.05);border:1px solid rgba(0,229,255,0.15);border-radius:4px;padding:1.35rem 1.6rem;margin-bottom:2rem';
+  const label = document.createElement('div');
+  label.style.cssText = 'font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.85rem';
+  label.textContent = 'This week in liquid metal research';
+  div.appendChild(label);
+  summary.split(/
+
++/).filter(Boolean).forEach(para => {
+    const p = document.createElement('p');
+    p.style.cssText = 'font-size:13.5px;line-height:1.8;color:rgba(255,255,255,0.72);margin:0 0 0.75rem';
+    p.textContent = para;
+    div.appendChild(p);
+  });
+  const meta = document.createElement('div');
+  meta.style.cssText = 'font-family:var(--mono);font-size:9px;color:rgba(255,255,255,0.3);margin-top:0.5rem';
+  meta.textContent = `Generated ${dateStr} · ${paperCount} papers`;
+  div.appendChild(meta);
+  const output = document.getElementById('digest-output');
+  output.insertBefore(div, output.firstChild);
+}
+
+// ── Load digest from Railway — always try live data first, fall back to demo
+(async function init() {
+  const params      = new URLSearchParams(window.location.search);
+  const digestParam = params.get('digest');
+  const freq        = (digestParam && digestParam !== 'latest') ? digestParam : 'weekly';
+
+  // Switch to digest panel if URL requested it
+  if (digestParam) {
+    switchPanel('digest', document.querySelectorAll('.nav-pill')[1]);
+  }
+
+  setStatus(true, 'Loading latest digest from server…');
+  document.getElementById('run-btn').disabled = true;
+
+  try {
+    const resp = await fetch(`${BACKEND}/digest/latest?freq=${freq}`);
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const data = await resp.json();
+    if (!data.papers || data.papers.length === 0) throw new Error('No papers stored yet');
+
+    // Render papers
+    document.getElementById('digest-output').innerHTML = '';
+    const focus = document.getElementById('focus-select').value;
+    currentData = renderDigest(data.papers, focus);
+    renderEmailBody(currentData, focus);
+
+    // Render summary block
+    if (data.summary) renderSummaryBlock(data.summary, data.created_at, data.papers.length);
+
+    setStatus(false);
+    console.log(`Loaded live digest: ${data.papers.length} papers (${freq}, id=${data.id})`);
+    const dateLoaded = new Date(data.created_at).toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
+    document.getElementById('digest-source-label').textContent =
+      `Latest digest · ${dateLoaded} · ${data.papers.length} papers · arXiv · ACS · Nature · Wiley`;
+
+  } catch(e) {
+    // Fall back to demo data — no error shown, just quiet fallback
+    setStatus(false);
+    console.info(`Live digest unavailable (${e.message}) — showing demo data`);
+    document.getElementById('digest-source-label').textContent = 'Demo data · arXiv · ACS · Nature · Wiley · Elsevier · Physical Review';
+    loadDemo();
+  }
+
+  document.getElementById('run-btn').disabled = false;
+})();
 </script>
 </body>
 </html>
