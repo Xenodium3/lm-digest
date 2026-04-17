@@ -1170,10 +1170,6 @@ function showToast(msg){
 }
 
 async function toggleRating(btn, doi, title){
-  if(!ratingEmail){
-    showToast('Subscribe first to save ratings to your profile');
-    return;
-  }
   const wasRated=ratings.has(doi);
   const rating=wasRated?0:1; // toggle
 
@@ -1190,17 +1186,17 @@ async function toggleRating(btn, doi, title){
     }
   });
 
-  showToast(rating===1?'Saved — helps improve your digest':'Removed from relevant papers');
+  showToast(rating===1?'Marked as relevant — helps improve future searches':'Removed');
 
-  // Persist to Railway
+  // Persist to Railway as community signal — no login required
   try {
     await fetch(BACKEND+'/papers/rate',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({email:ratingEmail, doi, title, rating})
+      body:JSON.stringify({email:'community', doi, title, rating})
     });
   } catch(e) {
-    console.warn('Rating sync failed (will retry next session):', e.message);
+    console.warn('Rating sync failed:', e.message);
   }
 }
 
