@@ -512,7 +512,7 @@ app.<span class="cf">listen</span>(<span class="cn">3000</span>, () => console.<
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 const TOPICS=[
   {id:'nuclear',label:'Nuclear Fusion / Fission'},
   {id:'planetary',label:'Planetary & Geo/Astrophysics'},
@@ -1217,9 +1217,7 @@ function renderSummaryBlock(summary, createdAt, paperCount) {
   label.style.cssText = 'font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.85rem';
   label.textContent = 'This week in liquid metal research';
   div.appendChild(label);
-  summary.split(/
-
-+/).filter(Boolean).forEach(para => {
+    summary.split(/\n\n+/).filter(Boolean).forEach(para => {
     const p = document.createElement('p');
     p.style.cssText = 'font-size:13.5px;line-height:1.8;color:rgba(255,255,255,0.72);margin:0 0 0.75rem';
     p.textContent = para;
