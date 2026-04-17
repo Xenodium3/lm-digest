@@ -27,7 +27,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 .brand .dot{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);animation:pulse 2s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.85)}}
 .nav-pills{display:flex;gap:2px}
-.nav-pill{background:none;border:none;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--dimmer);padding:0 1rem;height:56px;cursor:pointer;position:relative;transition:color 0.2s}
+.nav-pill{background:none;border:none;font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--dimmer);padding:0 1.25rem;height:56px;cursor:pointer;position:relative;transition:color 0.2s}
 .nav-pill::after{content:'';position:absolute;bottom:0;left:1rem;right:1rem;height:2px;background:var(--cyan);transform:scaleX(0);transition:transform 0.2s;box-shadow:0 0 8px var(--cyan)}
 .nav-pill:hover{color:rgba(255,255,255,0.6)}
 .nav-pill.active{color:var(--cyan)}
@@ -45,9 +45,9 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,229,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,0.03) 1px,transparent 1px);background-size:40px 40px;mask-image:radial-gradient(ellipse 80% 60% at 50% 50%,black 30%,transparent 80%);animation:gridfloat 8s ease-in-out infinite}
 @keyframes gridfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 
-.hero-title{position:relative;z-index:1;font-family:var(--serif);font-size:clamp(2.4rem,5.5vw,4.2rem);font-weight:400;line-height:1.05;margin-bottom:0.6rem}
+.hero-title{position:relative;z-index:1;font-family:var(--serif);font-size:clamp(3.2rem,6.5vw,5.5rem);font-weight:400;line-height:1.05;margin-bottom:0.6rem}
 .hero-title em{display:block;font-style:italic;font-size:clamp(1.35rem,2.8vw,2rem);background:linear-gradient(135deg,rgba(200,200,210,0.9),rgba(255,255,255,0.55));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-top:0.5rem;letter-spacing:0.01em}
-.hero-sub{position:relative;z-index:1;font-family:var(--serif);color:var(--dim);font-size:1.15rem;max-width:520px;margin:0 auto;font-weight:400;line-height:1.6}
+.hero-sub{position:relative;z-index:1;font-family:var(--serif);color:var(--dim);font-size:1.6rem;max-width:580px;margin:0 auto;font-weight:400;line-height:1.5}
 
 .survey-wrap{max-width:680px;margin:0 auto;padding:3rem 1.5rem 5rem}
 .form-card{background:var(--panel);border:1px solid var(--border);border-radius:4px;overflow:hidden}
@@ -126,7 +126,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 .paper-meta{display:flex;flex-wrap:wrap;gap:0.4rem 1.25rem;font-family:var(--mono);font-size:12.5px;color:var(--dimmer);margin-bottom:0.75rem}
 .paper-meta a{color:var(--cyan2);text-decoration:none;font-size:11.5px;letter-spacing:0.05em}
 .paper-meta a:hover{color:var(--cyan);text-decoration:underline}
-.paper-abstract{font-size:15px;line-height:1.75;color:rgba(255,255,255,0.62);font-weight:400}
+.paper-abstract{font-family:var(--serif);font-size:15px;line-height:1.75;color:rgba(255,255,255,0.62);font-weight:400}
 .paper-footer{display:flex;align-items:center;justify-content:space-between;margin-top:0.85rem}
 .thumb-btn{display:flex;align-items:center;gap:5px;background:none;border:1px solid var(--border);border-radius:3px;padding:3px 10px;font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--dimmer);cursor:pointer;transition:all 0.15s}
 .thumb-btn:hover{border-color:rgba(0,229,255,0.4);color:var(--cyan)}
@@ -159,7 +159,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 .recommend-submit{padding:0.5rem 1.25rem;background:var(--cyan);color:#050508;border:none;border-radius:3px;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:all 0.15s}
 .recommend-submit:hover{background:#22f0ff}
 .recommend-submit:disabled{background:var(--dark3);color:var(--dimmer);cursor:not-allowed}
-.recommend-note{font-family:var(--mono);font-size:10px;color:var(--dimmer);line-height:1.6;margin-top:0.75rem}
+.recommend-note{font-family:var(--serif);font-size:13px;color:var(--dim);line-height:1.65;margin-top:0.75rem}
 .recommend-success{display:none;margin-top:0.75rem;padding:0.75rem 1rem;background:rgba(0,229,138,0.06);border:1px solid rgba(0,229,138,0.2);border-radius:3px;font-family:var(--mono);font-size:11px;color:var(--green);letter-spacing:0.04em}
 .recommend-success.show{display:block}
 
@@ -206,7 +206,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   .two-col,.arch-grid{grid-template-columns:1fr}
   .form-section{padding:1.5rem}
   .hero-title{font-size:2rem}
-  .nav-pill{padding:0 0.65rem;font-size:9px}
+  .nav-pill{padding:0 0.75rem;font-size:12px}
   .api-input-wrap input{width:120px}
   .ec-body,.ec-header,.ec-footer{padding-left:1.25rem;padding-right:1.25rem}
 }
@@ -249,8 +249,8 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   <div class="nav-pills">
     <button class="nav-pill active" onclick="switchPanel('survey',this)">Subscribe</button>
     <button class="nav-pill" onclick="switchPanel('digest',this)">Digest</button>
-    <button class="nav-pill" onclick="switchPanel('email',this)">Email</button>
-    <button class="nav-pill" onclick="switchPanel('backend',this)">Setup</button>
+    <button class="nav-pill" onclick="switchPanel('contact',this)">Contact</button>
+    <button class="nav-pill" onclick="switchPanel('setup',this)">How it works</button>
   </div>
 </nav>
 
@@ -259,8 +259,8 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   <div class="survey-hero">
     <div class="hero-photo"></div>
     <div class="hero-bg"></div><div class="hero-grid"></div>
-    <h1 class="hero-title">Liquid Metals Research Newsletter<br><em>delivered to your inbox</em></h1>
-    <p class="hero-sub">Weekly or monthly digests of newly published papers and preprints — ranked by your research focus, written in plain language. Delivered every Monday at 8am ET.</p>
+    <h1 class="hero-title">Liquid Metals Research Newsletter</h1>
+    <p class="hero-sub">Your personalized digest delivered to inbox.</p>
   </div>
   <div class="survey-wrap">
     <div class="form-card">
@@ -287,18 +287,18 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
         <div class="freq-row" id="freq-row">
           <div class="freq-opt active" onclick="setFreq(this,'weekly')">
             <div>Weekly</div>
-            <div style="font-size:9px;font-weight:400;opacity:0.6;margin-top:2px">Every Monday · 8am ET</div>
+            <div style="font-family:var(--mono);font-size:11px;font-weight:400;opacity:0.75;margin-top:3px;letter-spacing:0.04em">Every Monday · 8am ET</div>
           </div>
           <div class="freq-opt" onclick="setFreq(this,'biweekly')">
             <div>Every 2 weeks</div>
-            <div style="font-size:9px;font-weight:400;opacity:0.6;margin-top:2px">Alternating Mondays · 8am ET</div>
+            <div style="font-family:var(--mono);font-size:11px;font-weight:400;opacity:0.75;margin-top:3px;letter-spacing:0.04em">Alternating Mondays · 8am ET</div>
           </div>
           <div class="freq-opt" onclick="setFreq(this,'monthly')">
             <div>Monthly</div>
-            <div style="font-size:9px;font-weight:400;opacity:0.6;margin-top:2px">1st of month · 8am ET</div>
+            <div style="font-family:var(--mono);font-size:11px;font-weight:400;opacity:0.75;margin-top:3px;letter-spacing:0.04em">1st of month · 8am ET</div>
           </div>
         </div>
-        <p style="font-family:var(--mono);font-size:10px;color:var(--dimmer);margin-top:0.65rem;line-height:1.6">
+        <p style="font-family:var(--mono);font-size:11px;color:var(--dim);margin-top:0.75rem;line-height:1.7;letter-spacing:0.03em">
           All digests are sent at <strong style="color:rgba(255,255,255,0.5)">8am Eastern Time</strong> (1pm UTC).
           Weekly subscribers also receive a Sunday 8am ET preview of that week's papers — giving you a chance to recommend any missing papers before Monday's full digest.
         </p>
@@ -328,40 +328,11 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
         <h2>Liquid Metal <span>Research Digest</span></h2>
         <p id="digest-source-label" style="color:var(--dimmer);font-family:var(--mono);font-size:11px;margin-top:0.3rem;letter-spacing:0.06em">Loading latest digest…</p>
       </div>
-      <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
-        <button class="btn-secondary" onclick="copyToEmail()">→ Email preview</button>
-        <button class="btn-primary" id="run-btn" onclick="runSearch()">Generate digest</button>
-      </div>
+
     </div>
 
-    <div class="control-bar">
-      <label>API KEY</label>
-      <div class="api-input-wrap">
-        <span>sk-ant-</span>
-        <input type="password" id="api-key" placeholder="your-key-here" autocomplete="off">
-      </div>
-      <label style="margin-left:0.75rem">FOCUS</label>
-      <select id="focus-select">
-        <option value="nuclear">Nuclear / Fusion first</option>
-        <option value="mhd">Planetary &amp; Geo/Astrophysics first</option>
-        <option value="electronics">Flexible Electronics first</option>
-        <option value="biomedical">Biomedical / Robotics first</option>
-        <option value="all">All areas (balanced)</option>
-      </select>
-      <div class="spacer"></div>
-      <button class="btn-secondary" onclick="loadDemo()">Load demo data</button>
-    </div>
 
-    <div class="status-bar" id="status-bar">
-      <div class="status-spinner"></div>
-      <span id="status-text">Searching journals and arXiv…</span>
-    </div>
-    <div id="digest-output">
-      <div class="state-box">
-        <div class="icon">◈</div>
-        Enter your Anthropic API key and click <strong style="color:var(--text)">Generate digest</strong> for a live AI search,<br>or click <strong style="color:var(--text)">Load demo data</strong> to preview with real recent papers.
-      </div>
-    </div>
+    <div id="digest-output"></div>
 
     <!-- ── Paper recommendation box ── -->
     <div class="recommend-box">
@@ -391,124 +362,150 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 </div>
 
 <!-- ═══════ PANEL 3 — EMAIL ═══════ -->
-<div id="panel-email" class="panel">
-  <div class="email-wrap">
-    <div class="email-toolbar">
-      <span>RENDERED EMAIL PREVIEW</span>
-      <button class="btn-secondary" onclick="copyEmailHTML()">Copy HTML</button>
-      <button class="btn-secondary" onclick="copyEmailText()">Copy plain text</button>
-      <button class="btn-primary" onclick="switchPanel('backend',document.querySelectorAll('.nav-pill')[3])">SMTP setup →</button>
-    </div>
-    <div class="email-card" id="email-card">
-      <div class="ec-header">
-        <div class="ec-label">LM · Digest</div>
-        <div class="ec-date" id="ec-date">Week of —</div>
-        <h1>Liquid Metal Research Digest</h1>
-        <p id="ec-subtitle">Generate a digest first to populate this email preview.</p>
-      </div>
-      <div class="ec-body" id="ec-body">
-        <p style="color:#aaa;font-family:sans-serif;font-size:13px">Switch to the Digest tab and generate or load papers to populate this email.</p>
-      </div>
-      <div class="ec-footer">
-        You're receiving this because you subscribed at <strong>lm-digest.example.com</strong><br>
-        <a href="#">Unsubscribe</a> &nbsp;·&nbsp; <a href="#">Update preferences</a> &nbsp;·&nbsp; <a href="#">View in browser</a>
-      </div>
-    </div>
-  </div>
-</div>
+
 
 <!-- ═══════ PANEL 4 — BACKEND ═══════ -->
-<div id="panel-backend" class="panel">
-  <div class="backend-wrap">
-    <h2>Server Setup Guide</h2>
-    <p>Deploy the full newsletter pipeline on your personal server. Node.js + Express + Nodemailer + SMTP.</p>
-    <div class="arch-grid">
-      <div class="arch-card"><h4>01 — Serve the page</h4><p>Host this HTML file via Nginx or Caddy. Expose <code>POST /subscribe</code> to save subscribers and <code>GET /digest/send</code> to trigger manually.</p></div>
-      <div class="arch-card"><h4>02 — Store subscribers</h4><p>Each POST writes to <code>subscribers.json</code> (or SQLite). Fields: name, email, topics[], focus_text, frequency, created_at.</p></div>
-      <div class="arch-card"><h4>03 — Cron job</h4><p>Weekly: <code>0 13 * * 1</code> &nbsp; Monthly: <code>0 13 1 * *</code> &nbsp; Preview: <code>0 13 * * 0</code>. All run at 1pm UTC (8am ET). Calls Anthropic API with web_search, generates personalised HTML, sends via SMTP.</p></div>
-      <div class="arch-card"><h4>04 — SMTP config</h4><p>Set <code>SMTP_HOST</code>, <code>SMTP_USER</code>, <code>SMTP_PASS</code>, <code>FROM_EMAIL</code> in <code>.env</code>. Works with Postfix, Gmail SMTP, SendGrid, Mailgun relay.</p></div>
-    </div>
-
-    <div class="code-block">
-<span class="cm">// server.js — Express + Nodemailer + Anthropic SDK</span>
-<span class="ck">require</span>(<span class="cs">'dotenv'</span>).<span class="cf">config</span>();
-<span class="ck">const</span> express  = <span class="ck">require</span>(<span class="cs">'express'</span>);
-<span class="ck">const</span> fs       = <span class="ck">require</span>(<span class="cs">'fs'</span>);
-<span class="ck">const</span> mail     = <span class="ck">require</span>(<span class="cs">'nodemailer'</span>);
-<span class="ck">const</span> Anthropic = <span class="ck">require</span>(<span class="cs">'@anthropic-ai/sdk'</span>);
-<span class="ck">const</span> app = <span class="cf">express</span>();
-app.<span class="cf">use</span>(express.<span class="cf">json</span>(), express.<span class="cf">static</span>(<span class="cs">'public'</span>));
-
-<span class="cm">// SMTP transport</span>
-<span class="ck">const</span> smtp = mail.<span class="cf">createTransport</span>({
-  host: process.env.<span class="cn">SMTP_HOST</span>, port: <span class="cn">587</span>, secure: <span class="cn">false</span>,
-  auth: { user: process.env.<span class="cn">SMTP_USER</span>, pass: process.env.<span class="cn">SMTP_PASS</span> }
-});
-
-<span class="cm">// Save subscriber</span>
-app.<span class="cf">post</span>(<span class="cs">'/subscribe'</span>, (req, res) => {
-  <span class="ck">const</span> db = JSON.<span class="cf">parse</span>(fs.<span class="cf">readFileSync</span>(<span class="cs">'subscribers.json'</span>, <span class="cs">'utf8'</span>));
-  db.<span class="cf">push</span>({ ...req.body, id: <span class="cf">Date</span>.<span class="cf">now</span>(), created_at: <span class="ck">new</span> <span class="cf">Date</span>().<span class="cf">toISOString</span>() });
-  fs.<span class="cf">writeFileSync</span>(<span class="cs">'subscribers.json'</span>, JSON.<span class="cf">stringify</span>(db, <span class="cn">null</span>, 2));
-  res.<span class="cf">json</span>({ ok: <span class="cn">true</span> });
-});
-
-<span class="cm">// Generate + send digest for one subscriber</span>
-<span class="ck">async function</span> <span class="cf">sendDigest</span>(sub) {
-  <span class="ck">const</span> client = <span class="ck">new</span> Anthropic({ apiKey: process.env.<span class="cn">ANTHROPIC_API_KEY</span> });
-  <span class="ck">const</span> focus  = sub.focus_text || sub.topics.<span class="cf">join</span>(<span class="cs">', '</span>);
-  <span class="ck">const</span> period = sub.frequency === <span class="cs">'weekly'</span> ? <span class="cs">'past 7 days'</span> : <span class="cs">'past 30 days'</span>;
-
-  <span class="ck">const</span> msg = <span class="ck">await</span> client.messages.<span class="cf">create</span>({
-    model:      <span class="cs">'claude-sonnet-4-20250514'</span>,
-    max_tokens: <span class="cn">6000</span>,
-    tools:      [{ type: <span class="cs">'web_search_20250305'</span>, name: <span class="cs">'web_search'</span> }],
-    messages:   [{ role: <span class="cs">'user'</span>, content: <span class="cf">buildPrompt</span>(focus, period) }]
-  });
-
-  <span class="ck">const</span> text   = msg.content.<span class="cf">filter</span>(b => b.type === <span class="cs">'text'</span>).<span class="cf">map</span>(b => b.text).<span class="cf">join</span>(<span class="cs">'\n'</span>);
-  <span class="ck">const</span> papers = <span class="cf">JSON</span>.<span class="cf">parse</span>(text.<span class="cf">match</span>(<span class="cs">/\[\s*\{[\s\S]*\}\s*\]/</span>)[0]);
-  <span class="ck">const</span> html   = <span class="cf">renderEmailHTML</span>(sub, papers);
-
-  <span class="ck">await</span> smtp.<span class="cf">sendMail</span>({
-    from:    <span class="cs">`"LM Digest" &lt;${process.env.FROM_EMAIL}&gt;`</span>,
-    to:      sub.email,
-    subject: <span class="cs">`Liquid Metal Research Digest — ${new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'})}`</span>,
-    html
-  });
-  console.<span class="cf">log</span>(<span class="cs">`✓ Sent to ${sub.email}`</span>);
-}
-
-<span class="cm">// Manual trigger: GET /digest/send?freq=weekly</span>
-app.<span class="cf">get</span>(<span class="cs">'/digest/send'</span>, <span class="ck">async</span> (req, res) => {
-  <span class="ck">const</span> freq = req.query.freq || <span class="cs">'weekly'</span>;
-  <span class="ck">const</span> subs = JSON.<span class="cf">parse</span>(fs.<span class="cf">readFileSync</span>(<span class="cs">'subscribers.json'</span>))
-               .<span class="cf">filter</span>(s => s.frequency === freq);
-  <span class="ck">for</span> (<span class="ck">const</span> sub <span class="ck">of</span> subs) <span class="ck">await</span> <span class="cf">sendDigest</span>(sub);
-  res.<span class="cf">json</span>({ sent: subs.length });
-});
-
-app.<span class="cf">listen</span>(<span class="cn">3000</span>, () => console.<span class="cf">log</span>(<span class="cs">'▶ LM Digest server on :3000'</span>));
-</div>
-
-    <div class="code-block">
-<span class="cm"># .env</span>
-<span class="cn">ANTHROPIC_API_KEY</span>=sk-ant-...
-<span class="cn">SMTP_HOST</span>=smtp.yourserver.com
-<span class="cn">SMTP_USER</span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="675a030e00021413271e08121503080a060e094904080a">[email&#160;protected]</a>
-<span class="cn">SMTP_PASS</span>=your-smtp-password
-<span class="cn">FROM_EMAIL</span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="99a4fdf0fefceaedd9e0f6ecebfdf6f4f8f0f7b7faf6f4">[email&#160;protected]</a>
-
-<span class="cm"># crontab -e  (weekly Mon 8am / monthly 1st 8am)</span>
-<span class="cn">0 8 * * 1</span>  curl -s http://localhost:3000/digest/send?freq=weekly
-<span class="cn">0 8 1 * *</span>  curl -s http://localhost:3000/digest/send?freq=monthly
-</div>
-
-    <div class="arch-card" style="border-left:3px solid var(--cyan);margin-top:0.5rem">
-      <h4>What the AI search prompt does</h4>
-      <p>Instructs Claude to search arXiv, Google Scholar, ACS, Nature, Wiley, Physical Review, and Elsevier for liquid metal papers in the past 7 (or 30) days. Crucially, it searches for papers where liquid metal appears in the <em style="color:var(--text)">abstract</em> — catching geophysics, MHD turbulence, planetary core dynamics, and rotating magnetoconvection papers. Returns a structured JSON array with real author names, specific dates, clickable DOIs, and plain-language summaries. Subscriber's primary topic is listed first.</p>
+<div id="panel-contact" class="panel">
+  <div style="max-width:560px;margin:0 auto;padding:4rem 1.5rem 5rem">
+    <h2 style="font-family:var(--serif);font-size:2rem;font-weight:400;color:var(--text);margin-bottom:0.5rem">Get in touch</h2>
+    <p style="font-family:var(--serif);font-size:1.1rem;color:var(--dim);margin-bottom:2.5rem;line-height:1.65">Questions about the digest, paper suggestions, or anything else — send a message and we'll get back to you.</p>
+    <div style="display:flex;flex-direction:column;gap:1rem">
+      <div class="field"><label>Your name</label><input type="text" id="c-name" placeholder="Your name"></div>
+      <div class="field"><label>Your email</label><input type="email" id="c-email" placeholder="you@institution.edu"></div>
+      <div class="field"><label>Message</label><textarea id="c-message" placeholder="Your message…" style="min-height:140px"></textarea></div>
+      <button class="submit-btn" id="contact-btn" onclick="submitContact()">Send message →</button>
+      <div id="contact-success" style="display:none;padding:0.85rem 1.25rem;background:rgba(0,229,138,0.08);border:1px solid rgba(0,229,138,0.25);border-radius:3px;font-family:var(--serif);font-size:14px;color:var(--green)">✓ &nbsp;Message sent — thank you.</div>
+      <div id="contact-error" style="display:none;padding:0.85rem 1.25rem;background:rgba(255,68,88,0.08);border:1px solid rgba(255,68,88,0.2);border-radius:3px;font-family:var(--serif);font-size:14px;color:var(--red)">Could not send — please email us directly at <a href="mailto:yufanxu94@gmail.com" style="color:var(--cyan)">yufanxu94@gmail.com</a></div>
     </div>
   </div>
+</div>
+
+<!-- ═══════ PANEL 4 — SETUP ═══════ -->
+<div id="panel-setup" class="panel">
+<div style="max-width:860px;margin:0 auto;padding:3.5rem 1.5rem 6rem">
+
+  <!-- INTRO -->
+  <h2 style="font-family:var(--serif);font-size:2.2rem;font-weight:400;color:var(--text);margin-bottom:0.6rem;line-height:1.15">How the digest works</h2>
+  <p style="font-family:var(--serif);font-size:1.1rem;color:var(--dim);max-width:640px;line-height:1.7;margin-bottom:3rem">This newsletter is fully automated — no manual curation. Every week an AI research librarian searches academic databases, verifies what it finds, personalises the results for each subscriber, and delivers them by email. Here is how the pieces fit together.</p>
+
+  <!-- SECTION 1: FILE STRUCTURE -->
+  <div style="margin-bottom:3.5rem">
+    <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">01 — Code structure<span style="flex:1;height:1px;background:var(--border2)"></span></div>
+    <p style="font-family:var(--serif);font-size:1rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">Five files do all the work. <code style="font-family:var(--mono);font-size:12px;background:var(--dark3);color:var(--gold);padding:2px 6px;border-radius:2px">shared.cjs</code> is the library — it exports the search prompt, DOI verification, CrossRef lookups, and author hydration. Both pipeline scripts require it, so there is only one copy of every critical function. <code style="font-family:var(--mono);font-size:12px;background:var(--dark3);color:var(--gold);padding:2px 6px;border-radius:2px">server.js</code> runs continuously on Railway and exposes the REST API that everything else calls. The two pipeline scripts run ephemerally inside GitHub Actions once a week.</p>
+    <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;overflow:hidden">
+      <table style="width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12px">
+        <thead><tr style="border-bottom:1px solid var(--border2)">
+          <td style="padding:10px 16px;color:var(--cyan);font-weight:700">File</td>
+          <td style="padding:10px 16px;color:var(--cyan);font-weight:700">Lines</td>
+          <td style="padding:10px 16px;color:var(--cyan);font-weight:700">Role</td>
+        </tr></thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">shared.cjs</td><td style="padding:10px 16px;color:var(--dimmer)">288</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--serif);font-size:13px">Single source of truth — prompt, Sonnet search, Haiku calls, DOI verify, CrossRef, author hydration</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">server.js</td><td style="padding:10px 16px;color:var(--dimmer)">663</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--serif);font-size:13px">Always-on Express API on Railway — subscribers, digest store, ratings, recommendations</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">preview.cjs</td><td style="padding:10px 16px;color:var(--dimmer)">215</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--serif);font-size:13px">Sunday pipeline — search, verify, hydrate authors, store as preview, email admin</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">digest.cjs</td><td style="padding:10px 16px;color:var(--dimmer)">503</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--serif);font-size:13px">Monday pipeline — reuse Sunday preview, merge late recommendations, rerank per subscriber, send emails</td></tr>
+          <tr><td style="padding:10px 16px;color:var(--text)">index.html</td><td style="padding:10px 16px;color:var(--dimmer)">~1200</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--serif);font-size:13px">This page — subscribe form, digest viewer, thumbs-up ratings, DOI recommendation box</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SECTION 2: WEEKLY CYCLE -->
+  <div style="margin-bottom:3.5rem">
+    <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">02 — Weekly cycle<span style="flex:1;height:1px;background:var(--border2)"></span></div>
+    <p style="font-family:var(--serif);font-size:1rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">The week runs in two phases separated by 24 hours. Sunday's search builds the canonical paper pool and emails a preview to the admin. Monday reuses that pool, merges any late recommendations, personalises the order for each subscriber, and sends the full digest.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+      <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.25rem 1.5rem">
+        <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--cyan);margin-bottom:1rem">Sunday · 8am ET</div>
+        <div style="display:flex;flex-direction:column;gap:0.6rem">
+          <div style="font-family:var(--serif);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">1</span>Search arXiv, ACS, Nature, Wiley, Elsevier, Physical Review</div>
+          <div style="font-family:var(--serif);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">2</span>Verify every DOI resolves and title matches</div>
+          <div style="font-family:var(--serif);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">3</span>Hydrate author lists from CrossRef and arXiv</div>
+          <div style="font-family:var(--serif);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">4</span>Store verified pool in database as <em>preview</em></div>
+          <div style="font-family:var(--serif);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">5</span>Email compact list to admin for review</div>
+        </div>
+      </div>
+      <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.25rem 1.5rem">
+        <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--cyan);margin-bottom:1rem">Monday · 8am ET</div>
+        <div style="display:flex;flex-direction:column;gap:0.6rem">
+          <div style="font-family:var(--serif);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">1</span>Load Sunday preview from database</div>
+          <div style="font-family:var(--serif);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">2</span>Fetch any DOIs recommended after Sunday</div>
+          <div style="font-family:var(--serif);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">3</span>Generate two-paragraph summary with Haiku</div>
+          <div style="font-family:var(--serif);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">4</span>Re-rank paper pool for each subscriber's profile</div>
+          <div style="font-family:var(--serif);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">5</span>Send personalised email to all subscribers simultaneously</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: SELF-IMPROVEMENT -->
+  <div style="margin-bottom:3.5rem">
+    <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">03 — Self-improving search<span style="flex:1;height:1px;background:var(--border2)"></span></div>
+    <p style="font-family:var(--serif);font-size:1rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">Each week's search gets smarter based on three signals from subscribers. These are injected directly into the search prompt so the AI librarian knows what this audience values before it begins.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem">
+      <div style="background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--cyan);border-radius:0 6px 6px 0;padding:1.25rem 1.25rem">
+        <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.6rem">Ratings</div>
+        <p style="font-family:var(--serif);font-size:13.5px;color:var(--dim);line-height:1.65">Thumbs up on any paper in the Digest tab. Highly rated papers become relevance examples injected into the next week's prompt.</p>
+      </div>
+      <div style="background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--cyan);border-radius:0 6px 6px 0;padding:1.25rem 1.25rem">
+        <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.6rem">Recommendations</div>
+        <p style="font-family:var(--serif);font-size:13.5px;color:var(--dim);line-height:1.65">Submit a DOI at the bottom of the Digest tab. The paper is looked up, verified, and added to Monday's digest regardless of recency or journal tier.</p>
+      </div>
+      <div style="background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--cyan);border-radius:0 6px 6px 0;padding:1.25rem 1.25rem">
+        <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.6rem">Subscriber profile</div>
+        <p style="font-family:var(--serif);font-size:13.5px;color:var(--dim);line-height:1.65">Research focus, affiliation, and comments from your subscription form. Used by Haiku to re-rank the paper pool specifically for you before sending.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: STACK -->
+  <div style="margin-bottom:3.5rem">
+    <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">04 — Technology stack<span style="flex:1;height:1px;background:var(--border2)"></span></div>
+    <p style="font-family:var(--serif);font-size:1rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">Built entirely with open tooling and deployed on free or near-free infrastructure. The Anthropic API is the only meaningful cost — roughly one Sonnet search call per week.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+      <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.25rem 1.5rem">
+        <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:0.85rem">AI</div>
+        <div style="display:flex;flex-direction:column;gap:0.5rem">
+          <div style="font-family:var(--serif);font-size:13.5px;color:var(--dim)"><span style="color:var(--text)">Claude Sonnet 4</span> — weekly paper search with web search tool</div>
+          <div style="font-family:var(--serif);font-size:13.5px;color:var(--dim)"><span style="color:var(--text)">Claude Haiku</span> — digest summary and per-subscriber re-ranking</div>
+          <div style="font-family:var(--serif);font-size:13.5px;color:var(--dim)"><span style="color:var(--text)">CrossRef API</span> — DOI verification and preprint upgrade detection</div>
+          <div style="font-family:var(--serif);font-size:13.5px;color:var(--dim)"><span style="color:var(--text)">arXiv API</span> — author metadata for preprints</div>
+        </div>
+      </div>
+      <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.25rem 1.5rem">
+        <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:0.85rem">Infrastructure</div>
+        <div style="display:flex;flex-direction:column;gap:0.5rem">
+          <div style="font-family:var(--serif);font-size:13.5px;color:var(--dim)"><span style="color:var(--text)">Railway</span> — Node.js backend + PostgreSQL, always-on</div>
+          <div style="font-family:var(--serif);font-size:13.5px;color:var(--dim)"><span style="color:var(--text)">GitHub Actions</span> — cron jobs for Sunday preview and Monday digest</div>
+          <div style="font-family:var(--serif);font-size:13.5px;color:var(--dim)"><span style="color:var(--text)">GitHub Pages</span> — this website, deployed on every push</div>
+          <div style="font-family:var(--serif);font-size:13.5px;color:var(--dim)"><span style="color:var(--text)">SMTP</span> — email delivery via any standard mail relay</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: DATABASE -->
+  <div>
+    <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">05 — Database<span style="flex:1;height:1px;background:var(--border2)"></span></div>
+    <p style="font-family:var(--serif);font-size:1rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">Four PostgreSQL tables on Railway. Papers are stored as JSONB so the schema never needs to change as the paper structure evolves.</p>
+    <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;overflow:hidden">
+      <table style="width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12px">
+        <thead><tr style="border-bottom:1px solid var(--border2)">
+          <td style="padding:10px 16px;color:var(--cyan);font-weight:700">Table</td>
+          <td style="padding:10px 16px;color:var(--cyan);font-weight:700">Key columns</td>
+          <td style="padding:10px 16px;color:var(--cyan);font-weight:700">Purpose</td>
+        </tr></thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">subscribers</td><td style="padding:10px 16px;color:var(--dimmer)">email, topics[], focus, affil, comments</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--serif);font-size:13px">Subscriber profiles used for personalised re-ranking</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">digests</td><td style="padding:10px 16px;color:var(--dimmer)">freq, papers JSONB, summary</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--serif);font-size:13px">Stores weekly, monthly, and preview digests — this page reads from here</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">paper_ratings</td><td style="padding:10px 16px;color:var(--dimmer)">email, doi, rating 0/1</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--serif);font-size:13px">Thumbs up/down — injected as relevance examples into the next search</td></tr>
+          <tr><td style="padding:10px 16px;color:var(--text)">paper_recommendations</td><td style="padding:10px 16px;color:var(--dimmer)">doi, used boolean</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--serif);font-size:13px">User-submitted DOIs — consumed once then marked used</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
 </div>
 
 <script>
@@ -840,9 +837,9 @@ async function runSearch(){
   const rawKey=document.getElementById('api-key').value.trim();
   if(!rawKey){alert('Please enter your Anthropic API key. Or click "Load demo data" to preview.');return}
   const apiKey='sk-ant-'+rawKey;
-  const focus=document.getElementById('focus-select').value;
+  const focus='all';
   setStatus(true,'Searching arXiv, journals, and scholar…');
-  document.getElementById('run-btn').disabled=true;
+
   document.getElementById('digest-output').innerHTML='';
   const prompt=buildPrompt(focus);
   try{
@@ -871,7 +868,7 @@ async function runSearch(){
     setStatus(false);
     document.getElementById('digest-output').innerHTML=`<div class="state-box"><div class="icon" style="color:var(--red)">⚠</div><strong style="color:var(--red)">Error: ${err.message}</strong><br><br>Check your API key or click <strong style="color:var(--text)">Load demo data</strong> to preview.</div>`;
   }
-  document.getElementById('run-btn').disabled=false;
+
 }
 
 function buildPrompt(focus){
@@ -967,8 +964,7 @@ function renderDigest(papers, focus){
     groups[cat].forEach(p => { p.feat = (p === featPaper); });
   }
 
-  const summary=buildDigestSummary(papers,groups,sortedCats);
-  document.getElementById('digest-output').innerHTML=summary+sortedCats.map(cat=>{
+  document.getElementById('digest-output').innerHTML=sortedCats.map(cat=>{
     const list=groups[cat];
     const feat=list.find(p=>p.feat);
     const more=list.filter(p=>p!==feat);
@@ -1002,9 +998,7 @@ function toggleMore(btn){
 }
 
 function loadDemo(){
-  const focus=document.getElementById('focus-select').value;
-  currentData=renderDigest(DEMO_PAPERS,focus);
-  renderEmailBody(currentData,focus);
+  currentData=renderDigest(DEMO_PAPERS,'all');
 }
 
 function setStatus(show,msg=''){const b=document.getElementById('status-bar');if(show){b.classList.add('show');document.getElementById('status-text').textContent=msg}else b.classList.remove('show')}
@@ -1036,13 +1030,7 @@ function ecPaper(p,isFeat){
   return`<div class="ec-paper" ${isFeat?'style="border-left:3px solid #0055aa;padding-left:1rem"':''}><span class="ec-badge ${bc}">${p.badge}</span>${isFeat?' <span class="ec-badge feat">Featured</span>':''}<div class="ec-paper-title">${p.title}</div><div class="ec-paper-meta">${p.authors} · ${p.journal} · ${p.date} · <a href="${href}">DOI: ${p.doi}</a></div><div class="ec-abstract">${p.abstract}</div></div>`;
 }
 
-function copyToEmail(){
-  if(!currentData)loadDemo();
-  renderEmailBody(currentData,document.getElementById('focus-select').value);
-  switchPanel('email',document.querySelectorAll('.nav-pill')[2]);
-}
-function copyEmailHTML(){navigator.clipboard.writeText(document.getElementById('email-card').outerHTML).then(()=>alert('Email HTML copied.'))}
-function copyEmailText(){navigator.clipboard.writeText(document.getElementById('email-card').innerText).then(()=>alert('Plain text copied.'))}
+
 
 /* ── NAV ── */
 function switchPanel(name,btn){
@@ -1242,7 +1230,6 @@ function renderSummaryBlock(summary, createdAt, paperCount) {
   }
 
   setStatus(true, 'Loading latest digest from server…');
-  document.getElementById('run-btn').disabled = true;
 
   try {
     const resp = await fetch(`${BACKEND}/digest/latest?freq=${freq}`);
@@ -1252,15 +1239,13 @@ function renderSummaryBlock(summary, createdAt, paperCount) {
 
     // Render papers
     document.getElementById('digest-output').innerHTML = '';
-    const focus = document.getElementById('focus-select').value;
-    currentData = renderDigest(data.papers, focus);
+    currentData = renderDigest(data.papers, 'all');
     renderEmailBody(currentData, focus);
 
     // Render summary block
     if (data.summary) renderSummaryBlock(data.summary, data.created_at, data.papers.length);
 
     setStatus(false);
-    console.log(`Loaded live digest: ${data.papers.length} papers (${freq}, id=${data.id})`);
     const dateLoaded = new Date(data.created_at).toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
     const sourceLabel = data.served_freq === 'preview' ? 'Sunday preview' : 'Weekly digest';
     document.getElementById('digest-source-label').textContent =
@@ -1274,8 +1259,44 @@ function renderSummaryBlock(summary, createdAt, paperCount) {
     loadDemo();
   }
 
-  document.getElementById('run-btn').disabled = false;
+
 })();
+
+/* ── CONTACT ── */
+async function submitContact() {
+  const name    = document.getElementById('c-name').value.trim();
+  const email   = document.getElementById('c-email').value.trim();
+  const message = document.getElementById('c-message').value.trim();
+
+  if (!name || !email || !message) { alert('Please fill in all fields.'); return; }
+  if (!isValidEmail(email)) { alert('Please enter a valid email address.'); return; }
+
+  const btn = document.getElementById('contact-btn');
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+
+  // Use mailto as the delivery mechanism — opens email client pre-filled
+  // Falls back gracefully if no email client configured
+  try {
+    const subject = encodeURIComponent('LM Digest contact from ' + name);
+    const body    = encodeURIComponent('From: ' + name + ' <' + email + '>\n\n' + message);
+    window.location.href = 'mailto:yufanxu94@gmail.com?subject=' + subject + '&body=' + body;
+
+    // Show success after short delay (mailto launched)
+    setTimeout(() => {
+      document.getElementById('contact-success').style.display = 'block';
+      document.getElementById('c-name').value = '';
+      document.getElementById('c-email').value = '';
+      document.getElementById('c-message').value = '';
+      btn.disabled = false;
+      btn.textContent = 'Send message →';
+    }, 800);
+  } catch(e) {
+    document.getElementById('contact-error').style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Send message →';
+  }
+}
 </script>
 </body>
 </html>
