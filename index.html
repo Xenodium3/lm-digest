@@ -370,7 +370,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   <!-- SECTION 1: FILE STRUCTURE -->
   <div style="margin-bottom:3.5rem">
     <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">01 — Code structure<span style="flex:1;height:1px;background:var(--border2)"></span></div>
-    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">Five files do all the work. <code style="font-family:var(--mono);font-size:12px;background:var(--dark3);color:var(--gold);padding:2px 6px;border-radius:2px">shared.cjs</code> is the library — it exports the search prompt, DOI verification, CrossRef lookups, and author hydration. Both pipeline scripts require it, so there is only one copy of every critical function. <code style="font-family:var(--mono);font-size:12px;background:var(--dark3);color:var(--gold);padding:2px 6px;border-radius:2px">server.js</code> runs continuously on Railway and exposes the REST API that everything else calls. The two pipeline scripts run ephemerally inside GitHub Actions once a week.</p>
+    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">The project now uses a private GitHub repository as the data store. <code style="font-family:var(--mono);font-size:12px;background:var(--dark3);color:var(--gold);padding:2px 6px;border-radius:2px">shared.cjs</code> is the library — it exports the search prompt, DOI verification, CrossRef lookups, and author hydration. A small intake worker receives public form submissions and appends them to private JSONL files, while GitHub Actions runs the weekly paper pipeline.</p>
     <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;overflow:hidden">
       <table style="width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12px">
         <thead><tr style="border-bottom:1px solid var(--border2)">
@@ -379,10 +379,11 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
           <td style="padding:10px 16px;color:var(--cyan);font-weight:700">Role</td>
         </tr></thead>
         <tbody>
-          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">shared.cjs</td><td style="padding:10px 16px;color:var(--dimmer)">288</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Single source of truth — prompt, Sonnet search, Haiku calls, DOI verify, CrossRef, author hydration</td></tr>
-          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">server.js</td><td style="padding:10px 16px;color:var(--dimmer)">663</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Always-on Express API on Railway — subscribers, digest store, ratings, recommendations</td></tr>
-          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">preview.cjs</td><td style="padding:10px 16px;color:var(--dimmer)">215</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Sunday pipeline — search, verify, hydrate authors, store as preview, email admin</td></tr>
-          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">digest.cjs</td><td style="padding:10px 16px;color:var(--dimmer)">503</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Monday pipeline — reuse Sunday preview, merge late recommendations, rerank per subscriber, send emails</td></tr>
+	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">shared.cjs</td><td style="padding:10px 16px;color:var(--dimmer)">library</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Single source of truth — prompt, Sonnet search, Haiku calls, DOI verify, CrossRef, author hydration</td></tr>
+	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">worker/intake-worker.js</td><td style="padding:10px 16px;color:var(--dimmer)">edge</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Public intake API — subscriptions, contact messages, ratings, recommendations, latest digest</td></tr>
+	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">data/*.jsonl</td><td style="padding:10px 16px;color:var(--dimmer)">private</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Append-only private data files for subscribers, ratings, recommendations, and contact messages</td></tr>
+	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">preview.cjs</td><td style="padding:10px 16px;color:var(--dimmer)">job</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Sunday pipeline — search, verify, hydrate authors, store as preview, email admin</td></tr>
+	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">digest.cjs</td><td style="padding:10px 16px;color:var(--dimmer)">job</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Monday pipeline — reuse Sunday preview, merge late recommendations, rerank per subscriber, send emails</td></tr>
           <tr><td style="padding:10px 16px;color:var(--text)">index.html</td><td style="padding:10px 16px;color:var(--dimmer)">~1200</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">This page — subscribe form, digest viewer, thumbs-up ratings, DOI recommendation box</td></tr>
         </tbody>
       </table>
@@ -400,14 +401,14 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
           <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">1</span>Search arXiv, ACS, Nature, Wiley, Elsevier, Physical Review</div>
           <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">2</span>Verify every DOI resolves and title matches</div>
           <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">3</span>Hydrate author lists from CrossRef and arXiv</div>
-          <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">4</span>Store verified pool in database as <em>preview</em></div>
+	          <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">4</span>Store verified pool in the private repo as <em>preview</em></div>
           <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">5</span>Email compact list to admin for review</div>
         </div>
       </div>
       <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.25rem 1.5rem">
         <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--cyan);margin-bottom:1rem">Monday · 8am ET</div>
         <div style="display:flex;flex-direction:column;gap:0.6rem">
-          <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">1</span>Load Sunday preview from database</div>
+	          <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">1</span>Load Sunday preview from private data files</div>
           <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">2</span>Fetch any DOIs recommended after Sunday</div>
           <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">3</span>Generate two-paragraph summary with Haiku</div>
           <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">4</span>Re-rank paper pool for each subscriber's profile</div>
@@ -445,7 +446,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
       <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.25rem 1.5rem">
         <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:0.85rem">AI</div>
         <div style="display:flex;flex-direction:column;gap:0.5rem">
-          <div style="font-family:var(--display);font-size:13px;color:var(--dim)"><span style="color:var(--text)">Claude Sonnet 4</span> — weekly paper search with web search tool</div>
+          <div style="font-family:var(--display);font-size:13px;color:var(--dim)"><span style="color:var(--text)">Claude Sonnet 5</span> — weekly paper search with web search tool</div>
           <div style="font-family:var(--display);font-size:13px;color:var(--dim)"><span style="color:var(--text)">Claude Haiku</span> — digest summary and per-subscriber re-ranking</div>
           <div style="font-family:var(--display);font-size:13px;color:var(--dim)"><span style="color:var(--text)">CrossRef API</span> — DOI verification and preprint upgrade detection</div>
           <div style="font-family:var(--display);font-size:13px;color:var(--dim)"><span style="color:var(--text)">arXiv API</span> — author metadata for preprints</div>
@@ -454,8 +455,9 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
       <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.25rem 1.5rem">
         <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:0.85rem">Infrastructure</div>
         <div style="display:flex;flex-direction:column;gap:0.5rem">
-          <div style="font-family:var(--display);font-size:13px;color:var(--dim)"><span style="color:var(--text)">Railway</span> — Node.js backend + PostgreSQL, always-on</div>
-          <div style="font-family:var(--display);font-size:13px;color:var(--dim)"><span style="color:var(--text)">GitHub Actions</span> — cron jobs for Sunday preview and Monday digest</div>
+	          <div style="font-family:var(--display);font-size:13px;color:var(--dim)"><span style="color:var(--text)">Cloudflare Worker</span> — tiny public intake API without an always-on server</div>
+	          <div style="font-family:var(--display);font-size:13px;color:var(--dim)"><span style="color:var(--text)">Private GitHub repo</span> — append-only JSONL data store and digest snapshots</div>
+	          <div style="font-family:var(--display);font-size:13px;color:var(--dim)"><span style="color:var(--text)">GitHub Actions</span> — cron jobs for Sunday preview and Monday digest</div>
           <div style="font-family:var(--display);font-size:13px;color:var(--dim)"><span style="color:var(--text)">GitHub Pages</span> — this website, deployed on every push</div>
           <div style="font-family:var(--display);font-size:13px;color:var(--dim)"><span style="color:var(--text)">SMTP</span> — email delivery via any standard mail relay</div>
         </div>
@@ -465,20 +467,20 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 
   <!-- SECTION 5: DATABASE -->
   <div>
-    <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">05 — Database<span style="flex:1;height:1px;background:var(--border2)"></span></div>
-    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">Four PostgreSQL tables on Railway. Papers are stored as JSONB so the schema never needs to change as the paper structure evolves.</p>
+	    <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">05 — Private data store<span style="flex:1;height:1px;background:var(--border2)"></span></div>
+	    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">Subscriber data lives in append-only JSONL files inside the private backend repository. The public site never sees a GitHub token; it only talks to the intake worker.</p>
     <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;overflow:hidden">
       <table style="width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12px">
         <thead><tr style="border-bottom:1px solid var(--border2)">
-          <td style="padding:10px 16px;color:var(--cyan);font-weight:700">Table</td>
-          <td style="padding:10px 16px;color:var(--cyan);font-weight:700">Key columns</td>
+	          <td style="padding:10px 16px;color:var(--cyan);font-weight:700">File</td>
+	          <td style="padding:10px 16px;color:var(--cyan);font-weight:700">Fields</td>
           <td style="padding:10px 16px;color:var(--cyan);font-weight:700">Purpose</td>
         </tr></thead>
         <tbody>
-          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">subscribers</td><td style="padding:10px 16px;color:var(--dimmer)">email, topics[], focus, affil, comments</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Subscriber profiles used for personalised re-ranking</td></tr>
-          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">digests</td><td style="padding:10px 16px;color:var(--dimmer)">freq, papers JSONB, summary</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Stores weekly, monthly, and preview digests — this page reads from here</td></tr>
-          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">paper_ratings</td><td style="padding:10px 16px;color:var(--dimmer)">email, doi, rating 0/1</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Thumbs up/down — injected as relevance examples into the next search</td></tr>
-          <tr><td style="padding:10px 16px;color:var(--text)">paper_recommendations</td><td style="padding:10px 16px;color:var(--dimmer)">doi, used boolean</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">User-submitted DOIs — consumed once then marked used</td></tr>
+	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">subscriptions.jsonl</td><td style="padding:10px 16px;color:var(--dimmer)">email, topics[], focus, affil, comments</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Subscriber profiles used for personalised re-ranking</td></tr>
+	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">digests/*/latest.json</td><td style="padding:10px 16px;color:var(--dimmer)">freq, papers, summary</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Stores preview, weekly, and monthly digests — this page reads from here</td></tr>
+	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">ratings.jsonl</td><td style="padding:10px 16px;color:var(--dimmer)">email, doi, rating 0/1</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Thumbs up/down — injected as relevance examples into the next search</td></tr>
+	          <tr><td style="padding:10px 16px;color:var(--text)">recommendations.jsonl</td><td style="padding:10px 16px;color:var(--dimmer)">doi, email, consumed marker</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">User-submitted DOIs — consumed once then marked used</td></tr>
         </tbody>
       </table>
     </div>
@@ -782,7 +784,7 @@ async function submitSurvey(){
 
   if(!valid) return;
 
-  // POST to Railway backend
+  // POST to the intake API
   document.getElementById('submit-btn').textContent = 'Submitting…';
   document.getElementById('submit-btn').disabled = true;
   try {
@@ -801,8 +803,10 @@ async function submitSurvey(){
       })
     });
     if (!resp.ok) throw new Error('Server error ' + resp.status);
+    setRatingEmail(email);
     document.getElementById('submit-btn').textContent = '✓ Subscribed';
     document.getElementById('submit-success').classList.add('show');
+    document.getElementById('recommend-note').textContent = 'Recommendations will be attached to your subscriber profile.';
   } catch(e) {
     document.getElementById('submit-btn').textContent = 'Activate Subscription →';
     document.getElementById('submit-btn').disabled = false;
@@ -811,6 +815,114 @@ async function submitSurvey(){
 }
 
 /* ── DIGEST ── */
+
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>"']/g, c => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  }[c]));
+}
+
+function doiHref(doi) {
+  if (!doi) return '';
+  if (/^https?:\/\//i.test(doi)) return doi;
+  if (/^arXiv:/i.test(doi)) return `https://arxiv.org/abs/${doi.replace(/^arXiv:/i, '')}`;
+  if (/^10\./.test(doi)) return `https://doi.org/${doi}`;
+  return '';
+}
+
+function normalisePaper(raw) {
+  const doi = raw.doi || raw.url || raw.link || '';
+  return {
+    category: raw.category || raw.topic || raw.area || 'Liquid Metal Research',
+    feat: Boolean(raw.feat || raw.featured),
+    badge: raw.badge || raw.type || (/arXiv/i.test(doi) ? 'Preprint' : 'Published'),
+    title: raw.title || 'Untitled paper',
+    authors: raw.authors || raw.author || 'Authors unavailable',
+    journal: raw.journal || raw.venue || raw.source || 'Source unavailable',
+    date: raw.date || raw.published || raw.published_at || raw.year || '',
+    doi,
+    abstract: raw.abstract || raw.summary || raw.plain_language_summary || raw.description || ''
+  };
+}
+
+function ratingButton(paper) {
+  const active = ratings.has(paper.doi);
+  return `<button class="thumb-btn ${active ? 'active' : ''}" data-doi="${escapeHtml(paper.doi)}" data-title="${escapeHtml(paper.title)}" onclick="toggleRating(this,this.dataset.doi,this.dataset.title)">
+    <svg viewBox="0 0 24 24" fill="${active ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M7 10v11H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3Z"></path>
+      <path d="M7 21h10.2a2 2 0 0 0 2-1.6l1.2-6a2 2 0 0 0-2-2.4H14V6.5A2.5 2.5 0 0 0 11.5 4L7 10v11Z"></path>
+    </svg>
+    ${active ? 'Relevant' : 'Mark relevant'}
+  </button>`;
+}
+
+function renderPaper(paper, compact = false) {
+  const p = normalisePaper(paper);
+  const href = doiHref(p.doi);
+  const title = href
+    ? `<a class="paper-title" href="${escapeHtml(href)}" target="_blank" rel="noopener">${escapeHtml(p.title)}</a>`
+    : `<div class="paper-title">${escapeHtml(p.title)}</div>`;
+  const doi = href
+    ? `<a href="${escapeHtml(href)}" target="_blank" rel="noopener">${escapeHtml(p.doi)}</a>`
+    : escapeHtml(p.doi || 'No DOI');
+  const cls = compact ? 'paper-row' : 'featured-paper';
+
+  return `<article class="${cls}">
+    <div class="paper-badges">
+      <span class="badge ${/preprint|arxiv/i.test(p.badge) ? 'badge-pre' : 'badge-pub'}">${escapeHtml(p.badge)}</span>
+      ${p.feat && !compact ? '<span class="badge badge-feat">Featured</span>' : ''}
+    </div>
+    ${title}
+    <div class="paper-meta">
+      <span>${escapeHtml(p.authors)}</span>
+      <span>${escapeHtml(p.journal)}</span>
+      ${p.date ? `<span>${escapeHtml(p.date)}</span>` : ''}
+      <span>${doi}</span>
+    </div>
+    <p class="paper-abstract">${escapeHtml(p.abstract)}</p>
+    <div class="paper-footer">${ratingButton(p)}</div>
+  </article>`;
+}
+
+function renderDigest(papers, focus = 'all') {
+  const ordered = (papers || []).map(normalisePaper);
+  const order = FOCUS_ORDER[focus] || FOCUS_ORDER.all;
+  const categories = [...new Set([...order, ...ordered.map(p => p.category)])];
+
+  const html = categories.map(category => {
+    const group = ordered.filter(p => p.category === category);
+    if (!group.length) return '';
+
+    const featured = group.find(p => p.feat) || group[0];
+    const rest = group.filter(p => p !== featured);
+    const moreId = `more-${category.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+
+    return `<section class="cat-section">
+      <div class="cat-header">
+        <div class="cat-name">${escapeHtml(category)}</div>
+        <div class="cat-rule"></div>
+        <div class="cat-count">${group.length} paper${group.length === 1 ? '' : 's'}</div>
+      </div>
+      ${renderPaper(featured)}
+      ${rest.length ? `<button class="see-more-btn" onclick="document.getElementById('${moreId}').classList.toggle('open')">Show ${rest.length} more</button>
+      <div class="more-list" id="${moreId}">${rest.map(p => renderPaper(p, true)).join('')}</div>` : ''}
+    </section>`;
+  }).join('');
+
+  document.getElementById('digest-output').innerHTML = html || `<div class="featured-paper"><p class="paper-abstract">No papers are available yet.</p></div>`;
+  currentData = ordered;
+  return ordered;
+}
+
+function loadDemo() {
+  currentData = renderDigest(DEMO_PAPERS, 'all');
+  document.getElementById('digest-source-label').textContent = 'Demo data';
+  return currentData;
+}
 
 
 /* ── NAV ── */
@@ -909,7 +1021,8 @@ async function submitRecommendations() {
 }
 
 /* ── RATINGS ── */
-const BACKEND='https://lm-digest-backend-production.up.railway.app';
+// Replace this with the deployed intake Worker URL.
+const BACKEND='https://lm-digest-intake.YOUR_WORKER_SUBDOMAIN.workers.dev';
 const ratings=new Set(); // doi strings rated by current user
 let ratingEmail=''; // set when user subscribes or from localStorage
 
@@ -944,7 +1057,9 @@ async function toggleRating(btn, doi, title){
 
   // Update ALL thumb buttons for this DOI on the page
   document.querySelectorAll('.thumb-btn').forEach(b=>{
-    if(b.getAttribute('onclick')&&b.getAttribute('onclick').includes(doi.replace(/'/g,"\'"))) {
+    const buttonDoi = b.dataset?.doi || '';
+    const legacyClick = b.getAttribute('onclick') || '';
+    if(buttonDoi === doi || legacyClick.includes(doi.replace(/'/g,"\'"))) {
       b.classList.toggle('active', rating===1);
       b.querySelector('svg').setAttribute('fill', rating===1?'currentColor':'none');
       b.childNodes[b.childNodes.length-1].textContent=' '+(rating===1?'Relevant':'Mark relevant');
@@ -953,7 +1068,7 @@ async function toggleRating(btn, doi, title){
 
   showToast(rating===1?'Marked as relevant — helps improve future searches':'Removed');
 
-  // Persist to Railway as community signal — no login required
+  // Persist to the private data store as a community signal — no login required
   try {
     await fetch(BACKEND+'/papers/rate',{
       method:'POST',
@@ -995,15 +1110,19 @@ function renderSummaryBlock(summary, createdAt, paperCount) {
   output.insertBefore(div, output.firstChild);
 }
 
-// ── Load digest from Railway — show demo immediately, upgrade to live if available
+// ── Load digest from intake API — show demo immediately, upgrade to live if available
 (async function init() {
   const params      = new URLSearchParams(window.location.search);
   const digestParam = params.get('digest');
+  const hashPanel   = window.location.hash.replace('#','');
   const freq        = (digestParam && digestParam !== 'latest') ? digestParam : 'weekly';
 
-  // Switch to digest panel if URL requested it
-  if (digestParam) {
+  // Switch panel if URL requested it
+  if (digestParam || hashPanel === 'digest') {
     switchPanel('digest', document.querySelectorAll('.nav-pill')[1]);
+  } else if (['survey','contact','setup'].includes(hashPanel)) {
+    const names = ['survey','digest','contact','setup'];
+    switchPanel(hashPanel, document.querySelectorAll('.nav-pill')[names.indexOf(hashPanel)]);
   }
 
   // Show demo immediately so page is never blank
