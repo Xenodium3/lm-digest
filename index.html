@@ -1442,7 +1442,15 @@ function renderSummaryBlock(summary, createdAt, paperCount) {
     if (data.summary) renderSummaryBlock(data.summary, data.created_at, data.papers.length);
 
     const dateLoaded = new Date(data.created_at).toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
-    document.getElementById('digest-source-label').textContent = `published on ${dateLoaded}`;
+    const servedFreq = data.served_freq || freq;
+    const sourceLabel = servedFreq === 'preview'
+      ? 'Sunday preview updated'
+      : servedFreq === 'biweekly'
+        ? 'biweekly digest published'
+        : servedFreq === 'monthly'
+          ? 'monthly digest published'
+          : 'weekly digest published';
+    document.getElementById('digest-source-label').textContent = `${sourceLabel} on ${dateLoaded}`;
 
   } catch(e) {
     // Keep demo data already shown
