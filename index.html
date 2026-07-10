@@ -278,7 +278,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
         </div>
         <p style="font-family:var(--mono);font-size:11px;color:var(--dim);margin-top:0.75rem;line-height:1.7;letter-spacing:0.03em">
           All digests are sent at <strong style="color:rgba(255,255,255,0.5)">8am Eastern Time</strong> (1pm UTC).
-          Weekly subscribers also receive a Sunday 8am ET preview of that week's papers — giving you a chance to recommend any missing papers before Monday's full digest.
+          Weekly subscribers receive the Monday digest; Sunday's preview is an internal admin review step.
         </p>
       </div>
       <div class="form-section">
@@ -290,7 +290,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
       </div>
       <div class="submit-row">
         <button class="submit-btn" id="submit-btn" onclick="submitSurvey()">Activate Subscription →</button>
-        <div class="submit-success" id="submit-success">✓ &nbsp;Subscription confirmed. Your digest arrives every Monday at 8am ET, with your primary focus area shown first. Weekly subscribers also receive a Sunday preview.</div>
+        <div class="submit-success" id="submit-success">✓ &nbsp;Subscription confirmed. Your digest arrives every Monday at 8am ET, with your primary focus area shown first.</div>
       </div>
     </div>
   </div>
@@ -329,7 +329,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
     <div class="recommend-box">
       <div class="section-tag">Recommend a paper for next week's digest</div>
       <p style="font-size:13px;color:var(--dim);line-height:1.65;margin-bottom:1.25rem">
-        Know a paper that should be included? Paste its DOI link below — it will be prioritised in next week's search.
+        Know a paper that should be included? Paste its DOI link below — it will be saved for admin review and used as a relevance signal.
         Please attach the DOI link here for any recommended paper (e.g. <span style="font-family:var(--mono);color:var(--dimmer);font-size:11px">10.1017/jfm.2025.123</span> or <span style="font-family:var(--mono);color:var(--dimmer);font-size:11px">arXiv:2501.12345</span>).
       </p>
       <div class="recommend-entries" id="recommend-entries">
@@ -346,7 +346,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
       <div class="recommend-note" id="recommend-note">
         Subscribe first to attach recommendations to your profile. Not subscribed yet? Recommendations from anonymous users are still collected.
       </div>
-      <div class="recommend-success" id="recommend-success">✓ &nbsp;Recommendations received — these papers will be prioritised in the next digest search.</div>
+      <div class="recommend-success" id="recommend-success">✓ &nbsp;Recommendations received — these papers will be saved for admin review and future ranking.</div>
     </div>
 
   </div>
@@ -411,7 +411,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">worker/intake-worker.js</td><td style="padding:10px 16px;color:var(--dimmer)">edge</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Public intake API — subscriptions, contact messages, ratings, recommendations, latest digest</td></tr>
 	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">data/*.jsonl</td><td style="padding:10px 16px;color:var(--dimmer)">private</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Append-only private data files for subscribers, ratings, recommendations, and contact messages</td></tr>
 	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">preview.cjs</td><td style="padding:10px 16px;color:var(--dimmer)">job</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Sunday pipeline — search, verify, hydrate authors, store as preview, email admin</td></tr>
-	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">digest.cjs</td><td style="padding:10px 16px;color:var(--dimmer)">job</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Monday pipeline — reuse Sunday preview, merge late recommendations, rerank per subscriber, send emails</td></tr>
+	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">digest.cjs</td><td style="padding:10px 16px;color:var(--dimmer)">job</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Monday pipeline — reuse Sunday preview, generate summary, personalise per subscriber, send emails</td></tr>
           <tr><td style="padding:10px 16px;color:var(--text)">index.html</td><td style="padding:10px 16px;color:var(--dimmer)">~1200</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">This page — subscribe form, digest viewer, thumbs-up ratings, DOI recommendation box</td></tr>
         </tbody>
       </table>
@@ -421,7 +421,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   <!-- SECTION 2: WEEKLY CYCLE -->
   <div style="margin-bottom:3.5rem">
     <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">02 — Weekly cycle<span style="flex:1;height:1px;background:var(--border2)"></span></div>
-    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">The week runs in two phases separated by 24 hours. Sunday's search builds the canonical paper pool, flags incomplete candidates for admin review, and emails a preview. Monday reuses the edited preview, merges any late recommendations, personalises the order for each subscriber, and sends the full digest.</p>
+    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">The week runs in two phases separated by 24 hours. Sunday's search builds the canonical paper pool, flags incomplete candidates for admin review, and emails a preview. Monday reuses the edited preview, does no additional paper search, personalises the order for each subscriber, and sends the full digest.</p>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
       <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.25rem 1.5rem">
         <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--cyan);margin-bottom:1rem">Sunday · 8am ET</div>
@@ -438,27 +438,27 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
         <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--cyan);margin-bottom:1rem">Monday · 8am ET</div>
         <div style="display:flex;flex-direction:column;gap:0.6rem">
 	          <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">1</span>Load edited Sunday preview from private data files</div>
-          <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">2</span>Fetch any DOIs recommended after Sunday</div>
+          <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">2</span>Re-verify metadata and check arXiv preprints for publication updates</div>
           <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">3</span>Generate two-paragraph summary with Haiku</div>
-          <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">4</span>Re-rank paper pool for each subscriber's profile</div>
+          <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">4</span>Rank and select papers for each subscriber's profile</div>
           <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">5</span>Send personalised email to all subscribers simultaneously</div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- SECTION 3: SELF-IMPROVEMENT -->
+  <!-- SECTION 3: READER SIGNALS -->
   <div style="margin-bottom:3.5rem">
-    <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">03 — Self-improving search<span style="flex:1;height:1px;background:var(--border2)"></span></div>
-    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">Each week's search gets smarter based on three signals from subscribers. These are injected directly into the search prompt so the AI librarian knows what this audience values before it begins.</p>
+    <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">03 — Reader signals<span style="flex:1;height:1px;background:var(--border2)"></span></div>
+    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">Subscriber signals help rank and review the weekly paper pool. They do not trigger a second Monday search; the Monday digest only personalises the Sunday-approved set.</p>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem">
       <div style="background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--cyan);border-radius:0 6px 6px 0;padding:1.25rem 1.25rem">
         <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.6rem">Ratings</div>
-        <p style="font-family:var(--display);font-size:13px;color:var(--dim);line-height:1.65">Thumbs up on any paper in the Digest tab. Highly rated papers become relevance examples injected into the next week's prompt.</p>
+        <p style="font-family:var(--display);font-size:13px;color:var(--dim);line-height:1.65">Thumbs up on any paper in the Digest tab. These signals are stored privately and can guide future ranking and admin review.</p>
       </div>
       <div style="background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--cyan);border-radius:0 6px 6px 0;padding:1.25rem 1.25rem">
         <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.6rem">Recommendations</div>
-        <p style="font-family:var(--display);font-size:13px;color:var(--dim);line-height:1.65">Submit a DOI at the bottom of the Digest tab. The paper is looked up, verified, and added to Monday's digest regardless of recency or journal tier.</p>
+        <p style="font-family:var(--display);font-size:13px;color:var(--dim);line-height:1.65">Submit a DOI at the bottom of the Digest tab. Recommended papers are saved for admin review and boost ranking when they already appear in the weekly paper pool.</p>
       </div>
       <div style="background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--cyan);border-radius:0 6px 6px 0;padding:1.25rem 1.25rem">
         <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.6rem">Subscriber profile</div>
@@ -470,15 +470,15 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   <!-- SECTION 4: STACK -->
   <div style="margin-bottom:3.5rem">
     <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">04 — Technology stack<span style="flex:1;height:1px;background:var(--border2)"></span></div>
-    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">Built entirely with open tooling and deployed on free or near-free infrastructure. The Anthropic API is the only meaningful cost — roughly one Sonnet search call per week.</p>
+    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">Built entirely with open tooling and deployed on free or near-free infrastructure. CrossRef and arXiv handle paper discovery; Anthropic is used for summarisation and profile-aware ranking, with no second Monday paper search.</p>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
       <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.25rem 1.5rem">
         <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:0.85rem">AI</div>
         <div style="display:flex;flex-direction:column;gap:0.5rem">
-          <div style="font-family:var(--display);font-size:13px;color:var(--dim)"><span style="color:var(--text)">Claude Sonnet 5</span> — weekly paper search with web search tool</div>
+          <div style="font-family:var(--display);font-size:13px;color:var(--dim)"><span style="color:var(--text)">Claude Sonnet 5</span> — optional fallback search, disabled during normal scheduled runs</div>
           <div style="font-family:var(--display);font-size:13px;color:var(--dim)"><span style="color:var(--text)">Claude Haiku</span> — digest summary and per-subscriber re-ranking</div>
-          <div style="font-family:var(--display);font-size:13px;color:var(--dim)"><span style="color:var(--text)">CrossRef API</span> — DOI verification and preprint upgrade detection</div>
-          <div style="font-family:var(--display);font-size:13px;color:var(--dim)"><span style="color:var(--text)">arXiv API</span> — author metadata for preprints</div>
+          <div style="font-family:var(--display);font-size:13px;color:var(--dim)"><span style="color:var(--text)">CrossRef API</span> — paper discovery, DOI verification, and preprint upgrade detection</div>
+          <div style="font-family:var(--display);font-size:13px;color:var(--dim)"><span style="color:var(--text)">arXiv API</span> — preprint discovery and author metadata</div>
         </div>
       </div>
       <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.25rem 1.5rem">
@@ -508,8 +508,8 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
         <tbody>
 	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">subscriptions.jsonl</td><td style="padding:10px 16px;color:var(--dimmer)">email, topics[], focus, affil, comments</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Subscriber profiles used for personalised re-ranking</td></tr>
 	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">digests/*/latest.json</td><td style="padding:10px 16px;color:var(--dimmer)">freq, papers, summary</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Stores preview, weekly, and monthly digests — this page reads from here</td></tr>
-	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">ratings.jsonl</td><td style="padding:10px 16px;color:var(--dimmer)">email, doi, rating 0/1</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Thumbs up/down — injected as relevance examples into the next search</td></tr>
-	          <tr><td style="padding:10px 16px;color:var(--text)">recommendations.jsonl</td><td style="padding:10px 16px;color:var(--dimmer)">doi, email, consumed marker</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">User-submitted DOIs — consumed once then marked used</td></tr>
+	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">ratings.jsonl</td><td style="padding:10px 16px;color:var(--dimmer)">email, doi, rating 0/1</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Thumbs up/down — stored as future ranking and admin-review signals</td></tr>
+	          <tr><td style="padding:10px 16px;color:var(--text)">recommendations.jsonl</td><td style="padding:10px 16px;color:var(--dimmer)">doi, email, consumed marker</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">User-submitted DOIs — saved for admin review and marked used once covered</td></tr>
         </tbody>
       </table>
     </div>
