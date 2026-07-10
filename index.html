@@ -110,8 +110,8 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 .paper-badges{display:flex;gap:0.4rem;margin-bottom:0.75rem;flex-wrap:wrap}
 .badge{display:inline-block;font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;padding:2px 8px;border-radius:2px}
 .badge-pub{background:rgba(0,229,255,0.12);color:var(--cyan);border:1px solid rgba(0,229,255,0.25)}
-.badge-pre{background:rgba(240,192,96,0.12);color:var(--gold);border:1px solid rgba(240,192,96,0.25)}
-.badge-feat{background:rgba(255,255,255,0.06);color:var(--dimmer);border:1px solid var(--border2)}
+.badge-pre{background:rgba(0,229,138,0.12);color:var(--green);border:1px solid rgba(0,229,138,0.32)}
+.badge-feat{background:rgba(240,192,96,0.13);color:var(--gold);border:1px solid rgba(240,192,96,0.32)}
 .paper-title{font-family:var(--display);font-size:1.1rem;font-weight:600;line-height:1.38;margin-bottom:0.6rem;color:rgba(255,255,255,0.95);text-decoration:none;display:block;cursor:pointer;transition:color 0.15s}
 .paper-title:hover{color:var(--cyan)}
 .paper-meta{display:flex;flex-wrap:wrap;gap:0.4rem 1.25rem;font-family:var(--mono);font-size:12.5px;color:var(--dimmer);margin-bottom:0.75rem}
@@ -119,7 +119,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 .paper-meta a:hover{color:var(--cyan);text-decoration:underline}
 .paper-abstract{font-family:var(--display);font-size:14px;line-height:1.75;color:rgba(255,255,255,0.62);font-weight:400}
 .paper-footer{display:flex;align-items:center;justify-content:space-between;margin-top:0.85rem}
-.thumb-btn{display:flex;align-items:center;gap:5px;background:none;border:1px solid var(--border);border-radius:3px;padding:3px 10px;font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--dimmer);cursor:pointer;transition:all 0.15s}
+.thumb-btn{display:flex;align-items:center;gap:5px;background:none;border:1px solid rgba(255,255,255,0.14);border-radius:3px;padding:3px 10px;font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.58);cursor:pointer;transition:all 0.15s}
 .thumb-btn:hover{border-color:rgba(0,229,255,0.4);color:var(--cyan)}
 .thumb-btn.active{border-color:var(--cyan);color:var(--cyan);background:rgba(0,229,255,0.08)}
 .thumb-btn svg{width:12px;height:12px;flex-shrink:0}
@@ -295,9 +295,9 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
     </div>
   </div>
   <div style="max-width:680px;margin:0 auto;padding:0 1.5rem 1.5rem;text-align:center">
-    <p style="font-family:var(--mono);font-size:11px;color:var(--dimmer);line-height:1.7">
+    <p style="font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.56);line-height:1.7">
       Already subscribed? You can <button onclick="showUnsubscribe()" style="background:none;border:none;font-family:var(--mono);font-size:11px;color:var(--cyan);cursor:pointer;padding:0;text-decoration:underline">update your preferences</button> by resubmitting the form, or
-      <button onclick="showUnsubscribe()" style="background:none;border:none;font-family:var(--mono);font-size:11px;color:var(--dimmer);cursor:pointer;padding:0;text-decoration:underline">unsubscribe</button>.
+      <button onclick="showUnsubscribe()" style="background:none;border:none;font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.62);cursor:pointer;padding:0;text-decoration:underline">unsubscribe</button>.
     </p>
     <div id="unsub-form" style="display:none;margin-top:1rem;display:none">
       <div style="display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap">
