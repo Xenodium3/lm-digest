@@ -152,9 +152,36 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 .recommend-success{display:none;margin-top:0.75rem;padding:0.75rem 1rem;background:rgba(0,229,138,0.06);border:1px solid rgba(0,229,138,0.2);border-radius:3px;font-family:var(--mono);font-size:11px;color:var(--green);letter-spacing:0.04em}
 .recommend-success.show{display:block}
 
+/* ═══ ADMIN ═══ */
+.admin-shell{max-width:1100px;margin:0 auto;padding:3rem 1.5rem 6rem}
+.admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;align-items:start}
+.admin-card{background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:1.35rem}
+.admin-card.review{border-color:rgba(240,192,96,0.24);border-left:3px solid var(--gold)}
+.admin-toolbar{display:flex;gap:0.55rem;align-items:center;flex-wrap:wrap;margin:1.25rem 0}
+.admin-status{font-family:var(--mono);font-size:11px;color:var(--dimmer);letter-spacing:0.04em;min-height:1.2rem}
+.admin-status.ok{color:var(--green)}
+.admin-status.err{color:var(--red)}
+.admin-list{display:flex;flex-direction:column;gap:0.85rem}
+.admin-paper{background:rgba(255,255,255,0.025);border:1px solid var(--border);border-radius:4px;padding:1rem}
+.admin-paper.review{border-color:rgba(240,192,96,0.18);background:rgba(240,192,96,0.035)}
+.admin-paper-head{display:flex;align-items:center;justify-content:space-between;gap:0.75rem;margin-bottom:0.85rem}
+.admin-paper-title{font-family:var(--display);font-size:13px;font-weight:700;color:var(--text);line-height:1.35}
+.admin-paper-actions{display:flex;gap:0.4rem;flex-wrap:wrap;justify-content:flex-end}
+.admin-mini-btn{background:transparent;border:1px solid var(--border2);border-radius:3px;color:var(--dim);font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:0.35rem 0.55rem;cursor:pointer}
+.admin-mini-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.admin-mini-btn.danger:hover{border-color:var(--red);color:var(--red)}
+.admin-mini-btn.promote:hover{border-color:var(--green);color:var(--green)}
+.admin-fields{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem}
+.admin-fields .wide{grid-column:1/-1}
+.admin-fields label{display:block;font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--dimmer);margin-bottom:0.25rem}
+.admin-fields input,.admin-fields select,.admin-fields textarea{width:100%;padding:0.5rem 0.65rem;background:var(--dark2);border:1px solid var(--border2);border-radius:3px;color:var(--text);font-family:var(--mono);font-size:11px;outline:none}
+.admin-fields textarea{min-height:72px;resize:vertical;line-height:1.5;font-family:var(--display);font-size:12px}
+.admin-fields input:focus,.admin-fields select:focus,.admin-fields textarea:focus{border-color:var(--cyan)}
+.admin-login{max-width:520px}
+.admin-empty{font-family:var(--display);font-size:13px;color:var(--dim);line-height:1.7;padding:1rem;border:1px dashed var(--border2);border-radius:4px}
 
 @media(max-width:640px){
-  .two-col,.arch-grid{grid-template-columns:1fr}
+  .two-col,.arch-grid,.admin-grid,.admin-fields{grid-template-columns:1fr}
   .form-section{padding:1.5rem}
   .hero-title{font-size:2rem}
   .nav-pill{padding:0 0.75rem;font-size:12px}
@@ -201,6 +228,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
     <button class="nav-pill" onclick="switchPanel('digest',this)">Digest</button>
     <button class="nav-pill" onclick="switchPanel('contact',this)">Contact</button>
     <button class="nav-pill" onclick="switchPanel('setup',this)">How it works</button>
+    <button class="nav-pill" onclick="switchPanel('admin',this)">Admin</button>
   </div>
 </nav>
 
@@ -365,7 +393,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 
   <!-- INTRO -->
   <h2 style="font-family:var(--display);font-size:2.2rem;font-weight:700;color:var(--text);margin-bottom:0.6rem;line-height:1.15">How the digest works</h2>
-  <p style="font-family:var(--display);font-size:1rem;color:var(--dim);max-width:640px;line-height:1.7;margin-bottom:3rem">This newsletter is fully automated — no manual curation. Every week an AI research librarian searches academic databases, verifies what it finds, personalises the results for each subscriber, and delivers them by email. Here is how the pieces fit together.</p>
+  <p style="font-family:var(--display);font-size:1rem;color:var(--dim);max-width:640px;line-height:1.7;margin-bottom:3rem">This newsletter is mostly automated with an admin review step for edge cases. Every week the pipeline searches academic databases, verifies what it finds, surfaces incomplete but promising candidates, personalises the results for each subscriber, and delivers them by email.</p>
 
   <!-- SECTION 1: FILE STRUCTURE -->
   <div style="margin-bottom:3.5rem">
@@ -393,7 +421,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   <!-- SECTION 2: WEEKLY CYCLE -->
   <div style="margin-bottom:3.5rem">
     <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">02 — Weekly cycle<span style="flex:1;height:1px;background:var(--border2)"></span></div>
-    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">The week runs in two phases separated by 24 hours. Sunday's search builds the canonical paper pool and emails a preview to the admin. Monday reuses that pool, merges any late recommendations, personalises the order for each subscriber, and sends the full digest.</p>
+    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">The week runs in two phases separated by 24 hours. Sunday's search builds the canonical paper pool, flags incomplete candidates for admin review, and emails a preview. Monday reuses the edited preview, merges any late recommendations, personalises the order for each subscriber, and sends the full digest.</p>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
       <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.25rem 1.5rem">
         <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--cyan);margin-bottom:1rem">Sunday · 8am ET</div>
@@ -402,13 +430,14 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
           <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">2</span>Verify every DOI resolves and title matches</div>
           <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">3</span>Hydrate author lists from CrossRef and arXiv</div>
 	          <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">4</span>Store verified pool in the private repo as <em>preview</em></div>
-          <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">5</span>Email compact list to admin for review</div>
+          <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">5</span>Email compact list plus incomplete candidates to admin</div>
+          <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">6</span>Admin can add, edit, delete, or promote papers before Monday</div>
         </div>
       </div>
       <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.25rem 1.5rem">
         <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--cyan);margin-bottom:1rem">Monday · 8am ET</div>
         <div style="display:flex;flex-direction:column;gap:0.6rem">
-	          <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">1</span>Load Sunday preview from private data files</div>
+	          <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">1</span>Load edited Sunday preview from private data files</div>
           <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">2</span>Fetch any DOIs recommended after Sunday</div>
           <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">3</span>Generate two-paragraph summary with Haiku</div>
           <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">4</span>Re-rank paper pool for each subscriber's profile</div>
@@ -489,6 +518,53 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 </div>
 </div>
 
+<!-- ═══════ PANEL 5 — ADMIN ═══════ -->
+<div id="panel-admin" class="panel">
+  <div class="admin-shell">
+    <h2 style="font-family:var(--display);font-size:2.2rem;font-weight:700;color:var(--text);margin-bottom:0.6rem;line-height:1.15">Admin review</h2>
+    <p style="font-family:var(--display);font-size:1rem;color:var(--dim);max-width:720px;line-height:1.7;margin-bottom:2rem">
+      Review the Sunday preview, complete candidates that are missing metadata, and save the final paper pool before Monday's digest sends.
+    </p>
+
+    <div class="admin-card admin-login" id="admin-login-card">
+      <div class="section-tag">Sign on</div>
+      <div class="field">
+        <label>Admin token</label>
+        <input type="password" id="admin-token" placeholder="Cloudflare Worker ADMIN_TOKEN">
+      </div>
+      <div class="admin-toolbar">
+        <button class="btn-primary" onclick="adminLogin()">Sign on</button>
+        <button class="btn-secondary" onclick="adminUseStoredToken()">Use stored token</button>
+      </div>
+      <div class="admin-status" id="admin-login-status">Token is stored only in this browser and sent to the Worker as a bearer token.</div>
+    </div>
+
+    <div id="admin-editor" style="display:none">
+      <div class="admin-toolbar">
+        <button class="btn-primary" onclick="adminLoadPreview()">Reload preview</button>
+        <button class="btn-secondary" onclick="adminAddPaper()">Add paper</button>
+        <button class="btn-secondary" onclick="adminSavePreview()">Save preview</button>
+        <button class="btn-secondary" onclick="adminLogout()">Sign out</button>
+      </div>
+      <div class="admin-status" id="admin-status"></div>
+
+      <div class="admin-grid">
+        <section class="admin-card">
+          <div class="section-tag">Included in digest</div>
+          <div class="admin-list" id="admin-papers"></div>
+        </section>
+        <section class="admin-card review">
+          <div class="section-tag">Needs admin review</div>
+          <p style="font-family:var(--display);font-size:13px;color:var(--dim);line-height:1.65;margin-bottom:1rem">
+            These candidates looked relevant but failed metadata checks. Complete the missing fields and promote them, or delete them.
+          </p>
+          <div class="admin-list" id="admin-review-papers"></div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 const TOPICS=[
   {id:'nuclear',label:'Nuclear Fusion / Fission'},
@@ -557,7 +633,7 @@ const DEMO_PAPERS=[
    doi:'10.48550/arXiv.2509.03689',
    abstract:'Liu, Xu, Abbate, Cheng, and Aurnou deliver the first thermovelocimetric measurements of magnetostrophic convection using liquid gallium — a laboratory proxy for Earth\'s liquid iron outer core. At Elsasser number Λ = 1 (Coriolis and Lorentz forces balanced), flow velocities follow geostrophic turbulence scaling until local Lorentz forces dominate, at which point the system enters a magnetically-damped regime with enhanced heat transport. Extrapolating to Earth, the authors predict core convection operates in this magnetically-damped state at Rayleigh numbers 10²⁴–10²⁶ — the first direct experimental anchor for this fundamental geodynamo regime.'},
   {category:'Planetary & Geo/Astrophysics',feat:false,badge:'Published',
-   title:'Magnetostrophic rotating magnetoconvection and the geodynamo hypothesis',
+   title:'The Elbert range of magnetostrophic convection. II. Comparing linear theory to nonlinear low-Rm simulations',
    authors:'Horn, S. & Aurnou, J. M.',
    journal:'Proceedings of the Royal Society A',
    date:'Published March 21, 2025',
@@ -1021,10 +1097,223 @@ async function submitRecommendations() {
 }
 
 /* ── RATINGS ── */
-// Replace this with the deployed intake Worker URL.
-const BACKEND='https://lm-digest-intake.YOUR_WORKER_SUBDOMAIN.workers.dev';
+const BACKEND='https://lm-digest-intake-internal.yufanxu.workers.dev';
 const ratings=new Set(); // doi strings rated by current user
 let ratingEmail=''; // set when user subscribes or from localStorage
+let adminToken=localStorage.getItem('lmd_admin_token') || '';
+let adminDigest={papers:[],review_papers:[],summary:null};
+
+const ADMIN_CATS=[
+  'Nuclear & Fusion Applications',
+  'Planetary & Geo/Astrophysics',
+  'Flexible Electronics, Wearables & Soft Matter',
+  'Biomedical, Robotics & Energy'
+];
+
+function adminSetStatus(msg,type=''){
+  const el=document.getElementById('admin-status') || document.getElementById('admin-login-status');
+  if(!el) return;
+  el.textContent=msg;
+  el.className='admin-status '+type;
+}
+
+function adminAuthHeaders(json=true){
+  const headers={Authorization:'Bearer '+adminToken};
+  if(json) headers['Content-Type']='application/json';
+  return headers;
+}
+
+async function adminLogin(){
+  const token=document.getElementById('admin-token').value.trim();
+  if(!token){
+    document.getElementById('admin-login-status').textContent='Enter the admin token.';
+    document.getElementById('admin-login-status').className='admin-status err';
+    return;
+  }
+  try{
+    const resp=await fetch(BACKEND+'/admin/login',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({token})
+    });
+    if(!resp.ok) throw new Error('Invalid token');
+    adminToken=token;
+    localStorage.setItem('lmd_admin_token',token);
+    document.getElementById('admin-login-card').style.display='none';
+    document.getElementById('admin-editor').style.display='block';
+    adminSetStatus('Signed on. Loading preview…','ok');
+    await adminLoadPreview();
+  }catch(e){
+    document.getElementById('admin-login-status').textContent='Could not sign on: '+e.message;
+    document.getElementById('admin-login-status').className='admin-status err';
+  }
+}
+
+function adminUseStoredToken(){
+  const token=localStorage.getItem('lmd_admin_token') || '';
+  if(!token){
+    document.getElementById('admin-login-status').textContent='No stored token in this browser.';
+    document.getElementById('admin-login-status').className='admin-status err';
+    return;
+  }
+  document.getElementById('admin-token').value=token;
+  adminLogin();
+}
+
+function adminLogout(){
+  adminToken='';
+  localStorage.removeItem('lmd_admin_token');
+  document.getElementById('admin-login-card').style.display='block';
+  document.getElementById('admin-editor').style.display='none';
+  document.getElementById('admin-token').value='';
+}
+
+async function adminLoadPreview(){
+  try{
+    const resp=await fetch(BACKEND+'/admin/preview',{headers:adminAuthHeaders(false)});
+    if(!resp.ok) throw new Error('HTTP '+resp.status);
+    const data=await resp.json();
+    adminDigest={
+      ...data,
+      papers:Array.isArray(data.papers)?data.papers:[],
+      review_papers:Array.isArray(data.review_papers)?data.review_papers:[]
+    };
+    adminRender();
+    const when=data.created_at?new Date(data.created_at).toLocaleString():'unknown time';
+    adminSetStatus(`Loaded preview from ${when}: ${adminDigest.papers.length} included, ${adminDigest.review_papers.length} needing review.`,'ok');
+  }catch(e){
+    adminSetStatus('Could not load preview: '+e.message,'err');
+  }
+}
+
+function adminSyncFromDom(){
+  adminDigest.papers=adminCollectList('admin-papers',false);
+  adminDigest.review_papers=adminCollectList('admin-review-papers',true);
+}
+
+function adminCollectList(containerId,review){
+  return [...document.querySelectorAll(`#${containerId} .admin-paper`)].map(card=>{
+    const val=name=>card.querySelector(`[data-field="${name}"]`)?.value.trim() || '';
+    const paper={
+      category:val('category') || 'Liquid Metal Research',
+      title:val('title'),
+      authors:val('authors'),
+      journal:val('journal'),
+      date:val('date'),
+      doi:val('doi'),
+      badge:val('badge') || 'Published',
+      abstract:val('abstract'),
+      feat:card.querySelector('[data-field="feat"]')?.checked || false
+    };
+    const preprint=card.dataset.preprintDoi || '';
+    if(preprint) paper.preprint_doi=preprint;
+    const reason=val('review_reason');
+    if(review){
+      paper.needs_review=true;
+      paper.review_reason=reason || 'Needs admin review';
+    }
+    return paper;
+  }).filter(p=>p.title || p.doi);
+}
+
+function adminField(label,field,value,type='text',wide=false){
+  return `<div class="${wide?'wide':''}"><label>${label}</label><input type="${type}" data-field="${field}" value="${escapeHtml(value||'')}"></div>`;
+}
+
+function adminPaperCard(p,index,review=false){
+  const cats=[p.category || '', ...ADMIN_CATS.filter(c=>c!==p.category)];
+  const catOptions=cats.map(c=>`<option value="${escapeHtml(c)}">${escapeHtml(c || 'Choose category')}</option>`).join('');
+  const badgeOptions=['Published','Preprint'].map(b=>`<option value="${b}" ${p.badge===b?'selected':''}>${b}</option>`).join('');
+  return `<article class="admin-paper ${review?'review':''}" data-preprint-doi="${escapeHtml(p.preprint_doi||'')}">
+    <div class="admin-paper-head">
+      <div class="admin-paper-title">${escapeHtml(p.title || 'Untitled paper')}</div>
+      <div class="admin-paper-actions">
+        ${review?`<button class="admin-mini-btn promote" onclick="adminPromote(${index})">Promote</button>`:''}
+        <button class="admin-mini-btn danger" onclick="adminDelete(${review?'true':'false'},${index})">Delete</button>
+      </div>
+    </div>
+    <div class="admin-fields">
+      <div><label>Category</label><select data-field="category">${catOptions}</select></div>
+      <div><label>Badge</label><select data-field="badge">${badgeOptions}</select></div>
+      ${adminField('Title','title',p.title,'text',true)}
+      ${adminField('Authors','authors',p.authors)}
+      ${adminField('Journal','journal',p.journal)}
+      ${adminField('Date','date',p.date)}
+      ${adminField('DOI / arXiv ID','doi',p.doi)}
+      ${review?adminField('Review reason','review_reason',p.review_reason,'text',true):''}
+      <div><label>Featured</label><input type="checkbox" data-field="feat" ${p.feat?'checked':''}></div>
+      <div class="wide"><label>Abstract / summary</label><textarea data-field="abstract">${escapeHtml(p.abstract||'')}</textarea></div>
+    </div>
+  </article>`;
+}
+
+function adminRender(){
+  const papers=document.getElementById('admin-papers');
+  const review=document.getElementById('admin-review-papers');
+  papers.innerHTML=adminDigest.papers.length
+    ? adminDigest.papers.map((p,i)=>adminPaperCard(p,i,false)).join('')
+    : '<div class="admin-empty">No included papers yet. Add one manually or promote a review candidate.</div>';
+  review.innerHTML=adminDigest.review_papers.length
+    ? adminDigest.review_papers.map((p,i)=>adminPaperCard(p,i,true)).join('')
+    : '<div class="admin-empty">No review candidates. Sunday search did not hold back incomplete papers.</div>';
+}
+
+function adminAddPaper(){
+  adminSyncFromDom();
+  adminDigest.papers.unshift({
+    category:'Nuclear & Fusion Applications',
+    title:'',
+    authors:'',
+    journal:'',
+    date:'',
+    doi:'',
+    badge:'Published',
+    abstract:'',
+    feat:false
+  });
+  adminRender();
+}
+
+function adminPromote(index){
+  adminSyncFromDom();
+  const paper=adminDigest.review_papers.splice(index,1)[0];
+  if(!paper) return;
+  delete paper.needs_review;
+  delete paper.review_reason;
+  adminDigest.papers.unshift(paper);
+  adminRender();
+  adminSetStatus('Candidate promoted. Review fields, then save preview.','ok');
+}
+
+function adminDelete(review,index){
+  adminSyncFromDom();
+  const list=review?adminDigest.review_papers:adminDigest.papers;
+  list.splice(index,1);
+  adminRender();
+}
+
+async function adminSavePreview(){
+  adminSyncFromDom();
+  try{
+    adminSetStatus('Saving preview…');
+    const resp=await fetch(BACKEND+'/admin/preview',{
+      method:'POST',
+      headers:adminAuthHeaders(true),
+      body:JSON.stringify({
+        papers:adminDigest.papers,
+        review_papers:adminDigest.review_papers,
+        summary:adminDigest.summary || null
+      })
+    });
+    const data=await resp.json().catch(()=>({}));
+    if(!resp.ok) throw new Error(data.error || ('HTTP '+resp.status));
+    adminDigest=data.digest || adminDigest;
+    adminRender();
+    adminSetStatus(`Saved preview: ${adminDigest.papers.length} included, ${adminDigest.review_papers.length} still needing review.`,'ok');
+  }catch(e){
+    adminSetStatus('Could not save preview: '+e.message,'err');
+  }
+}
 
 function setRatingEmail(email){
   ratingEmail=email;
@@ -1120,8 +1409,8 @@ function renderSummaryBlock(summary, createdAt, paperCount) {
   // Switch panel if URL requested it
   if (digestParam || hashPanel === 'digest') {
     switchPanel('digest', document.querySelectorAll('.nav-pill')[1]);
-  } else if (['survey','contact','setup'].includes(hashPanel)) {
-    const names = ['survey','digest','contact','setup'];
+  } else if (['survey','contact','setup','admin'].includes(hashPanel)) {
+    const names = ['survey','digest','contact','setup','admin'];
     switchPanel(hashPanel, document.querySelectorAll('.nav-pill')[names.indexOf(hashPanel)]);
   }
 
