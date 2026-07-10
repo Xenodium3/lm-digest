@@ -290,7 +290,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
       </div>
       <div class="submit-row">
         <button class="submit-btn" id="submit-btn" onclick="submitSurvey()">Activate Subscription →</button>
-        <div class="submit-success" id="submit-success">✓ &nbsp;Subscription confirmed. Your digest arrives every Monday at 8am ET, with your primary focus area shown first.</div>
+        <div class="submit-success" id="submit-success">✓ &nbsp;Subscription confirmed. Your digest schedule is set, with your primary focus area shown first.</div>
       </div>
     </div>
   </div>
@@ -411,7 +411,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">worker/intake-worker.js</td><td style="padding:10px 16px;color:var(--dimmer)">edge</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Public intake API — subscriptions, contact messages, ratings, recommendations, latest digest</td></tr>
 	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">data/*.jsonl</td><td style="padding:10px 16px;color:var(--dimmer)">private</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Append-only private data files for subscribers, ratings, recommendations, and contact messages</td></tr>
 	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">preview.cjs</td><td style="padding:10px 16px;color:var(--dimmer)">job</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Sunday pipeline — search, verify, hydrate authors, store as preview, email admin</td></tr>
-	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">digest.cjs</td><td style="padding:10px 16px;color:var(--dimmer)">job</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Monday pipeline — reuse Sunday preview, generate summary, personalise per subscriber, send emails</td></tr>
+	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">digest.cjs</td><td style="padding:10px 16px;color:var(--dimmer)">job</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Send pipeline — reuse Sunday preview for weekly, aggregate weekly archives for biweekly/monthly, personalise per subscriber, send emails</td></tr>
           <tr><td style="padding:10px 16px;color:var(--text)">index.html</td><td style="padding:10px 16px;color:var(--dimmer)">~1200</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">This page — subscribe form, digest viewer, thumbs-up ratings, DOI recommendation box</td></tr>
         </tbody>
       </table>
@@ -421,7 +421,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   <!-- SECTION 2: WEEKLY CYCLE -->
   <div style="margin-bottom:3.5rem">
     <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">02 — Weekly cycle<span style="flex:1;height:1px;background:var(--border2)"></span></div>
-    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">The week runs in two phases separated by 24 hours. Sunday's search builds the canonical paper pool, flags incomplete candidates for admin review, and emails a preview. Monday reuses the edited preview, does no additional paper search, personalises the order for each subscriber, and sends the full digest.</p>
+    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">The week runs in two phases separated by 24 hours. Sunday's search builds the canonical paper pool, flags incomplete candidates for admin review, and emails a preview. Monday reuses the edited preview, does no additional paper search, personalises the order for weekly subscribers, and stores a finalized weekly archive for biweekly and monthly digests.</p>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
       <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.25rem 1.5rem">
         <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--cyan);margin-bottom:1rem">Sunday · 8am ET</div>
@@ -442,6 +442,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
           <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">3</span>Generate two-paragraph summary with Haiku</div>
           <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">4</span>Rank and select papers for each subscriber's profile</div>
           <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">5</span>Send personalised email to all subscribers simultaneously</div>
+          <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">6</span>Save the final weekly snapshot for biweekly/monthly aggregation</div>
         </div>
       </div>
     </div>
@@ -450,7 +451,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   <!-- SECTION 3: READER SIGNALS -->
   <div style="margin-bottom:3.5rem">
     <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">03 — Reader signals<span style="flex:1;height:1px;background:var(--border2)"></span></div>
-    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">Subscriber signals help rank and review the weekly paper pool. They do not trigger a second Monday search; the Monday digest only personalises the Sunday-approved set.</p>
+    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">Subscriber signals help rank and review the weekly paper pool. They do not trigger a second Monday search; weekly sends personalise the Sunday-approved set, while biweekly and monthly sends personalise the latest 2 or 4 finalized weekly archives.</p>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem">
       <div style="background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--cyan);border-radius:0 6px 6px 0;padding:1.25rem 1.25rem">
         <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.6rem">Ratings</div>
@@ -507,7 +508,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
         </tr></thead>
         <tbody>
 	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">subscriptions.jsonl</td><td style="padding:10px 16px;color:var(--dimmer)">email, topics[], focus, affil, comments</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Subscriber profiles used for personalised re-ranking</td></tr>
-	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">digests/*/latest.json</td><td style="padding:10px 16px;color:var(--dimmer)">freq, papers, summary</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Stores preview, weekly, and monthly digests — this page reads from here</td></tr>
+	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">digests/*/latest.json</td><td style="padding:10px 16px;color:var(--dimmer)">freq, papers, summary</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Stores preview, weekly, biweekly, and monthly digests — this page reads from here</td></tr>
 	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">ratings.jsonl</td><td style="padding:10px 16px;color:var(--dimmer)">email, doi, rating 0/1</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Thumbs up/down — stored as future ranking and admin-review signals</td></tr>
 	          <tr><td style="padding:10px 16px;color:var(--text)">recommendations.jsonl</td><td style="padding:10px 16px;color:var(--dimmer)">doi, email, consumed marker</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">User-submitted DOIs — saved for admin review and marked used once covered</td></tr>
         </tbody>
@@ -783,6 +784,12 @@ function toggleChip(el){
   applyDropFill(el, checked);
 }
 function setFreq(el,v){document.querySelectorAll('.freq-opt').forEach(e=>e.classList.remove('active'));el.classList.add('active');selectedFreq=v}
+
+function selectedFreqLabel(){
+  if(selectedFreq === 'monthly') return 'on the 1st of each month at 8am ET';
+  if(selectedFreq === 'biweekly') return 'every 2 weeks on Monday at 8am ET';
+  return 'every Monday at 8am ET';
+}
 function clearErr(fieldId){
   document.getElementById(fieldId).classList.remove('field-error');
 }
@@ -881,7 +888,9 @@ async function submitSurvey(){
     if (!resp.ok) throw new Error('Server error ' + resp.status);
     setRatingEmail(email);
     document.getElementById('submit-btn').textContent = '✓ Subscribed';
-    document.getElementById('submit-success').classList.add('show');
+    const success = document.getElementById('submit-success');
+    success.textContent = `✓  Subscription confirmed. Your digest arrives ${selectedFreqLabel()}, with your primary focus area shown first.`;
+    success.classList.add('show');
     document.getElementById('recommend-note').textContent = 'Recommendations will be attached to your subscriber profile.';
   } catch(e) {
     document.getElementById('submit-btn').textContent = 'Activate Subscription →';
