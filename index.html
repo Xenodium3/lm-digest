@@ -398,21 +398,22 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   <!-- SECTION 1: FILE STRUCTURE -->
   <div style="margin-bottom:3.5rem">
     <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">01 — Code structure<span style="flex:1;height:1px;background:var(--border2)"></span></div>
-    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">The project now uses a private GitHub repository as the data store. <code style="font-family:var(--mono);font-size:12px;background:var(--dark3);color:var(--gold);padding:2px 6px;border-radius:2px">shared.cjs</code> is the library — it exports the search prompt, DOI verification, CrossRef lookups, and author hydration. A small intake worker receives public form submissions and appends them to private JSONL files, while GitHub Actions runs the weekly paper pipeline.</p>
+    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">The project now uses a private GitHub repository as the data store. <code style="font-family:var(--mono);font-size:12px;background:var(--dark3);color:var(--gold);padding:2px 6px;border-radius:2px">lib/domain-config.cjs</code> holds the research-area vocabulary, while <code style="font-family:var(--mono);font-size:12px;background:var(--dark3);color:var(--gold);padding:2px 6px;border-radius:2px">shared.cjs</code> handles prompt mechanics, DOI verification, CrossRef lookups, and author hydration. A small intake worker receives public form submissions and appends them to private JSONL files, while GitHub Actions runs the weekly paper pipeline.</p>
     <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;overflow:hidden">
       <table style="width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12px">
         <thead><tr style="border-bottom:1px solid var(--border2)">
           <td style="padding:10px 16px;color:var(--cyan);font-weight:700">File</td>
-          <td style="padding:10px 16px;color:var(--cyan);font-weight:700">Lines</td>
+          <td style="padding:10px 16px;color:var(--cyan);font-weight:700">Kind</td>
           <td style="padding:10px 16px;color:var(--cyan);font-weight:700">Role</td>
         </tr></thead>
         <tbody>
-	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">shared.cjs</td><td style="padding:10px 16px;color:var(--dimmer)">library</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Single source of truth — prompt, Sonnet search, Haiku calls, DOI verify, CrossRef, author hydration</td></tr>
+	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">lib/domain-config.cjs</td><td style="padding:10px 16px;color:var(--dimmer)">config</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Research-area source of truth — keywords, category rules, relevance terms, journal tiers, and prompt guidance</td></tr>
+	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">shared.cjs</td><td style="padding:10px 16px;color:var(--dimmer)">library</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Shared mechanics — prompt assembly, Claude calls, DOI verification, CrossRef parsing, author hydration</td></tr>
 	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">worker/intake-worker.js</td><td style="padding:10px 16px;color:var(--dimmer)">edge</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Public intake API — subscriptions, contact messages, ratings, recommendations, latest digest</td></tr>
 	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">data/*.jsonl</td><td style="padding:10px 16px;color:var(--dimmer)">private</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Append-only private data files for subscribers, ratings, recommendations, and contact messages</td></tr>
 	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">preview.cjs</td><td style="padding:10px 16px;color:var(--dimmer)">job</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Sunday pipeline — search, verify, hydrate authors, store as preview, email admin</td></tr>
 	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">digest.cjs</td><td style="padding:10px 16px;color:var(--dimmer)">job</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Send pipeline — reuse Sunday preview for weekly, aggregate weekly archives for biweekly/monthly, personalise per subscriber, send emails</td></tr>
-          <tr><td style="padding:10px 16px;color:var(--text)">index.html</td><td style="padding:10px 16px;color:var(--dimmer)">~1200</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">This page — subscribe form, digest viewer, thumbs-up ratings, DOI recommendation box</td></tr>
+          <tr><td style="padding:10px 16px;color:var(--text)">index.html</td><td style="padding:10px 16px;color:var(--dimmer)">site</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">This page — subscribe form, digest viewer, thumbs-up ratings, DOI recommendation box</td></tr>
         </tbody>
       </table>
     </div>
@@ -426,7 +427,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
       <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.25rem 1.5rem">
         <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--cyan);margin-bottom:1rem">Sunday · 8am ET</div>
         <div style="display:flex;flex-direction:column;gap:0.6rem">
-          <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">1</span>Search arXiv, ACS, Nature, Wiley, Elsevier, Physical Review</div>
+          <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">1</span>Search CrossRef and arXiv with the configured topic vocabulary</div>
           <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">2</span>Verify every DOI resolves and title matches</div>
           <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">3</span>Hydrate author lists from CrossRef and arXiv</div>
 	          <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">4</span>Store verified pool in the private repo as <em>preview</em></div>
@@ -463,7 +464,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
       </div>
       <div style="background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--cyan);border-radius:0 6px 6px 0;padding:1.25rem 1.25rem">
         <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.6rem">Subscriber profile</div>
-        <p style="font-family:var(--display);font-size:13px;color:var(--dim);line-height:1.65">Research focus, affiliation, and comments from your subscription form. Used by Haiku to re-rank the paper pool specifically for you before sending.</p>
+        <p style="font-family:var(--display);font-size:13px;color:var(--dim);line-height:1.65">Research focus, affiliation, and comments from your subscription form. Used by the deterministic ranking system to select and order papers before sending.</p>
       </div>
     </div>
   </div>
@@ -471,13 +472,13 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   <!-- SECTION 4: STACK -->
   <div style="margin-bottom:3.5rem">
     <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">04 — Technology stack<span style="flex:1;height:1px;background:var(--border2)"></span></div>
-    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">Built entirely with open tooling and deployed on free or near-free infrastructure. CrossRef and arXiv handle paper discovery; Anthropic is used for summarisation and profile-aware ranking, with no second Monday paper search.</p>
+    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">Built entirely with open tooling and deployed on free or near-free infrastructure. CrossRef and arXiv handle normal paper discovery; Anthropic is used for the compact digest summary and optional fallback search, with no second Monday paper search.</p>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
       <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.25rem 1.5rem">
         <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:0.85rem">AI</div>
         <div style="display:flex;flex-direction:column;gap:0.5rem">
           <div style="font-family:var(--display);font-size:13px;color:var(--dim)"><span style="color:var(--text)">Claude Sonnet 5</span> — optional fallback search, disabled during normal scheduled runs</div>
-          <div style="font-family:var(--display);font-size:13px;color:var(--dim)"><span style="color:var(--text)">Claude Haiku</span> — digest summary and per-subscriber re-ranking</div>
+          <div style="font-family:var(--display);font-size:13px;color:var(--dim)"><span style="color:var(--text)">Claude Haiku</span> — compact digest summary only; subscriber selection is deterministic</div>
           <div style="font-family:var(--display);font-size:13px;color:var(--dim)"><span style="color:var(--text)">CrossRef API</span> — paper discovery, DOI verification, and preprint upgrade detection</div>
           <div style="font-family:var(--display);font-size:13px;color:var(--dim)"><span style="color:var(--text)">arXiv API</span> — preprint discovery and author metadata</div>
         </div>
@@ -495,9 +496,29 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
     </div>
   </div>
 
-  <!-- SECTION 5: DATABASE -->
+  <!-- SECTION 5: RETARGETING -->
+  <div style="margin-bottom:3.5rem">
+	    <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">05 — Retargeting to another field<span style="flex:1;height:1px;background:var(--border2)"></span></div>
+	    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">The workflow is not tied to liquid metals. To adapt it for another research area, edit the domain configuration first, then align the public topic labels and run the existing dry-run tests before sending real email.</p>
+    <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;overflow:hidden">
+      <table style="width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12px">
+        <thead><tr style="border-bottom:1px solid var(--border2)">
+	          <td style="padding:10px 16px;color:var(--cyan);font-weight:700">Step</td>
+	          <td style="padding:10px 16px;color:var(--cyan);font-weight:700">Where</td>
+          <td style="padding:10px 16px;color:var(--cyan);font-weight:700">What to change</td>
+        </tr></thead>
+        <tbody>
+	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">1</td><td style="padding:10px 16px;color:var(--dimmer)">lib/domain-config.cjs</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Rename the domain, replace search keywords, relevance terms, exclusions, category rules, and journal reputation tiers</td></tr>
+	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">2</td><td style="padding:10px 16px;color:var(--dimmer)">index.html</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Update UI_DOMAIN, TOPICS, and FOCUS_ORDER so the website matches the backend categories exactly</td></tr>
+	          <tr><td style="padding:10px 16px;color:var(--text)">3</td><td style="padding:10px 16px;color:var(--dimmer)">GitHub Actions</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Run fixture/dry-run and preview tests, review the candidate pool, then update email wording or cron cadence only if the new audience needs it</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SECTION 6: DATABASE -->
   <div>
-	    <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">05 — Private data store<span style="flex:1;height:1px;background:var(--border2)"></span></div>
+	    <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">06 — Private data store<span style="flex:1;height:1px;background:var(--border2)"></span></div>
 	    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">Subscriber data lives in append-only JSONL files inside the private backend repository. The public site never sees a GitHub token; it only talks to the intake worker.</p>
     <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;overflow:hidden">
       <table style="width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12px">
@@ -507,7 +528,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
           <td style="padding:10px 16px;color:var(--cyan);font-weight:700">Purpose</td>
         </tr></thead>
         <tbody>
-	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">subscriptions.jsonl</td><td style="padding:10px 16px;color:var(--dimmer)">email, topics[], focus, affil, comments</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Subscriber profiles used for personalised re-ranking</td></tr>
+	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">subscriptions.jsonl</td><td style="padding:10px 16px;color:var(--dimmer)">email, topics[], focus, affil, comments</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Subscriber profiles used for deterministic personalised selection</td></tr>
 	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">digests/*/latest.json</td><td style="padding:10px 16px;color:var(--dimmer)">freq, papers, summary</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Stores preview, weekly, biweekly, and monthly digests — this page reads from here</td></tr>
 	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">ratings.jsonl</td><td style="padding:10px 16px;color:var(--dimmer)">email, doi, rating 0/1</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Thumbs up/down — stored as future ranking and admin-review signals</td></tr>
 	          <tr><td style="padding:10px 16px;color:var(--text)">recommendations.jsonl</td><td style="padding:10px 16px;color:var(--dimmer)">doi, email, consumed marker</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">User-submitted DOIs — saved for admin review and marked used once covered</td></tr>
@@ -567,6 +588,15 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 </div>
 
 <script>
+// UI-side research-domain config. Keep these labels aligned with
+// lm-digest-backend/lib/domain-config.cjs when retargeting the project.
+const UI_DOMAIN={
+  name:'liquid metal',
+  label:'Liquid Metal',
+  labelPlural:'Liquid Metals',
+  defaultCategory:'Liquid Metal Research'
+};
+
 const TOPICS=[
   {id:'nuclear',label:'Nuclear Fusion / Fission'},
   {id:'planetary',label:'Planetary & Geo/Astrophysics'},
@@ -709,6 +739,8 @@ const DEMO_PAPERS=[
    abstract:'Liquid metal MHD generators convert slow, high-force ocean wave motion into electricity without high-speed mechanical components. Zhao and Peng review LMMHD prototype development from early concepts through demonstration systems, and outline remaining challenges of survivability, reliability, efficient conversion, and scaling. The reciprocating conductive-fluid approach offers a direct path for coupling ocean-wave motion to electrical generation without high-speed rotating machinery.'},
 ];
 
+// Category display priority for each public focus filter.
+// Values must match backend CAT_NAMES exactly.
 const FOCUS_ORDER={
   nuclear:    ['Nuclear & Fusion Applications','Planetary & Geo/Astrophysics','Flexible Electronics, Wearables & Soft Matter','Biomedical, Robotics & Energy'],
   mhd:        ['Planetary & Geo/Astrophysics','Nuclear & Fusion Applications','Flexible Electronics, Wearables & Soft Matter','Biomedical, Robotics & Energy'],
@@ -922,7 +954,7 @@ function doiHref(doi) {
 function normalisePaper(raw) {
   const doi = raw.doi || raw.url || raw.link || '';
   return {
-    category: raw.category || raw.topic || raw.area || 'Liquid Metal Research',
+    category: raw.category || raw.topic || raw.area || UI_DOMAIN.defaultCategory,
     feat: Boolean(raw.feat || raw.featured),
     badge: raw.badge || raw.type || (/arXiv/i.test(doi) ? 'Preprint' : 'Published'),
     title: raw.title || 'Untitled paper',
@@ -1204,7 +1236,7 @@ function adminCollectList(containerId,review){
   return [...document.querySelectorAll(`#${containerId} .admin-paper`)].map(card=>{
     const val=name=>card.querySelector(`[data-field="${name}"]`)?.value.trim() || '';
     const paper={
-      category:val('category') || 'Liquid Metal Research',
+      category:val('category') || UI_DOMAIN.defaultCategory,
       title:val('title'),
       authors:val('authors'),
       journal:val('journal'),
@@ -1392,7 +1424,7 @@ function renderSummaryBlock(summary, createdAt, paperCount) {
   div.style.cssText = 'background:rgba(0,229,255,0.05);border:1px solid rgba(0,229,255,0.15);border-radius:4px;padding:1.35rem 1.6rem;margin-bottom:2rem';
   const label = document.createElement('div');
   label.style.cssText = 'font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.85rem';
-  label.textContent = 'This week in liquid metal research';
+  label.textContent = `This week in ${UI_DOMAIN.name} research`;
   div.appendChild(label);
     summary.split(/\n\n+/).filter(Boolean).forEach(para => {
     const p = document.createElement('p');
