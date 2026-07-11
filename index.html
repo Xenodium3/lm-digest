@@ -257,7 +257,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
         <div class="no-topic-err" id="no-topic-err">Please select at least one research area.</div>
         <div class="field" style="margin-top:1rem">
           <label>Specific focus or sub-topics</label>
-          <textarea id="s-focus" placeholder="e.g. liquid lithium blankets · soft robotics · thermal management · 3D printing · alloy design · catalysis · magnetostrophic convection…"></textarea>
+          <textarea id="s-focus" placeholder="e.g. liquid lithium blankets · heavy-ion beam strippers · soft robotics · thermal management · 3D printing · alloy design · catalysis · magnetostrophic convection…"></textarea>
         </div>
       </div>
       <div class="form-section">
@@ -598,7 +598,7 @@ const UI_DOMAIN={
 };
 
 const TOPICS=[
-  {id:'nuclear',label:'Nuclear & Fusion Applications'},
+  {id:'nuclear',label:'Nuclear, Accelerator & Fusion Applications'},
   {id:'planetary',label:'Planetary & Geo/Astrophysics'},
   {id:'electronics',label:'Flexible Electronics, Wearables & Soft Matter'},
   {id:'biomedical',label:'Biomedical, Robotics & Energy'},
@@ -607,11 +607,15 @@ const TOPICS=[
 // Category display priority for each public focus filter.
 // Values must match backend CAT_NAMES exactly.
 const FOCUS_ORDER={
-  nuclear:    ['Nuclear & Fusion Applications','Planetary & Geo/Astrophysics','Flexible Electronics, Wearables & Soft Matter','Biomedical, Robotics & Energy'],
-  mhd:        ['Planetary & Geo/Astrophysics','Nuclear & Fusion Applications','Flexible Electronics, Wearables & Soft Matter','Biomedical, Robotics & Energy'],
-  electronics:['Flexible Electronics, Wearables & Soft Matter','Biomedical, Robotics & Energy','Nuclear & Fusion Applications','Planetary & Geo/Astrophysics'],
-  biomedical: ['Biomedical, Robotics & Energy','Flexible Electronics, Wearables & Soft Matter','Nuclear & Fusion Applications','Planetary & Geo/Astrophysics'],
-  all:        ['Planetary & Geo/Astrophysics','Nuclear & Fusion Applications','Flexible Electronics, Wearables & Soft Matter','Biomedical, Robotics & Energy'],
+  nuclear:    ['Nuclear, Accelerator & Fusion Applications','Planetary & Geo/Astrophysics','Flexible Electronics, Wearables & Soft Matter','Biomedical, Robotics & Energy'],
+  mhd:        ['Planetary & Geo/Astrophysics','Nuclear, Accelerator & Fusion Applications','Flexible Electronics, Wearables & Soft Matter','Biomedical, Robotics & Energy'],
+  electronics:['Flexible Electronics, Wearables & Soft Matter','Biomedical, Robotics & Energy','Nuclear, Accelerator & Fusion Applications','Planetary & Geo/Astrophysics'],
+  biomedical: ['Biomedical, Robotics & Energy','Flexible Electronics, Wearables & Soft Matter','Nuclear, Accelerator & Fusion Applications','Planetary & Geo/Astrophysics'],
+  all:        ['Planetary & Geo/Astrophysics','Nuclear, Accelerator & Fusion Applications','Flexible Electronics, Wearables & Soft Matter','Biomedical, Robotics & Energy'],
+};
+
+const CATEGORY_ALIASES={
+  'Nuclear & Fusion Applications':'Nuclear, Accelerator & Fusion Applications',
 };
 
 let currentData=null, selectedFreq='weekly';
@@ -818,8 +822,9 @@ function doiHref(doi) {
 
 function normalisePaper(raw) {
   const doi = raw.doi || raw.url || raw.link || '';
+  const rawCategory = raw.category || raw.topic || raw.area || UI_DOMAIN.defaultCategory;
   return {
-    category: raw.category || raw.topic || raw.area || UI_DOMAIN.defaultCategory,
+    category: CATEGORY_ALIASES[rawCategory] || rawCategory,
     feat: Boolean(raw.feat || raw.featured),
     badge: raw.badge || raw.type || (/arXiv/i.test(doi) ? 'Preprint' : 'Published'),
     title: raw.title || 'Untitled paper',
@@ -1015,7 +1020,7 @@ let adminToken=localStorage.getItem('lmd_admin_token') || '';
 let adminDigest={papers:[],review_papers:[],summary:null};
 
 const ADMIN_CATS=[
-  'Nuclear & Fusion Applications',
+  'Nuclear, Accelerator & Fusion Applications',
   'Planetary & Geo/Astrophysics',
   'Flexible Electronics, Wearables & Soft Matter',
   'Biomedical, Robotics & Energy'
@@ -1172,7 +1177,7 @@ function adminRender(){
 function adminAddPaper(){
   adminSyncFromDom();
   adminDigest.papers.unshift({
-    category:'Nuclear & Fusion Applications',
+    category:'Nuclear, Accelerator & Fusion Applications',
     title:'',
     authors:'',
     journal:'',
