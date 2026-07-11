@@ -299,6 +299,9 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
       Already subscribed? Resubmit this form with the same email to replace your saved preferences, or
       <button onclick="showUnsubscribe()" style="background:none;border:none;font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.62);cursor:pointer;padding:0;text-decoration:underline">unsubscribe</button>.
     </p>
+    <p style="font-family:var(--mono);font-size:10px;color:rgba(255,255,255,0.48);line-height:1.7;max-width:620px;margin:0.75rem auto 0">
+      Privacy note: your email, affiliation, topic preferences, ratings, and recommendations are stored in a private backend repository and used only to send and personalize LM Digest. They are not sold or shared.
+    </p>
     <div id="unsub-form" style="display:none;margin-top:1rem;display:none">
       <div style="display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap">
         <input type="email" id="unsub-email" placeholder="your@email.com" style="padding:0.5rem 0.85rem;background:var(--dark2);border:1px solid var(--border2);border-radius:3px;font-family:var(--mono);font-size:12px;color:var(--text);outline:none;width:220px">
@@ -519,7 +522,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   <!-- SECTION 6: DATABASE -->
   <div>
 	    <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">06 — Private data store<span style="flex:1;height:1px;background:var(--border2)"></span></div>
-	    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">Subscriber data lives in append-only JSONL files inside the private backend repository. The public site never sees a GitHub token; it only talks to the intake worker.</p>
+	    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">Subscriber data lives in append-only JSONL files inside the private backend repository. The public site never sees a GitHub token; it only talks to the intake worker. Subscriber contact details and preferences are used only for digest delivery, personalization, recommendations, ratings, and unsubscribe/update handling.</p>
     <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;overflow:hidden">
       <table style="width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12px">
         <thead><tr style="border-bottom:1px solid var(--border2)">
