@@ -300,7 +300,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
       <button onclick="showUnsubscribe()" style="background:none;border:none;font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.62);cursor:pointer;padding:0;text-decoration:underline">unsubscribe</button>.
     </p>
     <p style="font-family:var(--mono);font-size:10px;color:rgba(255,255,255,0.48);line-height:1.7;max-width:620px;margin:0.75rem auto 0">
-      Privacy note: your email, affiliation, topic preferences, ratings, and recommendations are stored in a private backend repository and used only to send and personalize LM Digest. They are not sold or shared.
+      Privacy note: your email, affiliation, topic preferences, ratings, and recommendations are stored in a private backend repository and used only to send and personalize LM Digest. Anonymized preference phrases may help improve future searches. They are not sold or shared.
     </p>
     <div id="unsub-form" style="display:none;margin-top:1rem;display:none">
       <div style="display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap">
@@ -425,12 +425,12 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   <!-- SECTION 2: WEEKLY CYCLE -->
   <div style="margin-bottom:3.5rem">
     <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">02 — Weekly cycle<span style="flex:1;height:1px;background:var(--border2)"></span></div>
-    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">The week runs in two phases separated by 24 hours. Sunday's search builds the canonical paper pool, flags incomplete candidates for admin review, and emails a preview. Monday reuses the edited preview, does no additional paper search, personalises the paper order and email summary for weekly subscribers, and stores a finalized weekly archive for biweekly and monthly digests. The same Monday job also refreshes rolling biweekly/monthly archives by re-checking archived arXiv preprints for newly published versions.</p>
+    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">The week runs in two phases separated by 24 hours. Sunday's search builds the canonical paper pool, using anonymized subscriber focus, comment, and topic phrases as extra discovery hints. It flags incomplete candidates for admin review and emails a preview. Monday reuses the edited preview, does no additional paper search, personalises the paper order and email summary for weekly subscribers, and stores a finalized weekly archive for biweekly and monthly digests. The same Monday job also refreshes rolling biweekly/monthly archives by re-checking archived arXiv preprints for newly published versions.</p>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
       <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.25rem 1.5rem">
         <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--cyan);margin-bottom:1rem">Sunday · morning ET</div>
         <div style="display:flex;flex-direction:column;gap:0.6rem">
-          <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">1</span>Search CrossRef and arXiv with the configured topic vocabulary</div>
+          <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">1</span>Search CrossRef and arXiv with configured topic vocabulary plus anonymized reader-interest phrases</div>
           <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">2</span>Verify every DOI/arXiv ID, title, author list, and abstract source</div>
           <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">3</span>Hydrate metadata from CrossRef, arXiv, or reviewed digest history</div>
 	          <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">4</span>Store verified pool in the private repo as <em>preview</em></div>
@@ -461,7 +461,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   <!-- SECTION 3: READER SIGNALS -->
   <div style="margin-bottom:3.5rem">
     <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">03 — Reader signals<span style="flex:1;height:1px;background:var(--border2)"></span></div>
-    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">Subscriber signals help rank and review the weekly paper pool. They do not trigger a second Monday search; weekly sends personalise the Sunday-approved set, while biweekly and monthly sends personalise the latest 2 or 4 finalized weekly archives. The fast Claude model can interpret free-text focus, comments, and affiliation to score existing verified papers, but it cannot add papers or change paper metadata.</p>
+    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">Subscriber signals help shape the next Sunday paper pool and rank the weekly results. Anonymized focus/comment/topic phrases are added as extra search hints during Sunday discovery; they do not trigger a second Monday search. Weekly sends personalise the Sunday-approved set, while biweekly and monthly sends personalise the latest 2 or 4 finalized weekly archives. The fast Claude model can interpret free-text focus, comments, and affiliation to score existing verified papers, but it cannot add papers or change paper metadata.</p>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem">
       <div style="background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--cyan);border-radius:0 6px 6px 0;padding:1.25rem 1.25rem">
         <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.6rem">Ratings</div>
@@ -473,7 +473,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
       </div>
       <div style="background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--cyan);border-radius:0 6px 6px 0;padding:1.25rem 1.25rem">
         <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.6rem">Subscriber profile</div>
-        <p style="font-family:var(--display);font-size:13px;color:var(--dim);line-height:1.65">Research focus, affiliation, and comments from your subscription form. Used by deterministic ranking plus guarded Claude preference scoring to select and order papers before sending.</p>
+        <p style="font-family:var(--display);font-size:13px;color:var(--dim);line-height:1.65">Research focus and comments help widen the next Sunday search after anonymization. Focus, affiliation, and comments also feed deterministic ranking plus guarded Claude preference scoring before sending.</p>
       </div>
     </div>
   </div>
@@ -488,8 +488,8 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
         <div style="display:flex;flex-direction:column;gap:0.5rem">
           <div style="font-family:var(--display);font-size:13px;color:var(--dim)"><span style="color:var(--text)">Claude search model</span> — optional fallback search, disabled during normal scheduled runs and gated by metadata checks</div>
           <div style="font-family:var(--display);font-size:13px;color:var(--dim)"><span style="color:var(--text)">Claude fast model</span> — interprets subscriber free text for preference scoring and writes summaries for the selected verified papers</div>
-          <div style="font-family:var(--display);font-size:13px;color:var(--dim)"><span style="color:var(--text)">CrossRef API</span> — paper discovery, DOI verification, and preprint upgrade detection</div>
-          <div style="font-family:var(--display);font-size:13px;color:var(--dim)"><span style="color:var(--text)">arXiv API</span> — preprint discovery and author metadata</div>
+          <div style="font-family:var(--display);font-size:13px;color:var(--dim)"><span style="color:var(--text)">CrossRef API</span> — paper discovery, DOI verification, preprint upgrade detection, and reader-signal query expansion</div>
+          <div style="font-family:var(--display);font-size:13px;color:var(--dim)"><span style="color:var(--text)">arXiv API</span> — preprint discovery, author metadata, and reader-signal query expansion</div>
         </div>
       </div>
       <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.25rem 1.5rem">
@@ -528,7 +528,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   <!-- SECTION 6: DATABASE -->
   <div>
 	    <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">06 — Private data store<span style="flex:1;height:1px;background:var(--border2)"></span></div>
-	    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">Subscriber data lives in append-only JSONL files inside the private backend repository. The public site never sees a GitHub token; it only talks to the intake worker. Subscriber contact details and preferences are used only for digest delivery, personalization, recommendations, ratings, and unsubscribe/update handling.</p>
+	    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">Subscriber data lives in append-only JSONL files inside the private backend repository. The public site never sees a GitHub token; it only talks to the intake worker. Subscriber contact details and preferences are used only for digest delivery, anonymized search hints, personalization, recommendations, ratings, and unsubscribe/update handling.</p>
     <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;overflow:hidden">
       <table style="width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12px">
         <thead><tr style="border-bottom:1px solid var(--border2)">
@@ -537,7 +537,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
           <td style="padding:10px 16px;color:var(--cyan);font-weight:700">Purpose</td>
         </tr></thead>
         <tbody>
-	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">subscriptions.jsonl</td><td style="padding:10px 16px;color:var(--dimmer)">email, topics[], focus, affil, comments</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Subscriber profiles used for personalised selection and guarded preference scoring</td></tr>
+	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">subscriptions.jsonl</td><td style="padding:10px 16px;color:var(--dimmer)">email, topics[], focus, affil, comments</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Subscriber profiles used for anonymized Sunday search hints, personalised selection, and guarded preference scoring</td></tr>
 	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">digests/*/latest.json</td><td style="padding:10px 16px;color:var(--dimmer)">freq, papers</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Stores preview, weekly, biweekly, and monthly paper archives — this page reads paper data from here</td></tr>
 	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">ratings.jsonl</td><td style="padding:10px 16px;color:var(--dimmer)">email, doi, rating 0/1</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Thumbs up/down — stored as future ranking and admin-review signals</td></tr>
 	          <tr><td style="padding:10px 16px;color:var(--text)">recommendations.jsonl</td><td style="padding:10px 16px;color:var(--dimmer)">doi, email, consumed marker</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">User-submitted DOIs — saved for admin review and marked used once covered</td></tr>
