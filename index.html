@@ -610,135 +610,6 @@ const TOPICS=[
   {id:'catalysis',label:'Catalysis & Chemistry'},
 ];
 
-const DEMO_PAPERS=[
-  /* ── NUCLEAR & FUSION ── */
-  {category:'Nuclear & Fusion Applications',feat:true,badge:'Published',
-   title:'Overview of MHD studies for liquid metal systems of a fusion power reactor at Oak Ridge National Laboratory',
-   authors:'Smolentsev, S., Aduloju, S., Fan, Y., Jiang, Y. & Suarez, D.',
-   journal:'Nuclear Science and Engineering (Taylor & Francis)',
-   date:'Published August 20, 2025',
-   doi:'10.1080/00295639.2025.2508586',
-   abstract:'Smolentsev and ORNL colleagues survey four active projects investigating liquid lithium and lead-lithium (PbLi) MHD flows under fusion-relevant conditions — strong magnetic fields, transient plasma disruptions, and high heat loads. The work spans closed-duct blanket flows and open-surface plasma-facing components, and introduces the new CoUPLE corrosion testing loop for studying PbLi chemistry in DEMO-relevant conditions. One of the most comprehensive recent snapshots of U.S. fusion liquid metal R&D, directly informing pilot plant blanket design.'},
-  {category:'Nuclear & Fusion Applications',feat:false,badge:'Preprint',
-   title:'A full-induction MHD solver for liquid metal fusion blankets in Vertex-CFD',
-   authors:'Endeve, E., Stefanski, D., Delchini, M.-O., Slattery, S., Hauck, C. D., Turcksin, B. & Smolentsev, S.',
-   journal:'arXiv preprint',
-   date:'Posted November 19, 2025',
-   doi:'10.48550/arXiv.2511.15549',
-   abstract:'Standard blanket MHD codes assume a static background field, but plasma disruptions require tracking the induced magnetic field dynamically. Endeve, Smolentsev et al. implement a full-induction MHD solver in the open-source Vertex-CFD framework, validating against Smolentsev\'s 2025 transient disruption model. The solver captures millisecond-scale force-reversal oscillations entirely missed by quasi-static approximations — a critical new tool for off-normal safety analysis in breeding blankets.'},
-  {category:'Nuclear & Fusion Applications',feat:false,badge:'Published',
-   title:'Construction of 3D MHD pressure drop correlation in the contraction region of a fusion blanket manifold',
-   authors:'Jiang, Y. & Smolentsev, S.',
-   journal:'Fusion Engineering and Design',
-   date:'Published 2025',
-   doi:'10.1016/j.fusengdes.2025.114558',
-   abstract:'Outlet manifolds where PbLi flow contracts from breeding zones produce some of the highest pressure losses in liquid metal blankets. Jiang and Smolentsev ran 135 COMSOL 3-D simulations across Hartmann numbers up to 10,000 and built an engineering pressure-drop correlation as a function of Ha, Re, and contraction angle. Contraction losses are only slightly below expansion losses, giving blanket designers quantitative rules for both manifold ends of a DCLL or similar concept.'},
-  {category:'Nuclear & Fusion Applications',feat:false,badge:'Published',
-   title:'Enhancing MHD performance of liquid metal with solid insulating powders for fusion reactor blankets',
-   authors:'Li, J., Wang, B., Wang, B., Liu, G. & Wang, J.',
-   journal:'Journal of Nuclear Science and Technology',
-   date:'Published April 2, 2025',
-   doi:'10.1080/00223131.2025.2485224',
-   abstract:'Adding alumina (Al₂O₃) powder to liquid-metal blanket coolants dramatically reduces MHD-induced flow slowdown. Li et al. find that 2% Al₂O₃ by volume optimally cuts the velocity drop nearly in half while keeping electrical conductivity high enough for tritium breeding — a practical, low-cost route validated by 3-D numerical simulations at magnetic field strengths relevant to tokamak blankets.'},
-  {category:'Nuclear & Fusion Applications',feat:false,badge:'Published',
-   title:'Magnetohydrodynamic behavior of free-surface liquid metal plasma-facing components in fusion reactor environments',
-   authors:'Altıntaş, A.',
-   journal:'Physics of Fluids (AIP Publishing)',
-   date:'Published March 1, 2026',
-   doi:'10.1063/5.0315892',
-   abstract:'Liquid metal plasma-facing components (PFCs) are a promising alternative to solid walls in next-generation fusion reactors, but they face a critical problem: when the flowing liquid metal interacts with the reactor\'s magnetic field, Lorentz forces slow the flow and cause the metal to "pile up" upstream — potentially blocking the channel. Altıntaş uses high-fidelity OpenFOAM simulations to capture the full onset and growth of this pileup mechanism and characterise how MHD forces govern liquid metal transport at the plasma-facing surface. The results directly inform the design of advanced PFCs and tritium-breeding first walls, making this an open-access reference for the free-surface LM divertor community.'},
-  {category:'Nuclear & Fusion Applications',feat:false,badge:'Preprint',
-   title:'Exploratory study of liquid metal response to rapid variation of applied magnetic field during fusion plasma disruptions',
-   authors:'Smolyanov, I. & Zikanov, O.',
-   journal:'arXiv preprint',
-   date:'Posted February 4, 2025 (updated May 2025)',
-   doi:'10.48550/arXiv.2502.02699',
-   abstract:'Plasma disruptions can change the reactor magnetic field in milliseconds, driving giant eddy currents in liquid-metal blanket components. Smolyanov and Zikanov show the metal\'s response unfolds in two stages — a brief (~1 ms) Lorentz-force surge followed by force reversals and velocity oscillations — dynamics entirely missed by quasi-static MHD approximations standard in blanket safety codes.'},
-
-  /* ── PLANETARY & GEO/ASTROPHYSICS ── */
-  {category:'Planetary & Geo/Astrophysics',feat:true,badge:'Published',
-   title:'From geostrophic to magnetically-damped turbulence in liquid metal rotating magnetoconvection',
-   authors:'Liu, T., Xu, Y., Abbate, J. A., Cheng, J. S. & Aurnou, J. M.',
-   journal:'Physics of Earth and Planetary Interiors',
-   date:'Published March 2026 (arXiv: September 3, 2025)',
-   doi:'10.48550/arXiv.2509.03689',
-   abstract:'Liu, Xu, Abbate, Cheng, and Aurnou deliver the first thermovelocimetric measurements of magnetostrophic convection using liquid gallium — a laboratory proxy for Earth\'s liquid iron outer core. At Elsasser number Λ = 1 (Coriolis and Lorentz forces balanced), flow velocities follow geostrophic turbulence scaling until local Lorentz forces dominate, at which point the system enters a magnetically-damped regime with enhanced heat transport. Extrapolating to Earth, the authors predict core convection operates in this magnetically-damped state at Rayleigh numbers 10²⁴–10²⁶ — the first direct experimental anchor for this fundamental geodynamo regime.'},
-  {category:'Planetary & Geo/Astrophysics',feat:false,badge:'Published',
-   title:'The Elbert range of magnetostrophic convection. II. Comparing linear theory to nonlinear low-Rm simulations',
-   authors:'Horn, S. & Aurnou, J. M.',
-   journal:'Proceedings of the Royal Society A',
-   date:'Published March 21, 2025',
-   doi:'10.1098/rspa.2024.0016',
-   abstract:'Horn and Aurnou use DNS simulations of liquid-gallium RMC to test whether Nakagawa\'s classic laboratory photographs — long used to underpin the magnetostrophic dynamo hypothesis — reflect the actual nonlinear RMC regime. Mapping heat and momentum transport across five convective regimes, they find classical linear predictions often fail in turbulence, demanding a reassessment of which flow state most efficiently drives planetary dynamos.'},
-  {category:'Planetary & Geo/Astrophysics',feat:false,badge:'Preprint',
-   title:'Diffusivity-free turbulence in liquid metal rotating Rayleigh–Bénard convection experiments',
-   authors:'Abbate, J. A., Xu, Y., Cheng, J. S., Hawkins, E. K. & Aurnou, J. M.',
-   journal:'arXiv preprint',
-   date:'Posted November 18, 2024 (updated April 18, 2025)',
-   doi:'10.48550/arXiv.2411.11226',
-   abstract:'Abbate, Xu, and Aurnou exploit the boundary-independent oscillatory thermal-inertial mode of rotating liquid-gallium convection to directly access the "ultimate" diffusivity-free turbulence regime predicted for planetary and stellar cores. Heat transfer (Nu), flow velocity (Re), and temperature anomalies (θ) all quantitatively match asymptotic reduced models — triple experimental verification of a convection state previously inaccessible in the lab.'},
-  {category:'Planetary & Geo/Astrophysics',feat:false,badge:'Preprint',
-   title:'Subcritical transition and multistability in liquid metal magnetoconvection with sidewalls',
-   authors:'McCormack, M., Favier, B., Aurnou, J. M. & Horn, S.',
-   journal:'arXiv preprint',
-   date:'Posted October 8, 2025',
-   doi:'10.48550/arXiv.2510.07201',
-   abstract:'McCormack, Favier, Aurnou and Horn show that under a strong vertical magnetic field, liquid gallium magnetoconvection is controlled by a hidden subcritical branch — turbulence appears well below the classical linear-stability threshold and the turbulent mean flow organises around subcritical spatial symmetries. The implication: large-scale magnetic structures in planetary and stellar interiors may be shaped by subcritical dynamics rather than linear onset, with direct consequences for how planetary dynamos self-organise.'},
-  {category:'Planetary & Geo/Astrophysics',feat:false,badge:'Published',
-   title:'Rotating magnetoconvection and MHD: a review bridging laboratory and geophysical scales',
-   authors:'Potherat, A. & Horn, S.',
-   journal:'Comptes Rendus Physique',
-   date:'Published February 25, 2025',
-   doi:'10.5802/crphys.237',
-   abstract:'Potherat and Horn provide a 55-page review connecting MHD physics of liquid metal laboratory experiments with geophysical and astrophysical convection systems. Topics include rotating magnetoconvection regimes, wall modes, quasi-static MHD in gallium and mercury, and direct links to Earth\'s outer core and solar magnetic field generation — the most comprehensive recent synthesis of this field.'},
-
-  /* ── FLEXIBLE ELECTRONICS ── */
-  {category:'Flexible Electronics, Wearables & Soft Matter',feat:true,badge:'Published',
-   title:'Liquid metal composites: Recent advances and applications in stretchable and flexible devices',
-   authors:'Choi, C., Liu, L. & Hwang, B.',
-   journal:'International Journal of Minerals, Metallurgy and Materials (Springer Nature)',
-   date:'Published 2025',
-   doi:'10.1007/s12613-025-3090-1',
-   abstract:'Choi, Liu and Hwang survey gallium-based liquid metal composites across flexible electronics, wearable sensors, energy storage, and biomedical interfaces, synthesising fabrication progress from electrospun fibre embedding to one-step transfer printing. Oxide-layer management and long-term biocompatibility remain the primary barriers to commercialisation; bio-inspired composite architectures are proposed as a path forward.'},
-  {category:'Flexible Electronics, Wearables & Soft Matter',feat:false,badge:'Published',
-   title:'Flexible electronic devices and wearable sensors based on liquid metals',
-   authors:'Li, X., Wu, G., Pan, C. & Bao, R.',
-   journal:'MetalMat (Wiley)',
-   date:'Published March 15, 2025',
-   doi:'10.1002/metm.70000',
-   abstract:'Li, Wu, Pan and Bao survey blade coating, transfer printing, and fibre infiltration methods for liquid-metal stretchable electrodes, with focus on substrates enabling stable operation underwater and at strains up to 1800% — a key capability for genuinely skin-worn computing.'},
-  {category:'Flexible Electronics, Wearables & Soft Matter',feat:false,badge:'Preprint',
-   title:'Liquid metal routes towards making superconductors under near-ambient conditions',
-   authors:'Hua, C., Li, X., Wang, Y. et al.',
-   journal:'arXiv preprint',
-   date:'March 2025',
-   doi:'10.48550/arXiv.2603.00591',
-   abstract:'Hua and colleagues propose gallium or bismuth alloys as simultaneous solvent, dopant, and superconducting host — bypassing the extreme pressures of conventional superconductor synthesis. The unified paradigm covers bulk alloys, printed films, and nanodroplets, each retaining the liquid metal\'s self-healing and flexibility for potential soft superconductor devices.'},
-
-  /* ── BIOMEDICAL / ROBOTICS / ENERGY ── */
-  {category:'Biomedical, Robotics & Energy',feat:true,badge:'Published',
-   title:'Liquid metal: A new approach to diagnosis and treatment of cardiovascular diseases',
-   authors:'Wang, C., Teng, T., Ma, Y., Xiao, Y., Zeng, M. & Fu, L.',
-   journal:'Advanced Materials',
-   date:'Published 2025',
-   doi:'10.1002/adma.202505540',
-   abstract:'Wang, Teng, Ma and colleagues review a pipeline from gallium-alloy synthesis to in vivo cardiovascular imaging and targeted drug delivery. Liquid metals flow through catheters, solidify at body temperature under ultrasound control, and release drugs on demand — enabling a single injectable agent that handles both real-time thrombus diagnosis and localised treatment with minimal invasiveness.'},
-  {category:'Biomedical, Robotics & Energy',feat:false,badge:'Published',
-   title:'Autonomous liquid metal droplets actuated by ion diffusion for untethered soft robotics',
-   authors:'Tang, J., Wang, F., Zhang, M., Chen, W., Chen, P., Tan, J., Shi, S., Li, X., Shang, W., Wang, B., Zhang, Y. & Sitti, M.',
-   journal:'Advanced Functional Materials (Wiley)',
-   date:'Published July 2025',
-   doi:'10.1002/adfm.202511943',
-   abstract:'Tang, Zhang, Sitti and colleagues at Shenzhen/Tsinghua/Max Planck show that GaInSn droplets in copper-chloride solution autonomously deform and roll by harvesting ion-diffusion chemical energy — zero external power. Steering via reservoir height adjustment sustains locomotion for hours, pointing toward genuinely untethered soft robots and autonomous drug-delivery microcarriers.'},
-  {category:'Biomedical, Robotics & Energy',feat:false,badge:'Published',
-   title:'Wave Energy Conversion Technology Based on Liquid Metal Magnetohydrodynamic Generators and Its Research Progress',
-   authors:'Zhao, L. & Peng, A.',
-   journal:'Energies (MDPI)',
-   date:'Published August 30, 2025',
-   doi:'10.3390/en18174615',
-   abstract:'Liquid metal MHD generators convert slow, high-force ocean wave motion into electricity without high-speed mechanical components. Zhao and Peng review LMMHD prototype development from early concepts through demonstration systems, and outline remaining challenges of survivability, reliability, efficient conversion, and scaling. The reciprocating conductive-fluid approach offers a direct path for coupling ocean-wave motion to electrical generation without high-speed rotating machinery.'},
-];
-
 // Category display priority for each public focus filter.
 // Values must match backend CAT_NAMES exactly.
 const FOCUS_ORDER={
@@ -1035,9 +906,16 @@ function renderDigest(papers, focus = 'all') {
   return ordered;
 }
 
-function loadDemo() {
-  currentData = renderDigest(DEMO_PAPERS, 'all');
-  document.getElementById('digest-source-label').textContent = 'Demo data';
+function showDigestStatus(title, detail) {
+  currentData = [];
+  document.getElementById('digest-output').innerHTML = `
+    <div class="featured-paper">
+      <div class="section-tag">${escapeHtml(title)}</div>
+      <p class="paper-abstract">${escapeHtml(detail)}</p>
+    </div>`;
+  document.getElementById('digest-source-label').textContent = title;
+  const existing = document.getElementById('digest-summary-block');
+  if (existing) existing.remove();
   return currentData;
 }
 
@@ -1440,7 +1318,7 @@ function renderSummaryBlock(summary, createdAt, paperCount) {
   output.insertBefore(div, output.firstChild);
 }
 
-// ── Load digest from intake API — show demo immediately, upgrade to live if available
+// ── Load digest from intake API. Beta site never displays hard-coded demo papers.
 (async function init() {
   const params      = new URLSearchParams(window.location.search);
   const digestParam = params.get('digest');
@@ -1455,8 +1333,7 @@ function renderSummaryBlock(summary, createdAt, paperCount) {
     switchPanel(hashPanel, document.querySelectorAll('.nav-pill')[names.indexOf(hashPanel)]);
   }
 
-  // Show demo immediately so page is never blank
-  loadDemo();
+  showDigestStatus('Loading live digest...', 'Fetching the latest reviewed digest from the backend.');
 
   try {
     const resp = await fetch(`${BACKEND}/digest/latest?freq=${freq}`);
@@ -1464,7 +1341,6 @@ function renderSummaryBlock(summary, createdAt, paperCount) {
     const data = await resp.json();
     if (!data.papers || data.papers.length === 0) throw new Error('No papers stored yet');
 
-    // Replace demo with live data
     document.getElementById('digest-output').innerHTML = '';
     const existing = document.getElementById('digest-summary-block');
     if (existing) existing.remove();
@@ -1485,9 +1361,11 @@ function renderSummaryBlock(summary, createdAt, paperCount) {
     document.getElementById('digest-source-label').textContent = `${sourceLabel} on ${dateLoaded}`;
 
   } catch(e) {
-    // Keep demo data already shown
-    console.info(`Live digest unavailable (${e.message}) — showing demo data`);
-    document.getElementById('digest-source-label').textContent = 'Demo data';
+    console.info(`Live digest unavailable (${e.message})`);
+    showDigestStatus(
+      'Live digest unavailable',
+      'No reviewed digest could be loaded from the backend. If you are testing locally, open the site through http://localhost:8080 or the GitHub Pages URL instead of file://.'
+    );
   }
 
 })();
