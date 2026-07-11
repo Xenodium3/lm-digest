@@ -422,7 +422,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   <!-- SECTION 2: WEEKLY CYCLE -->
   <div style="margin-bottom:3.5rem">
     <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">02 — Weekly cycle<span style="flex:1;height:1px;background:var(--border2)"></span></div>
-    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">The week runs in two phases separated by 24 hours. Sunday's search builds the canonical paper pool, flags incomplete candidates for admin review, and emails a preview. Monday reuses the edited preview, does no additional paper search, personalises the paper order and email summary for weekly subscribers, and stores a finalized weekly archive for biweekly and monthly digests.</p>
+    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">The week runs in two phases separated by 24 hours. Sunday's search builds the canonical paper pool, flags incomplete candidates for admin review, and emails a preview. Monday reuses the edited preview, does no additional paper search, personalises the paper order and email summary for weekly subscribers, and stores a finalized weekly archive for biweekly and monthly digests. The same Monday job also refreshes rolling biweekly/monthly archives by re-checking archived arXiv preprints for newly published versions.</p>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
       <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.25rem 1.5rem">
         <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--cyan);margin-bottom:1rem">Sunday · 8am ET</div>
@@ -443,7 +443,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
           <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">3</span>Rank and select papers for each subscriber's profile</div>
           <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">4</span>Generate subscriber-specific email summary with Haiku</div>
           <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">5</span>Send personalised email to all subscribers simultaneously</div>
-          <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">6</span>Save the final weekly snapshot for biweekly/monthly aggregation</div>
+          <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">6</span>Save the final weekly snapshot and refresh rolling biweekly/monthly archives</div>
         </div>
       </div>
     </div>
@@ -1320,9 +1320,9 @@ buildTopicsGrid();
     const sourceLabel = servedFreq === 'preview'
       ? 'Sunday preview updated'
       : servedFreq === 'biweekly'
-        ? 'biweekly digest published'
+        ? 'biweekly digest updated'
         : servedFreq === 'monthly'
-          ? 'monthly digest published'
+          ? 'monthly digest updated'
           : 'weekly digest published';
     document.getElementById('digest-source-label').textContent = `${sourceLabel} on ${dateLoaded}`;
 
