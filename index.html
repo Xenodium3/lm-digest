@@ -265,19 +265,19 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
         <div class="freq-row" id="freq-row">
           <div class="freq-opt active" onclick="setFreq(this,'weekly')">
             <div>Weekly</div>
-            <div style="font-family:var(--mono);font-size:11px;font-weight:400;opacity:0.75;margin-top:3px;letter-spacing:0.04em">Every Monday · 8am ET</div>
+            <div style="font-family:var(--mono);font-size:11px;font-weight:400;opacity:0.75;margin-top:3px;letter-spacing:0.04em">Every Monday · morning ET</div>
           </div>
           <div class="freq-opt" onclick="setFreq(this,'biweekly')">
             <div>Every 2 weeks</div>
-            <div style="font-family:var(--mono);font-size:11px;font-weight:400;opacity:0.75;margin-top:3px;letter-spacing:0.04em">Alternating Mondays · 8am ET</div>
+            <div style="font-family:var(--mono);font-size:11px;font-weight:400;opacity:0.75;margin-top:3px;letter-spacing:0.04em">Alternating Mondays · morning ET</div>
           </div>
           <div class="freq-opt" onclick="setFreq(this,'monthly')">
             <div>Monthly</div>
-            <div style="font-family:var(--mono);font-size:11px;font-weight:400;opacity:0.75;margin-top:3px;letter-spacing:0.04em">1st of month · 8am ET</div>
+            <div style="font-family:var(--mono);font-size:11px;font-weight:400;opacity:0.75;margin-top:3px;letter-spacing:0.04em">1st of month · morning ET</div>
           </div>
         </div>
         <p style="font-family:var(--mono);font-size:11px;color:var(--dim);margin-top:0.75rem;line-height:1.7;letter-spacing:0.03em">
-          All digests are sent at <strong style="color:rgba(255,255,255,0.5)">8am Eastern Time</strong> (1pm UTC).
+          All digests are sent in the <strong style="color:rgba(255,255,255,0.5)">morning Eastern Time</strong>.
           Weekly subscribers receive the Monday digest; Sunday's preview is an internal admin review step.
         </p>
       </div>
@@ -401,7 +401,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   <!-- SECTION 1: FILE STRUCTURE -->
   <div style="margin-bottom:3.5rem">
     <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">01 — Code structure<span style="flex:1;height:1px;background:var(--border2)"></span></div>
-    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">The project now uses a private GitHub repository as the data store. <code style="font-family:var(--mono);font-size:12px;background:var(--dark3);color:var(--gold);padding:2px 6px;border-radius:2px">lib/domain-config.cjs</code> holds the research-area vocabulary, while <code style="font-family:var(--mono);font-size:12px;background:var(--dark3);color:var(--gold);padding:2px 6px;border-radius:2px">shared.cjs</code> handles prompt mechanics, DOI verification, CrossRef lookups, and author hydration. A small intake worker receives public form submissions and appends them to private JSONL files, while GitHub Actions runs the weekly paper pipeline. The Digest tab reads live reviewed snapshots from the Worker only; if no digest is available, it shows a live-data status message rather than sample papers.</p>
+    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">The project now uses a private GitHub repository as the data store. <code style="font-family:var(--mono);font-size:12px;background:var(--dark3);color:var(--gold);padding:2px 6px;border-radius:2px">lib/domain-config.cjs</code> holds the research-area vocabulary, while <code style="font-family:var(--mono);font-size:12px;background:var(--dark3);color:var(--gold);padding:2px 6px;border-radius:2px">shared.cjs</code> handles prompt mechanics, DOI verification, CrossRef lookups, author hydration, and metadata enforcement. A small intake worker receives public form submissions and appends them to private JSONL files, while GitHub Actions runs the weekly paper pipeline. The Digest tab reads live reviewed snapshots from the Worker only; if no digest is available, it shows a live-data status message rather than sample papers.</p>
     <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;overflow:hidden">
       <table style="width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12px">
         <thead><tr style="border-bottom:1px solid var(--border2)">
@@ -411,10 +411,10 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
         </tr></thead>
         <tbody>
 	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">lib/domain-config.cjs</td><td style="padding:10px 16px;color:var(--dimmer)">config</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Research-area source of truth — keywords, category rules, relevance terms, journal tiers, and prompt guidance</td></tr>
-	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">shared.cjs</td><td style="padding:10px 16px;color:var(--dimmer)">library</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Shared mechanics — prompt assembly, Claude calls, DOI verification, CrossRef parsing, author hydration</td></tr>
+	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">shared.cjs</td><td style="padding:10px 16px;color:var(--dimmer)">library</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Shared mechanics — prompt assembly, Claude calls, DOI verification, CrossRef parsing, author hydration, metadata enforcement</td></tr>
 	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">worker/intake-worker.js</td><td style="padding:10px 16px;color:var(--dimmer)">edge</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Public intake API — subscriptions, contact messages, ratings, recommendations, latest digest</td></tr>
 	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">data/*.jsonl</td><td style="padding:10px 16px;color:var(--dimmer)">private</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Append-only private data files for subscribers, ratings, recommendations, and contact messages</td></tr>
-	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">preview.cjs</td><td style="padding:10px 16px;color:var(--dimmer)">job</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Sunday pipeline — search, verify, hydrate authors, store as preview, email admin</td></tr>
+	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">preview.cjs</td><td style="padding:10px 16px;color:var(--dimmer)">job</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Sunday pipeline — search, verify metadata, enforce abstract provenance, store as preview, email admin</td></tr>
 	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">digest.cjs</td><td style="padding:10px 16px;color:var(--dimmer)">job</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Send pipeline — reuse Sunday preview for weekly, aggregate weekly archives for biweekly/monthly, personalise paper selection and email summaries, send emails</td></tr>
           <tr><td style="padding:10px 16px;color:var(--text)">index.html</td><td style="padding:10px 16px;color:var(--dimmer)">site</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">This page — subscribe form, live digest viewer, thumbs-up ratings, DOI recommendation box</td></tr>
         </tbody>
@@ -428,18 +428,18 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
     <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">The week runs in two phases separated by 24 hours. Sunday's search builds the canonical paper pool, flags incomplete candidates for admin review, and emails a preview. Monday reuses the edited preview, does no additional paper search, personalises the paper order and email summary for weekly subscribers, and stores a finalized weekly archive for biweekly and monthly digests. The same Monday job also refreshes rolling biweekly/monthly archives by re-checking archived arXiv preprints for newly published versions.</p>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
       <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.25rem 1.5rem">
-        <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--cyan);margin-bottom:1rem">Sunday · 8am ET</div>
+        <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--cyan);margin-bottom:1rem">Sunday · morning ET</div>
         <div style="display:flex;flex-direction:column;gap:0.6rem">
           <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">1</span>Search CrossRef and arXiv with the configured topic vocabulary</div>
-          <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">2</span>Verify every DOI resolves and title matches</div>
-          <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">3</span>Hydrate author lists from CrossRef and arXiv</div>
+          <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">2</span>Verify every DOI/arXiv ID, title, author list, and abstract source</div>
+          <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">3</span>Hydrate metadata from CrossRef, arXiv, or reviewed digest history</div>
 	          <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">4</span>Store verified pool in the private repo as <em>preview</em></div>
           <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">5</span>Email compact list plus incomplete candidates to admin</div>
           <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">6</span>Admin can add, edit, delete, or promote papers before Monday</div>
         </div>
       </div>
       <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.25rem 1.5rem">
-        <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--cyan);margin-bottom:1rem">Monday · 8am ET</div>
+        <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--cyan);margin-bottom:1rem">Monday · morning ET</div>
         <div style="display:flex;flex-direction:column;gap:0.6rem">
 	          <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">1</span>Load edited Sunday preview from private data files</div>
           <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">2</span>Re-verify metadata and check arXiv preprints for publication updates</div>
@@ -449,6 +449,12 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
           <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">6</span>Save the final weekly snapshot and refresh rolling biweekly/monthly archives</div>
         </div>
       </div>
+    </div>
+    <div style="margin-top:1rem;background:rgba(255,176,32,0.06);border:1px solid rgba(255,176,32,0.22);border-left:3px solid var(--gold);border-radius:0 6px 6px 0;padding:1.1rem 1.25rem">
+      <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);margin-bottom:0.55rem">Anti-hallucination gates</div>
+      <p style="font-family:var(--display);font-size:13.5px;color:var(--dim);line-height:1.65;margin:0">
+        Paper identity comes from CrossRef, arXiv, reviewed digest history, or explicit admin edits. Claude fallback search is disabled during normal scheduled runs; when enabled manually, its candidates are treated as untrusted until DOI/arXiv metadata validates. Public/email papers also need a trusted abstract source: CrossRef, arXiv, reviewed cache, publisher metadata, or admin review.
+      </p>
     </div>
   </div>
 
@@ -480,8 +486,8 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
       <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.25rem 1.5rem">
         <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:0.85rem">AI</div>
         <div style="display:flex;flex-direction:column;gap:0.5rem">
-          <div style="font-family:var(--display);font-size:13px;color:var(--dim)"><span style="color:var(--text)">Claude Sonnet 5</span> — optional fallback search, disabled during normal scheduled runs</div>
-          <div style="font-family:var(--display);font-size:13px;color:var(--dim)"><span style="color:var(--text)">Claude Haiku</span> — email summaries tailored to selected subscriber categories; subscriber selection is deterministic</div>
+          <div style="font-family:var(--display);font-size:13px;color:var(--dim)"><span style="color:var(--text)">Claude search model</span> — optional fallback search, disabled during normal scheduled runs and gated by metadata checks</div>
+          <div style="font-family:var(--display);font-size:13px;color:var(--dim)"><span style="color:var(--text)">Claude fast model</span> — email summaries tailored to selected subscriber categories; subscriber selection is deterministic</div>
           <div style="font-family:var(--display);font-size:13px;color:var(--dim)"><span style="color:var(--text)">CrossRef API</span> — paper discovery, DOI verification, and preprint upgrade detection</div>
           <div style="font-family:var(--display);font-size:13px;color:var(--dim)"><span style="color:var(--text)">arXiv API</span> — preprint discovery and author metadata</div>
         </div>
@@ -690,9 +696,9 @@ function toggleChip(el){
 function setFreq(el,v){document.querySelectorAll('.freq-opt').forEach(e=>e.classList.remove('active'));el.classList.add('active');selectedFreq=v}
 
 function selectedFreqLabel(){
-  if(selectedFreq === 'monthly') return 'on the 1st of each month at 8am ET';
-  if(selectedFreq === 'biweekly') return 'every 2 weeks on Monday at 8am ET';
-  return 'every Monday at 8am ET';
+  if(selectedFreq === 'monthly') return 'on the 1st of each month in the morning ET';
+  if(selectedFreq === 'biweekly') return 'every 2 weeks on Monday morning ET';
+  return 'every Monday morning ET';
 }
 function clearErr(fieldId){
   document.getElementById(fieldId).classList.remove('field-error');
