@@ -255,6 +255,9 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
         <div class="section-tag">02 — Research areas</div>
         <div class="topics-grid" id="topics-grid"></div>
         <div class="no-topic-err" id="no-topic-err">Please select at least one research area.</div>
+      </div>
+      <div class="form-section">
+        <div class="section-tag">03 — Fine-tune your digest</div>
         <div class="field" style="margin-top:1rem">
           <label>Specific focus or sub-topics (optional)</label>
           <textarea id="s-focus" placeholder="e.g. liquid lithium blankets · heavy-ion beam strippers · soft robotics · thermal management · 3D printing · alloy design · catalysis · magnetostrophic convection…"></textarea>
@@ -263,9 +266,13 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
           <label>Authors to watch (optional)</label>
           <textarea id="s-watch-authors" placeholder="Names separated by semicolons or new lines"></textarea>
         </div>
+        <div class="field" style="margin-top:1rem">
+          <label>Additional research interests</label>
+          <textarea id="s-comments" placeholder="Keywords, applications, materials, journals, or paper types you want LM Digest to pay attention to"></textarea>
+        </div>
       </div>
       <div class="form-section">
-        <div class="section-tag">03 — Delivery frequency</div>
+        <div class="section-tag">04 — Delivery frequency</div>
         <div class="freq-row" id="freq-row">
           <div class="freq-opt active" onclick="setFreq(this,'weekly')">
             <div>Weekly</div>
@@ -284,13 +291,6 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
           All digests are sent in the <strong style="color:rgba(255,255,255,0.5)">morning Eastern Time</strong>.
           Weekly subscribers receive the Monday digest; Sunday's preview is an internal admin review step.
         </p>
-      </div>
-      <div class="form-section">
-        <div class="section-tag">04 — Anything else</div>
-        <div class="field">
-          <label>Comments / special requests</label>
-          <textarea id="s-comments" placeholder="Journals you follow, preferred depth of coverage, formatting requests…"></textarea>
-        </div>
       </div>
       <div class="submit-row">
         <button class="submit-btn" id="submit-btn" onclick="submitSurvey()">Activate Subscription →</button>
@@ -429,7 +429,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   <!-- SECTION 2: WEEKLY CYCLE -->
   <div style="margin-bottom:3.5rem">
     <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">02 — Weekly cycle<span style="flex:1;height:1px;background:var(--border2)"></span></div>
-    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">The week runs in two phases separated by 24 hours. Sunday's search builds the canonical paper pool from the baseline liquid-metal vocabulary, with anonymized subscriber focus and comment phrases added as extra discovery hints. Dedicated author-watch names use author-specific CrossRef and arXiv lookups. These hints never replace or narrow the baseline search, and every candidate still passes the same relevance, metadata, and abstract gates. The job flags incomplete candidates for admin review and emails a preview. Monday reuses the edited preview, does no additional paper search, personalises the paper order and email summary for weekly subscribers, and stores a finalized weekly archive for biweekly and monthly digests. The same Monday job also refreshes rolling biweekly/monthly archives by re-checking archived arXiv preprints for newly published versions. Biweekly subscriber sends run on alternating Monday mornings ET, and monthly sends run on the 1st of the month.</p>
+    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">The week runs in two phases separated by 24 hours. Sunday's search builds the canonical paper pool from the baseline liquid-metal vocabulary, with anonymized subscriber focus and comment phrases added as extra discovery hints. Dedicated author-watch names use author-specific CrossRef and arXiv lookups. These hints never replace or narrow the baseline search, and every candidate still passes the same relevance, metadata, and abstract gates. The job flags incomplete candidates for admin review and emails a preview. Monday reuses the edited preview, does no additional paper search, stores all approved papers in the finalized weekly archive for the website, and sends each weekly subscriber a focused email with only their preferred areas and at most five papers. The same Monday job also refreshes rolling biweekly/monthly archives by re-checking archived arXiv preprints for newly published versions. Biweekly subscriber sends run on alternating Monday mornings ET, and monthly sends run on the 1st of the month.</p>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
       <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.25rem 1.5rem">
         <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--cyan);margin-bottom:1rem">Sunday · morning ET</div>
@@ -465,7 +465,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   <!-- SECTION 3: READER SIGNALS -->
   <div style="margin-bottom:3.5rem">
     <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">03 — Reader signals<span style="flex:1;height:1px;background:var(--border2)"></span></div>
-    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">Subscriber signals help shape the next Sunday paper pool and rank the weekly results. Anonymized focus/comment phrases are added as extra search hints during Sunday discovery, in addition to the baseline search terms; dedicated author-watch names trigger author-specific CrossRef and arXiv searches. Broad checkbox topics guide ranking but do not widen source queries. Weekly sends personalise the Sunday-approved set, while biweekly and monthly sends personalise the latest 2 or 4 finalized weekly archives. The fast Claude model can interpret free-text focus, author-watch names, comments, and affiliation to score existing verified papers, but it cannot add papers or change paper metadata.</p>
+    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">Subscriber signals help shape the next Sunday paper pool and rank the weekly results. Anonymized focus/comment phrases are added as extra search hints during Sunday discovery, in addition to the baseline search terms; dedicated author-watch names trigger author-specific CrossRef and arXiv searches. Broad checkbox topics guide ranking but do not widen source queries. Subscriber emails are capped at five papers and try selected topic areas first. If that digest has no papers in the selected areas, or if no topics are selected, the email falls back to the top five overall ranked papers so delivery still happens on time. The public digest page continues to show the full approved archive. The fast Claude model can interpret free-text focus, author-watch names, comments, and affiliation to score existing verified papers, but it cannot add papers or change paper metadata.</p>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem">
       <div style="background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--cyan);border-radius:0 6px 6px 0;padding:1.25rem 1.25rem">
         <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.6rem">Ratings</div>
