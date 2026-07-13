@@ -1250,7 +1250,8 @@ async function adminSavePreview(){
     if(!resp.ok) throw new Error(data.error || ('HTTP '+resp.status));
     adminDigest=data.digest || adminDigest;
     adminRender();
-    adminSetStatus(`Saved preview: ${adminDigest.papers.length} included, ${adminDigest.review_papers.length} still needing review.`,'ok');
+    const publicNote = data.public_digest ? ' Public webpage updated.' : '';
+    adminSetStatus(`Saved preview: ${adminDigest.papers.length} included, ${adminDigest.review_papers.length} still needing review.${publicNote}`,'ok');
   }catch(e){
     adminSetStatus('Could not save preview: '+e.message,'err');
   }
