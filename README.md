@@ -4,25 +4,26 @@ Public GitHub Pages site for LM Digest.
 
 ## Retargeting
 
-Public, non-secret site settings live in:
+Use the browser-only builder linked from **How It Works → Retargeting**:
 
 ```text
-config/site-config.js
+retarget.html
 ```
 
-Edit that file when adapting the digest to another research area:
+The builder generates one non-secret JSON research profile. Use it with the
+private Paper Express starter repo:
 
-- `backendUrl`
-- `brand`
-- `domain`
-- `topics`
-- `defaultTopicIds`
-- `categoryOrder`
-- `categoryAliases`
+```text
+https://github.com/Xenodium3/paper-express
+```
 
-Keep those values aligned with the backend profile in
-`lm-digest-backend/config/domains/*.cjs`.
+Recommended flow:
 
-Do not put API keys, SMTP passwords, GitHub tokens, or admin tokens in this
-repository. Those belong in GitHub Actions secrets and Cloudflare Worker
-secrets.
+1. Generate a JSON profile with `retarget.html`.
+2. Clone Paper Express as a private operational repo.
+3. Save the profile under `config/domains/`.
+4. Configure GitHub Actions and Cloudflare secrets.
+5. Run validation and fixture tests before real sends.
+
+Do not put API keys, SMTP passwords, GitHub tokens, admin tokens, subscribers,
+ratings, recommendations, or digest history in the profile or public site.
