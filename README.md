@@ -11,7 +11,8 @@ retarget.html
 ```
 
 The builder generates one non-secret JSON research profile. Use it with the
-private Paper Express starter repo:
+private Paper Express starter repo. If GitHub shows 404, ask the LM Digest
+maintainer for access:
 
 ```text
 https://github.com/Xenodium3/paper-express
