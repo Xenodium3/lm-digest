@@ -405,7 +405,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   <!-- SECTION 1: FILE STRUCTURE -->
   <div style="margin-bottom:3.5rem">
     <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">01 — Code structure<span style="flex:1;height:1px;background:var(--border2)"></span></div>
-    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">The project now uses a private GitHub repository as the data store. <code style="font-family:var(--mono);font-size:12px;background:var(--dark3);color:var(--gold);padding:2px 6px;border-radius:2px">lib/domain-config.cjs</code> holds the research-area vocabulary, while <code style="font-family:var(--mono);font-size:12px;background:var(--dark3);color:var(--gold);padding:2px 6px;border-radius:2px">shared.cjs</code> handles prompt mechanics, DOI verification, CrossRef lookups, author hydration, and metadata enforcement. A small intake worker receives public form submissions and appends them to private JSONL files, while GitHub Actions runs the weekly paper pipeline. The Digest tab reads live reviewed snapshots from the Worker only; if no digest is available, it shows a live-data status message rather than sample papers.</p>
+    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">The project now uses a private GitHub repository as the data store. <code style="font-family:var(--mono);font-size:12px;background:var(--dark3);color:var(--gold);padding:2px 6px;border-radius:2px">config/domains/liquid-metal.cjs</code> holds the research-area vocabulary, while <code style="font-family:var(--mono);font-size:12px;background:var(--dark3);color:var(--gold);padding:2px 6px;border-radius:2px">shared.cjs</code> handles prompt mechanics, DOI verification, CrossRef lookups, author hydration, and metadata enforcement. A small intake worker receives public form submissions and appends them to private JSONL files, while GitHub Actions runs the weekly paper pipeline. The Digest tab reads live reviewed snapshots from the Worker only; if no digest is available, it shows a live-data status message rather than sample papers.</p>
     <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;overflow:hidden">
       <table style="width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12px">
         <thead><tr style="border-bottom:1px solid var(--border2)">
@@ -414,7 +414,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
           <td style="padding:10px 16px;color:var(--cyan);font-weight:700">Role</td>
         </tr></thead>
         <tbody>
-	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">lib/domain-config.cjs</td><td style="padding:10px 16px;color:var(--dimmer)">config</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Research-area source of truth — keywords, category rules, relevance terms, journal tiers, and prompt guidance</td></tr>
+	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">config/domains/*.cjs</td><td style="padding:10px 16px;color:var(--dimmer)">config</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Research-area source of truth — keywords, category rules, relevance terms, journal tiers, and prompt guidance</td></tr>
 	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">shared.cjs</td><td style="padding:10px 16px;color:var(--dimmer)">library</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Shared mechanics — prompt assembly, Claude calls, DOI verification, CrossRef parsing, author hydration, metadata enforcement</td></tr>
 	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">worker/intake-worker.js</td><td style="padding:10px 16px;color:var(--dimmer)">edge</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Public intake API — subscriptions, contact messages, ratings, recommendations, latest digest</td></tr>
 	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">data/*.jsonl</td><td style="padding:10px 16px;color:var(--dimmer)">private</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Append-only private data files for subscribers, ratings, recommendations, and contact messages</td></tr>
@@ -512,7 +512,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   <!-- SECTION 5: RETARGETING -->
   <div style="margin-bottom:3.5rem">
 	    <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">05 — Retargeting to another field<span style="flex:1;height:1px;background:var(--border2)"></span></div>
-	    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">The workflow is not tied to liquid metals. To adapt it for another research area, edit the domain configuration first, then align the public topic labels and run the existing dry-run tests before sending real email.</p>
+	    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">The workflow is not tied to liquid metals. To adapt it for another research area, create a backend domain profile, point GitHub Actions at it, update this site’s public config, then run validation and dry-run tests before sending real email.</p>
     <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;overflow:hidden">
       <table style="width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12px">
         <thead><tr style="border-bottom:1px solid var(--border2)">
@@ -521,9 +521,9 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
           <td style="padding:10px 16px;color:var(--cyan);font-weight:700">What to change</td>
         </tr></thead>
         <tbody>
-	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">1</td><td style="padding:10px 16px;color:var(--dimmer)">lib/domain-config.cjs</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Rename the domain, replace search keywords, relevance terms, exclusions, category rules, and journal reputation tiers</td></tr>
-	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">2</td><td style="padding:10px 16px;color:var(--dimmer)">index.html</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Update UI_DOMAIN, TOPICS, and CATEGORY_ORDER so the website matches the backend categories exactly</td></tr>
-	          <tr><td style="padding:10px 16px;color:var(--text)">3</td><td style="padding:10px 16px;color:var(--dimmer)">GitHub Actions</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Run fixture/dry-run and preview tests, review the candidate pool, then update email wording or cron cadence only if the new audience needs it</td></tr>
+	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">1</td><td style="padding:10px 16px;color:var(--dimmer)">backend/config/domains/*.cjs</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Copy the liquid-metal profile, then replace search keywords, relevance terms, exclusions, category rules, topic aliases, prompt guidance, and journal tiers</td></tr>
+	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">2</td><td style="padding:10px 16px;color:var(--dimmer)">config/site-config.js</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Update public domain labels, topic checkboxes, category order, aliases, and Worker URL; do not put secrets here</td></tr>
+	          <tr><td style="padding:10px 16px;color:var(--text)">3</td><td style="padding:10px 16px;color:var(--dimmer)">GitHub/Cloudflare settings</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Set RESEARCH_DOMAIN_PROFILE and deployment secrets, run config validation, fixture tests, and a reviewed preview before real sends</td></tr>
         </tbody>
       </table>
     </div>
@@ -600,35 +600,25 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   </div>
 </div>
 
+<script src="config/site-config.js"></script>
 <script>
-// UI-side research-domain config. Keep these labels aligned with
-// lm-digest-backend/lib/domain-config.cjs when retargeting the project.
-const UI_DOMAIN={
-  name:'liquid metal',
-  label:'Liquid Metal',
-  labelPlural:'Liquid Metals',
-  defaultCategory:'Biomedical, Robotics & Energy'
-};
+const SITE_CONFIG=window.LM_DIGEST_SITE_CONFIG || {};
+const UI_DOMAIN=SITE_CONFIG.domain || {};
+const TOPICS=Array.isArray(SITE_CONFIG.topics) ? SITE_CONFIG.topics : [];
+const CATEGORY_ORDER=Array.isArray(SITE_CONFIG.categoryOrder) ? SITE_CONFIG.categoryOrder : [];
+const CATEGORY_ALIASES=SITE_CONFIG.categoryAliases || {};
+const BACKEND=SITE_CONFIG.backendUrl || '';
+const ADMIN_CATS=CATEGORY_ORDER.length ? CATEGORY_ORDER : TOPICS.map(t=>t.label).filter(Boolean);
 
-const TOPICS=[
-  {id:'nuclear',label:'Nuclear, Accelerator & Fusion Applications'},
-  {id:'planetary',label:'Planetary & Geo/Astrophysics'},
-  {id:'electronics',label:'Flexible Electronics, Wearables & Soft Matter'},
-  {id:'biomedical',label:'Biomedical, Robotics & Energy'},
-];
-
-// Category display priority for the public digest.
-// Values must match backend CAT_NAMES exactly.
-const CATEGORY_ORDER=[
-  'Planetary & Geo/Astrophysics',
-  'Nuclear, Accelerator & Fusion Applications',
-  'Flexible Electronics, Wearables & Soft Matter',
-  'Biomedical, Robotics & Energy',
-];
-
-const CATEGORY_ALIASES={
-  'Nuclear & Fusion Applications':'Nuclear, Accelerator & Fusion Applications',
-};
+function validateSiteConfig(){
+  const errors=[];
+  if(!BACKEND) errors.push('backendUrl');
+  if(!UI_DOMAIN.name || !UI_DOMAIN.label || !UI_DOMAIN.labelPlural || !UI_DOMAIN.defaultCategory) errors.push('domain');
+  if(!TOPICS.length) errors.push('topics');
+  if(!CATEGORY_ORDER.length) errors.push('categoryOrder');
+  if(errors.length) throw new Error('Missing site config: '+errors.join(', '));
+}
+validateSiteConfig();
 
 let currentData=null, selectedFreq='weekly';
 
@@ -1025,18 +1015,10 @@ async function submitRecommendations() {
 }
 
 /* ── RATINGS ── */
-const BACKEND='https://lm-digest-intake-internal.yufanxu.workers.dev';
 const ratings=new Set(); // doi strings rated by current user
 let ratingEmail=''; // set when user subscribes or from localStorage
 let adminToken=localStorage.getItem('lmd_admin_token') || '';
 let adminDigest={papers:[],review_papers:[],summary:null};
-
-const ADMIN_CATS=[
-  'Nuclear, Accelerator & Fusion Applications',
-  'Planetary & Geo/Astrophysics',
-  'Flexible Electronics, Wearables & Soft Matter',
-  'Biomedical, Robotics & Energy'
-];
 
 function adminSetStatus(msg,type=''){
   const el=document.getElementById('admin-status') || document.getElementById('admin-login-status');
