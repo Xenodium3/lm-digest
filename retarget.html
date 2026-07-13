@@ -118,17 +118,38 @@ const SECRET_PATTERNS=[
   /sk-[a-z0-9_-]{20,}/i,
   /github_pat_[a-z0-9_]+/i,
   /\bgh[pousr]_[a-z0-9_]{20,}/i,
+  /\bAKIA[0-9A-Z]{16}\b/,
+  /\bxox[baprs]-[a-z0-9-]{20,}/i,
   /-----BEGIN [A-Z ]*PRIVATE KEY-----/,
   /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i
 ];
+const PRIVATE_DATA_KEY_PATTERNS=[
+  /"[^"]*(?:api[_-]?key|token|password|secret|smtp|cloudflare|github)[^"]*"\s*:/i,
+  /"(?:subscribers?|subscriberList|receivers?|mailingList|userData|ratings?|recommendations?|contactMessages?|digestArchives?)"\s*:/i
+];
 const DEFAULT_STOPWORDS=['about','above','after','also','and','are','based','because','been','between','from','have','into','interested','research','study','that','their','there','these','this','using','with','within','without'];
 let latestProfile=null;
+let latestProfileSafe=false;
 
 function lines(id){return document.getElementById(id).value.split(/\r?\n/).map(s=>s.trim()).filter(Boolean)}
 function csv(value){return String(value||'').split(',').map(s=>s.trim()).filter(Boolean)}
 function slug(value){return String(value||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,48)||'research'}
 function topicId(value){return String(value||'').toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'').slice(0,48)||'research'}
 function escapeHtml(value){return String(value||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
+function hasUnsafeText(text){return SECRET_PATTERNS.some(p=>p.test(text))||PRIVATE_DATA_KEY_PATTERNS.some(p=>p.test(text))}
+function setStatus(kind,message){
+  const status=document.getElementById('status');
+  status.className=`status ${kind}`;
+  status.textContent=message;
+}
+function renderChecks(checks){
+  document.getElementById('checks').innerHTML=checks.map(([label,ok])=>`<div class="check ${ok?'ok':'bad'}"><span class="dot"></span><span>${label}</span></div>`).join('');
+}
+function markImportRejected(message){
+  latestProfileSafe=false;
+  renderChecks([['Imported JSON contains no obvious secrets or private data',false]]);
+  setStatus('err',message);
+}
 
 function categoryCard(data={}){
   const id=crypto.randomUUID();
@@ -166,9 +187,9 @@ function checkProfile(profile){
     ['Each category has terms',Object.values(profile.backend.CATEGORY_RULES).every(r=>r.length&&r[0].terms.length)],
     ['Each category has journal tiers',Object.values(profile.backend.JOURNAL_TIERS).every(j=>j.length)],
     ['At least five discovery terms',profile.backend.DISCOVERY_TERMS.length>=5],
-    ['No obvious secrets, tokens, private keys, or email addresses',!SECRET_PATTERNS.some(p=>p.test(text))]
+    ['No obvious secrets, private data fields, tokens, private keys, or email addresses',!hasUnsafeText(text)]
   ];
-  document.getElementById('checks').innerHTML=checks.map(([label,ok])=>`<div class="check ${ok?'ok':'bad'}"><span class="dot"></span><span>${label}</span></div>`).join('');
+  renderChecks(checks);
   return checks.every(([,ok])=>ok);
 }
 
@@ -241,13 +262,20 @@ function buildProfile(){
     site
   };
   document.getElementById('output').textContent=JSON.stringify(latestProfile,null,2);
-  const ok=checkProfile(latestProfile);
-  document.getElementById('status').className=`status ${ok?'ok':'err'}`;
-  document.getElementById('status').textContent=ok?`Profile ready: config/domains/${profileId}.json`:'Profile built, but fix the safety checks before using it.';
+  latestProfileSafe=checkProfile(latestProfile);
+  setStatus(latestProfileSafe?'ok':'err',latestProfileSafe?`Profile ready: config/domains/${profileId}.json`:'Profile built, but fix the safety checks before using it.');
+  return latestProfileSafe;
+}
+
+function requireSafeProfile(action){
+  buildProfile();
+  if(latestProfileSafe) return true;
+  setStatus('err',`Cannot ${action}: fix the safety checks first.`);
+  return false;
 }
 
 function downloadProfile(){
-  if(!latestProfile) buildProfile();
+  if(!requireSafeProfile('download JSON')) return;
   const blob=new Blob([JSON.stringify(latestProfile,null,2)+'\n'],{type:'application/json'});
   const a=document.createElement('a');
   a.href=URL.createObjectURL(blob);
@@ -256,14 +284,30 @@ function downloadProfile(){
   URL.revokeObjectURL(a.href);
 }
 async function copyProfile(){
-  if(!latestProfile) buildProfile();
-  await navigator.clipboard.writeText(JSON.stringify(latestProfile,null,2));
-  document.getElementById('status').className='status ok';
-  document.getElementById('status').textContent='Profile JSON copied.';
+  if(!requireSafeProfile('copy JSON')) return;
+  try{
+    await navigator.clipboard.writeText(JSON.stringify(latestProfile,null,2));
+    setStatus('ok','Profile JSON copied.');
+  }catch(err){
+    setStatus('err','Could not copy automatically. Use the output panel instead.');
+  }
 }
 function toggleImport(){const box=document.getElementById('importBox');box.style.display=box.style.display==='block'?'none':'block'}
 function importProfile(){
-  const parsed=JSON.parse(document.getElementById('importText').value);
+  const raw=document.getElementById('importText').value.trim();
+  if(!raw){markImportRejected('Paste a profile JSON file first.');return}
+  if(hasUnsafeText(raw)){markImportRejected('Import blocked: pasted JSON appears to contain secrets, private data fields, or email addresses.');return}
+  let parsed;
+  try{
+    parsed=JSON.parse(raw);
+  }catch(err){
+    markImportRejected('Import blocked: pasted text is not valid JSON.');
+    return;
+  }
+  if(!parsed||typeof parsed!=='object'||Array.isArray(parsed)){
+    markImportRejected('Import blocked: profile JSON must be an object.');
+    return;
+  }
   const backend=parsed.backend||parsed;
   const site=parsed.site||{};
   document.getElementById('profileId').value=backend.DOMAIN_PROFILE_ID||parsed.profile_id||'research';
