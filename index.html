@@ -543,7 +543,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
         <tbody>
           <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">subscriptions.jsonl</td><td style="padding:10px 16px;color:var(--dimmer)">email, topics[], focus, watch_authors, affil, comments</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Subscriber profiles used for anonymized Sunday search hints, author-watch queries, personalised selection, and guarded preference scoring</td></tr>
 	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">digests/*/latest.json</td><td style="padding:10px 16px;color:var(--dimmer)">freq, papers</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Stores preview, weekly, biweekly, and monthly paper archives — this page reads paper data from here</td></tr>
-	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">ratings.jsonl</td><td style="padding:10px 16px;color:var(--dimmer)">email, doi, rating 0/1</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Thumbs up/down — stored as future ranking and admin-review signals</td></tr>
+		          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">ratings.jsonl</td><td style="padding:10px 16px;color:var(--dimmer)">email/client, doi, rating 0/1</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Mark relevant events — accumulated as active relevance marks and used in preview, archive, and email ranking</td></tr>
 	          <tr><td style="padding:10px 16px;color:var(--text)">recommendations.jsonl</td><td style="padding:10px 16px;color:var(--dimmer)">doi, email, consumed marker</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">User-submitted DOIs — saved for admin review and marked used once covered</td></tr>
         </tbody>
       </table>
@@ -1038,6 +1038,19 @@ let ratingEmail=''; // set when user subscribes or from localStorage
 let adminToken=localStorage.getItem('lmd_admin_token') || '';
 let adminDigest={papers:[],review_papers:[],summary:null};
 
+function ratingClientId(){
+  let id=localStorage.getItem('lmd_client_id');
+  if(!id){
+    const browserCrypto=window.crypto || window.msCrypto;
+    const rand=(browserCrypto && browserCrypto.getRandomValues)
+      ? [...browserCrypto.getRandomValues(new Uint8Array(12))].map(b=>b.toString(16).padStart(2,'0')).join('')
+      : Math.random().toString(36).slice(2)+Date.now().toString(36);
+    id='client_'+rand;
+    localStorage.setItem('lmd_client_id',id);
+  }
+  return id;
+}
+
 function adminSetStatus(msg,type=''){
   const el=document.getElementById('admin-status') || document.getElementById('admin-login-status');
   if(!el) return;
@@ -1289,7 +1302,7 @@ async function toggleRating(btn, doi, title){
     await fetch(BACKEND+'/papers/rate',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({email:'community', doi, title, rating})
+      body:JSON.stringify({email:ratingEmail || null, voter_id:ratingClientId(), doi, title, rating})
     });
   } catch(e) {
     console.warn('Rating sync failed:', e.message);
