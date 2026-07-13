@@ -180,12 +180,24 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 .admin-login{max-width:520px}
 .admin-empty{font-family:var(--display);font-size:13px;color:var(--dim);line-height:1.7;padding:1rem;border:1px dashed var(--border2);border-radius:4px}
 
+/* ═══ HOW IT WORKS ═══ */
+.setup-shell{max-width:1000px;margin:0 auto;padding:3.5rem 1.5rem 6rem}
+.setup-title{font-family:var(--display);font-size:2.2rem;font-weight:700;color:var(--text);margin-bottom:0.6rem;line-height:1.15}
+.setup-copy{width:100%;font-family:var(--display);font-size:0.95rem;color:rgba(255,255,255,0.66);line-height:1.75;text-align:justify;text-align-last:left;margin-bottom:1.5rem}
+.setup-intro{font-size:1rem;margin-bottom:3rem}
+.setup-copy code{font-family:var(--mono);font-size:12px;background:var(--dark3);color:var(--gold);padding:2px 6px;border-radius:2px}
+.setup-shell tbody td{color:rgba(255,255,255,0.64)!important}
+.setup-shell tbody td:first-child{color:rgba(255,255,255,0.84)!important}
+.setup-shell tbody td:nth-child(2){color:rgba(255,255,255,0.50)!important}
+.setup-shell [style*="color:var(--dim)"]{color:rgba(255,255,255,0.62)!important}
+
 @media(max-width:640px){
   .two-col,.arch-grid,.admin-grid,.admin-fields{grid-template-columns:1fr}
   .form-section{padding:1.5rem}
   .hero-title{font-size:2rem}
   .nav-pill{padding:0 0.75rem;font-size:12px}
   .ec-body,.ec-header,.ec-footer{padding-left:1.25rem;padding-right:1.25rem}
+  .setup-copy{text-align:left}
 }
 </style>
 </head>
@@ -396,16 +408,16 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 
 <!-- ═══════ PANEL 4 — SETUP ═══════ -->
 <div id="panel-setup" class="panel">
-<div style="max-width:860px;margin:0 auto;padding:3.5rem 1.5rem 6rem">
+<div class="setup-shell">
 
   <!-- INTRO -->
-  <h2 style="font-family:var(--display);font-size:2.2rem;font-weight:700;color:var(--text);margin-bottom:0.6rem;line-height:1.15">How the digest works</h2>
-  <p style="font-family:var(--display);font-size:1rem;color:var(--dim);max-width:640px;line-height:1.7;margin-bottom:3rem">This newsletter is mostly automated with an admin review step for edge cases. Every week the pipeline searches academic databases, verifies what it finds, surfaces incomplete but promising candidates, personalises the results for each subscriber, and delivers them by email.</p>
+  <h2 class="setup-title">How the digest works</h2>
+  <p class="setup-copy setup-intro">LM Digest is an automated research-paper newsletter with one human review step. Each week it searches academic sources, verifies paper metadata, sends an admin preview, publishes the reviewed paper list, and emails each subscriber a personalized selection.</p>
 
   <!-- SECTION 1: FILE STRUCTURE -->
   <div style="margin-bottom:3.5rem">
     <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">01 — Code structure<span style="flex:1;height:1px;background:var(--border2)"></span></div>
-    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">The project now uses a private GitHub repository as the data store. <code style="font-family:var(--mono);font-size:12px;background:var(--dark3);color:var(--gold);padding:2px 6px;border-radius:2px">config/domains/liquid-metal.cjs</code> holds the research-area vocabulary, while <code style="font-family:var(--mono);font-size:12px;background:var(--dark3);color:var(--gold);padding:2px 6px;border-radius:2px">shared.cjs</code> handles prompt mechanics, DOI verification, CrossRef lookups, author hydration, and metadata enforcement. A small intake worker receives public form submissions and appends them to private JSONL files, while GitHub Actions runs the weekly paper pipeline. The Digest tab reads live reviewed snapshots from the Worker only; if no digest is available, it shows a live-data status message rather than sample papers.</p>
+    <p class="setup-copy">The private backend repository is both codebase and data store. <code>config/domains/liquid-metal.cjs</code> defines this digest's vocabulary, categories, ranking hints, and prompt context; Paper Express retargeted clones use generated JSON profiles in the same folder. Shared scripts handle Claude calls, DOI checks, CrossRef/arXiv metadata, and anti-hallucination gates. The Cloudflare Worker writes website submissions to private JSONL files, and GitHub Actions runs the weekly search and email jobs.</p>
     <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;overflow:hidden">
       <table style="width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12px">
         <thead><tr style="border-bottom:1px solid var(--border2)">
@@ -414,12 +426,12 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
           <td style="padding:10px 16px;color:var(--cyan);font-weight:700">Role</td>
         </tr></thead>
         <tbody>
-	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">config/domains/*.cjs</td><td style="padding:10px 16px;color:var(--dimmer)">config</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Research-area source of truth — keywords, category rules, relevance terms, journal tiers, and prompt guidance</td></tr>
+	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">config/domains/*</td><td style="padding:10px 16px;color:var(--dimmer)">config</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Research-area source of truth — keywords, category rules, relevance terms, journal tiers, and prompt guidance</td></tr>
 	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">shared.cjs</td><td style="padding:10px 16px;color:var(--dimmer)">library</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Shared mechanics — prompt assembly, Claude calls, DOI verification, CrossRef parsing, author hydration, metadata enforcement</td></tr>
 	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">worker/intake-worker.js</td><td style="padding:10px 16px;color:var(--dimmer)">edge</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Public intake API — subscriptions, contact messages, ratings, recommendations, latest digest</td></tr>
 	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">data/*.jsonl</td><td style="padding:10px 16px;color:var(--dimmer)">private</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Append-only private data files for subscribers, ratings, recommendations, and contact messages</td></tr>
 	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">preview.cjs</td><td style="padding:10px 16px;color:var(--dimmer)">job</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Sunday pipeline — search, verify metadata, enforce abstract provenance, store as preview, email admin</td></tr>
-	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">digest.cjs</td><td style="padding:10px 16px;color:var(--dimmer)">job</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Send pipeline — reuse Sunday preview for weekly, aggregate weekly archives for biweekly/monthly, personalise paper selection and email summaries, send emails</td></tr>
+	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">digest.cjs</td><td style="padding:10px 16px;color:var(--dimmer)">job</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Send pipeline — reuse Sunday preview for weekly, aggregate weekly archives for biweekly/monthly, personalize paper selection and email summaries, send emails</td></tr>
           <tr><td style="padding:10px 16px;color:var(--text)">index.html</td><td style="padding:10px 16px;color:var(--dimmer)">site</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">This page — subscribe form, live digest viewer, thumbs-up ratings, DOI recommendation box</td></tr>
         </tbody>
       </table>
@@ -429,7 +441,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   <!-- SECTION 2: WEEKLY CYCLE -->
   <div style="margin-bottom:3.5rem">
     <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">02 — Weekly cycle<span style="flex:1;height:1px;background:var(--border2)"></span></div>
-    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">The week runs in two phases separated by 24 hours. Sunday's search builds the canonical paper pool from the baseline liquid-metal vocabulary, with anonymized subscriber focus and comment phrases added as extra discovery hints. Dedicated author-watch names use author-specific CrossRef and arXiv lookups. These hints never replace or narrow the baseline search, and every candidate still passes the same relevance, metadata, and abstract gates. The job flags incomplete candidates for admin review and emails a preview. Monday reuses the edited preview, does no additional paper search, stores all approved papers in the finalized weekly archive for the website, and sends each weekly subscriber a focused email with only their preferred areas and at most five papers. The same Monday job also refreshes rolling biweekly/monthly archives by re-checking archived arXiv preprints for newly published versions. Biweekly subscriber sends run on alternating Monday mornings ET, and monthly sends run on the 1st of the month.</p>
+    <p class="setup-copy">The schedule has two phases. On Sunday morning ET, the pipeline searches CrossRef and arXiv using the baseline topic vocabulary plus anonymized reader-interest hints. Every candidate must pass relevance, metadata, and abstract checks before it reaches the admin preview. On Monday morning ET, the system reuses the reviewed preview, does no new paper search, publishes the approved website list, and emails each weekly subscriber up to five papers matched to their interests. Rolling biweekly and monthly archives are refreshed from the same reviewed weekly snapshots.</p>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
       <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.25rem 1.5rem">
         <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--cyan);margin-bottom:1rem">Sunday · morning ET</div>
@@ -449,23 +461,21 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
           <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">2</span>Re-verify metadata and check arXiv preprints for publication updates</div>
           <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">3</span>Use the fast Claude model to interpret free-text preferences and boost matching verified papers</div>
           <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">4</span>Rank, select, and summarize papers for each subscriber's profile</div>
-          <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">5</span>Send personalised email to all subscribers simultaneously</div>
+          <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">5</span>Send personalized email to all subscribers simultaneously</div>
           <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">6</span>Save the final weekly snapshot and refresh rolling biweekly/monthly archives</div>
         </div>
       </div>
     </div>
     <div style="margin-top:1rem;background:rgba(255,176,32,0.06);border:1px solid rgba(255,176,32,0.22);border-left:3px solid var(--gold);border-radius:0 6px 6px 0;padding:1.1rem 1.25rem">
       <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);margin-bottom:0.55rem">Anti-hallucination gates</div>
-      <p style="font-family:var(--display);font-size:13.5px;color:var(--dim);line-height:1.65;margin:0">
-        Paper identity comes from CrossRef, arXiv, reviewed digest history, or explicit admin edits. Claude fallback search is disabled during normal scheduled runs; when enabled manually, its candidates are treated as untrusted until DOI/arXiv metadata validates. Public/email papers also need a trusted abstract source: CrossRef, arXiv, reviewed cache, publisher metadata, or admin review.
-      </p>
+      <p class="setup-copy" style="font-size:13.5px;line-height:1.65;margin:0">Paper identity must come from CrossRef, arXiv, reviewed digest history, or an explicit admin edit. Claude fallback search is off during normal scheduled runs; when enabled manually, its candidates remain untrusted until DOI or arXiv metadata validates them. Public and email papers also need a trusted abstract source or admin review.</p>
     </div>
   </div>
 
   <!-- SECTION 3: READER SIGNALS -->
   <div style="margin-bottom:3.5rem">
     <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">03 — Reader signals<span style="flex:1;height:1px;background:var(--border2)"></span></div>
-    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">Subscriber signals help shape the next Sunday paper pool and rank the weekly results. Anonymized focus/comment phrases are added as extra search hints during Sunday discovery, in addition to the baseline search terms; dedicated author-watch names trigger author-specific CrossRef and arXiv searches. Broad checkbox topics guide ranking but do not widen source queries. Subscriber emails are capped at five papers and try selected topic areas first. If that digest has no papers in the selected areas, or if no topics are selected, the email falls back to the top five overall ranked papers so delivery still happens on time. The public digest page continues to show the full approved archive. The fast Claude model can interpret free-text focus, author-watch names, comments, and affiliation to score existing verified papers, but it cannot add papers or change paper metadata.</p>
+    <p class="setup-copy">Subscriber preferences shape discovery and ranking without letting the model invent papers. Free-text focus and comments become anonymized search hints in addition to the baseline search. Author-watch names trigger author-field searches. For Monday emails, topic choices and free text rank the already verified paper pool; if no preferred-topic papers are available, the subscriber still receives the top five overall papers on time. The public Digest tab always shows the full approved archive.</p>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem">
       <div style="background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--cyan);border-radius:0 6px 6px 0;padding:1.25rem 1.25rem">
         <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.6rem">Ratings</div>
@@ -485,7 +495,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   <!-- SECTION 4: STACK -->
   <div style="margin-bottom:3.5rem">
     <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">04 — Technology stack<span style="flex:1;height:1px;background:var(--border2)"></span></div>
-    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">Built entirely with open tooling and deployed on free or near-free infrastructure. CrossRef and arXiv handle normal paper discovery; Anthropic is used for subscriber-specific email summaries and optional fallback search, with no second Monday paper search.</p>
+    <p class="setup-copy">The system runs on lightweight services: GitHub Pages for the website, Cloudflare Workers for intake, a private GitHub repo for storage, GitHub Actions for schedules, SMTP for email, and CrossRef/arXiv for normal discovery. Claude is used for preference scoring and summaries, not as the source of paper metadata.</p>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
       <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.25rem 1.5rem">
         <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:0.85rem">AI</div>
@@ -512,7 +522,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   <!-- SECTION 5: RETARGETING -->
   <div style="margin-bottom:3.5rem">
 	    <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">05 — Retargeting to another field<span style="flex:1;height:1px;background:var(--border2)"></span></div>
-	    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1rem">The workflow is not tied to liquid metals. To adapt it for another research area, start from the private <a href="https://github.com/Xenodium3/paper-express" target="_blank" rel="noopener" style="color:var(--cyan)">Paper Express starter repo</a>, generate a non-secret research profile, then set your own GitHub, Cloudflare, SMTP, and Claude credentials in deployment settings.</p>
+	    <p class="setup-copy" style="margin-bottom:1rem">The workflow is not tied to liquid metals. To retarget it, use the private <a href="https://github.com/Xenodium3/paper-express" target="_blank" rel="noopener" style="color:var(--cyan)">Paper Express starter repo</a>, generate one non-secret research profile, save it in a fresh private clone, and set your own GitHub, Cloudflare, SMTP, and Claude credentials outside the profile.</p>
       <div style="background:rgba(100,216,255,0.06);border:1px solid rgba(100,216,255,0.22);border-left:3px solid var(--cyan);border-radius:0 6px 6px 0;padding:1rem 1.15rem;margin-bottom:1.5rem">
         <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.5rem">Retargeting builder</div>
         <p style="font-family:var(--display);font-size:13.5px;color:var(--dim);line-height:1.65;margin:0 0 0.85rem">Use the browser-only builder to create one JSON profile for a clean clone. It does not ask for API keys, tokens, passwords, or subscriber data.</p>
@@ -537,7 +547,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   <!-- SECTION 6: DATABASE -->
   <div>
 	    <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">06 — Private data store<span style="flex:1;height:1px;background:var(--border2)"></span></div>
-	    <p style="font-family:var(--display);font-size:0.95rem;color:var(--dim);line-height:1.7;margin-bottom:1.5rem">Subscriber data lives in append-only JSONL files inside the private backend repository. The public site never sees a GitHub token; it only talks to the intake worker. Subscriber contact details and preferences are used only for digest delivery, anonymized search hints, personalization, recommendations, ratings, and unsubscribe/update handling.</p>
+	    <p class="setup-copy">Subscriber data lives in private JSONL files in the backend repo. The public website never sees a GitHub token; it only talks to the Cloudflare Worker. Subscriber details are used for delivery, preference matching, anonymized search hints, recommendations, ratings, and unsubscribe/update handling.</p>
     <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;overflow:hidden">
       <table style="width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12px">
         <thead><tr style="border-bottom:1px solid var(--border2)">
@@ -546,7 +556,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
           <td style="padding:10px 16px;color:var(--cyan);font-weight:700">Purpose</td>
         </tr></thead>
         <tbody>
-          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">subscriptions.jsonl</td><td style="padding:10px 16px;color:var(--dimmer)">email, topics[], focus, watch_authors, affil, comments</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Subscriber profiles used for anonymized Sunday search hints, author-watch queries, personalised selection, and guarded preference scoring</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">subscriptions.jsonl</td><td style="padding:10px 16px;color:var(--dimmer)">email, topics[], focus, watch_authors, affil, comments</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Subscriber profiles used for anonymized Sunday search hints, author-watch queries, personalized selection, and guarded preference scoring</td></tr>
 	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">digests/*/latest.json</td><td style="padding:10px 16px;color:var(--dimmer)">freq, papers</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Stores preview, weekly, biweekly, and monthly paper archives — this page reads paper data from here</td></tr>
 		          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">ratings.jsonl</td><td style="padding:10px 16px;color:var(--dimmer)">email/client, doi, rating 0/1</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Mark relevant events — accumulated as active relevance marks and used in preview, archive, and email ranking</td></tr>
 	          <tr><td style="padding:10px 16px;color:var(--text)">recommendations.jsonl</td><td style="padding:10px 16px;color:var(--dimmer)">doi, email, consumed marker</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">User-submitted DOIs — saved for admin review and marked used once covered</td></tr>
