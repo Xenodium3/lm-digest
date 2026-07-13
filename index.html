@@ -237,7 +237,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   <div class="survey-hero">
     <div class="hero-photo"></div>
     <div class="hero-bg"></div><div class="hero-grid"></div>
-    <h1 class="hero-title">Liquid Metals Research Digest</h1>
+    <h1 class="hero-title" id="hero-title">Liquid Metals Research Digest</h1>
     <p class="hero-sub">Your personalized newsletter delivered to inbox.</p>
   </div>
   <div class="survey-wrap">
@@ -303,7 +303,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
       Already subscribed? Resubmit this form with the same email to replace your saved preferences, or
       <button onclick="showUnsubscribe()" style="background:none;border:none;font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.62);cursor:pointer;padding:0;text-decoration:underline">unsubscribe</button>.
     </p>
-    <p style="font-family:var(--mono);font-size:10px;color:rgba(255,255,255,0.48);line-height:1.7;max-width:620px;margin:0.75rem auto 0">
+    <p id="privacy-note" style="font-family:var(--mono);font-size:10px;color:rgba(255,255,255,0.48);line-height:1.7;max-width:620px;margin:0.75rem auto 0">
       Privacy note: your email, affiliation, topic preferences, author-watch names, ratings, and recommendations are stored in a private backend repository and used only to send and personalize LM Digest. Anonymized preference phrases and explicit author-watch names may help improve future searches. They are not sold or shared.
     </p>
     <div id="unsub-form" style="display:none;margin-top:1rem;display:none">
@@ -323,7 +323,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   <div class="digest-shell">
     <div class="digest-topbar">
       <div>
-        <h2>Recent research in liquid metals</h2>
+        <h2 id="digest-heading">Recent research in liquid metals</h2>
         <p id="digest-source-label" style="color:var(--dimmer);font-family:var(--display);font-size:1rem;font-weight:400;margin-top:0.4rem">Loading latest digest…</p>
       </div>
 
@@ -522,7 +522,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
         </tr></thead>
         <tbody>
 	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">1</td><td style="padding:10px 16px;color:var(--dimmer)">backend/config/domains/*.cjs</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Copy the liquid-metal profile, then replace search keywords, relevance terms, exclusions, category rules, topic aliases, prompt guidance, and journal tiers</td></tr>
-	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">2</td><td style="padding:10px 16px;color:var(--dimmer)">config/site-config.js</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Update public domain labels, topic checkboxes, category order, aliases, and Worker URL; do not put secrets here</td></tr>
+	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">2</td><td style="padding:10px 16px;color:var(--dimmer)">config/site-config.js</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Update public brand copy, domain labels, topic checkboxes, default topics, category order, aliases, and Worker URL; do not put secrets here</td></tr>
 	          <tr><td style="padding:10px 16px;color:var(--text)">3</td><td style="padding:10px 16px;color:var(--dimmer)">GitHub/Cloudflare settings</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Set RESEARCH_DOMAIN_PROFILE and deployment secrets, run config validation, fixture tests, and a reviewed preview before real sends</td></tr>
         </tbody>
       </table>
@@ -603,8 +603,10 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 <script src="config/site-config.js"></script>
 <script>
 const SITE_CONFIG=window.LM_DIGEST_SITE_CONFIG || {};
+const BRAND=SITE_CONFIG.brand || {};
 const UI_DOMAIN=SITE_CONFIG.domain || {};
 const TOPICS=Array.isArray(SITE_CONFIG.topics) ? SITE_CONFIG.topics : [];
+const DEFAULT_TOPIC_IDS=Array.isArray(SITE_CONFIG.defaultTopicIds) ? SITE_CONFIG.defaultTopicIds : [];
 const CATEGORY_ORDER=Array.isArray(SITE_CONFIG.categoryOrder) ? SITE_CONFIG.categoryOrder : [];
 const CATEGORY_ALIASES=SITE_CONFIG.categoryAliases || {};
 const BACKEND=SITE_CONFIG.backendUrl || '';
@@ -616,15 +618,31 @@ function validateSiteConfig(){
   if(!UI_DOMAIN.name || !UI_DOMAIN.label || !UI_DOMAIN.labelPlural || !UI_DOMAIN.defaultCategory) errors.push('domain');
   if(!TOPICS.length) errors.push('topics');
   if(!CATEGORY_ORDER.length) errors.push('categoryOrder');
-  if(errors.length) throw new Error('Missing site config: '+errors.join(', '));
+  const topicIds=new Set(TOPICS.map(t=>t.id));
+  const missingDefaults=DEFAULT_TOPIC_IDS.filter(id=>!topicIds.has(id));
+  if(missingDefaults.length) errors.push('defaultTopicIds: '+missingDefaults.join(', '));
+  if(errors.length) throw new Error('Invalid site config: '+errors.join(', '));
 }
 validateSiteConfig();
+
+function applySiteCopy(){
+  const digestName=BRAND.digestName || 'LM Digest';
+  document.title=BRAND.pageTitle || document.title;
+  const setText=(id,value)=>{ const el=document.getElementById(id); if(el && value) el.textContent=value; };
+  const setPlaceholder=(id,value)=>{ const el=document.getElementById(id); if(el && value) el.placeholder=value; };
+  setText('hero-title',BRAND.heroTitle);
+  setText('digest-heading',BRAND.digestHeading);
+  setPlaceholder('s-focus',BRAND.focusPlaceholder);
+  setPlaceholder('s-comments',BRAND.commentsPlaceholder);
+  setText('privacy-note',`Privacy note: your email, affiliation, topic preferences, author-watch names, ratings, and recommendations are stored in a private backend repository and used only to send and personalize ${digestName}. Anonymized preference phrases and explicit author-watch names may help improve future searches. They are not sold or shared.`);
+}
+applySiteCopy();
 
 let currentData=null, selectedFreq='weekly';
 
 /* ── SURVEY ── */
 function buildTopicsGrid(){
-  const DEFAULT_CHECKED = ['nuclear','planetary'];
+  const DEFAULT_CHECKED = DEFAULT_TOPIC_IDS.length ? DEFAULT_TOPIC_IDS : TOPICS.slice(0,2).map(t=>t.id);
 
   document.getElementById('topics-grid').innerHTML = TOPICS.map((t,i) => {
     const isChecked = DEFAULT_CHECKED.includes(t.id);

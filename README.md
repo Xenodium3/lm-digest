@@ -13,8 +13,10 @@ config/site-config.js
 Edit that file when adapting the digest to another research area:
 
 - `backendUrl`
+- `brand`
 - `domain`
 - `topics`
+- `defaultTopicIds`
 - `categoryOrder`
 - `categoryAliases`
 
