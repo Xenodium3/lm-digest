@@ -179,6 +179,26 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 .admin-fields input:focus,.admin-fields select:focus,.admin-fields textarea:focus{border-color:var(--cyan)}
 .admin-login{max-width:520px}
 .admin-empty{font-family:var(--display);font-size:13px;color:var(--dim);line-height:1.7;padding:1rem;border:1px dashed var(--border2);border-radius:4px}
+.admin-ops{margin-bottom:1rem}
+.admin-ops-head{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:0.75rem}
+.admin-note{font-family:var(--display);font-size:13px;color:var(--dim);line-height:1.65;margin:0 0 1rem}
+.admin-delivery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0.75rem;margin-bottom:1rem}
+.admin-delivery{border:1px solid var(--border);border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;padding:0.85rem;background:rgba(255,255,255,0.018)}
+.admin-delivery-title{font-family:var(--mono);font-size:10px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.45rem}
+.admin-delivery-count{font-family:var(--display);font-size:1.45rem;font-weight:700;color:var(--text);line-height:1}
+.admin-delivery-meta{font-family:var(--mono);font-size:10px;color:var(--dimmer);line-height:1.55;margin-top:0.45rem}
+.admin-table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:11px;margin-top:0.65rem}
+.admin-table th{color:var(--cyan);font-weight:700;text-align:left;padding:0.45rem 0.55rem;border-bottom:1px solid var(--border2)}
+.admin-table td{color:var(--dim);padding:0.45rem 0.55rem;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.45}
+.admin-pill{display:inline-block;border:1px solid var(--border2);border-radius:2px;padding:0.12rem 0.35rem;font-family:var(--mono);font-size:9px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--dimmer)}
+.admin-pill.ok{border-color:rgba(0,229,138,0.32);color:var(--green)}
+.admin-pill.warn{border-color:rgba(255,176,32,0.34);color:var(--gold)}
+.admin-feedback-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1rem}
+.admin-panel-title{font-family:var(--mono);font-size:10px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.65rem}
+.admin-feed{display:flex;flex-direction:column;gap:0.65rem}
+.admin-feed-item{border:1px solid var(--border);border-radius:4px;padding:0.75rem;background:rgba(255,255,255,0.018)}
+.admin-feed-meta{font-family:var(--mono);font-size:10px;color:var(--dimmer);margin-bottom:0.35rem;line-height:1.45}
+.admin-feed-main{font-family:var(--display);font-size:13px;color:var(--text);line-height:1.55;overflow-wrap:anywhere}
 
 /* ═══ HOW IT WORKS ═══ */
 .setup-shell{max-width:1000px;margin:0 auto;padding:3.5rem 1.5rem 6rem}
@@ -192,7 +212,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 .setup-shell [style*="color:var(--dim)"]{color:rgba(255,255,255,0.62)!important}
 
 @media(max-width:640px){
-  .two-col,.arch-grid,.admin-grid,.admin-fields{grid-template-columns:1fr}
+  .two-col,.arch-grid,.admin-grid,.admin-fields,.admin-delivery-grid,.admin-feedback-grid{grid-template-columns:1fr}
   .form-section{padding:1.5rem}
   .hero-title{font-size:2rem}
   .nav-pill{padding:0 0.75rem;font-size:12px}
@@ -596,11 +616,41 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
     <div id="admin-editor" style="display:none">
       <div class="admin-toolbar">
         <button class="btn-primary" onclick="adminLoadPreview()">Reload preview</button>
+        <button class="btn-secondary" onclick="adminLoadStatus()">Reload status</button>
         <button class="btn-secondary" onclick="adminAddPaper()">Add paper</button>
         <button class="btn-secondary" onclick="adminSavePreview()">Save preview</button>
         <button class="btn-secondary" onclick="adminLogout()">Sign out</button>
       </div>
       <div class="admin-status" id="admin-status"></div>
+
+      <section class="admin-card admin-ops">
+        <div class="admin-ops-head">
+          <div class="section-tag">Operations dashboard</div>
+          <button class="admin-mini-btn" onclick="adminLoadStatus()">Refresh</button>
+        </div>
+        <p class="admin-note">Delivery status is based on LM Digest send logs. It confirms that SMTP accepted each message; inbox receipt, opens, bounces, and spam placement are not tracked yet.</p>
+        <div class="admin-status" id="admin-ops-status">Sign on to load send status, messages, recommendations, and relevance feedback.</div>
+        <div class="admin-delivery-grid" id="admin-delivery-cards"></div>
+        <div id="admin-recipient-status"></div>
+        <div class="admin-feedback-grid">
+          <div>
+            <div class="admin-panel-title">Messages</div>
+            <div class="admin-feed" id="admin-messages"></div>
+          </div>
+          <div>
+            <div class="admin-panel-title">Recommendations</div>
+            <div class="admin-feed" id="admin-recommendations"></div>
+          </div>
+          <div>
+            <div class="admin-panel-title">Recent relevance marks</div>
+            <div class="admin-feed" id="admin-ratings"></div>
+          </div>
+          <div>
+            <div class="admin-panel-title">Most marked papers</div>
+            <div class="admin-feed" id="admin-rating-summary"></div>
+          </div>
+        </div>
+      </section>
 
       <div class="admin-grid">
         <section class="admin-card">
@@ -1056,6 +1106,7 @@ const ratings=new Set(); // doi strings rated by current user
 let ratingEmail=''; // set when user subscribes or from localStorage
 let adminToken=localStorage.getItem('lmd_admin_token') || '';
 let adminDigest={papers:[],review_papers:[],summary:null};
+let adminOps=null;
 
 function ratingClientId(){
   let id=localStorage.getItem('lmd_client_id');
@@ -1072,6 +1123,13 @@ function ratingClientId(){
 
 function adminSetStatus(msg,type=''){
   const el=document.getElementById('admin-status') || document.getElementById('admin-login-status');
+  if(!el) return;
+  el.textContent=msg;
+  el.className='admin-status '+type;
+}
+
+function adminSetOpsStatus(msg,type=''){
+  const el=document.getElementById('admin-ops-status');
   if(!el) return;
   el.textContent=msg;
   el.className='admin-status '+type;
@@ -1103,6 +1161,7 @@ async function adminLogin(){
     document.getElementById('admin-editor').style.display='block';
     adminSetStatus('Signed on. Loading preview…','ok');
     await adminLoadPreview();
+    await adminLoadStatus();
   }catch(e){
     document.getElementById('admin-login-status').textContent='Could not sign on: '+e.message;
     document.getElementById('admin-login-status').className='admin-status err';
@@ -1122,6 +1181,7 @@ function adminUseStoredToken(){
 
 function adminLogout(){
   adminToken='';
+  adminOps=null;
   localStorage.removeItem('lmd_admin_token');
   document.getElementById('admin-login-card').style.display='block';
   document.getElementById('admin-editor').style.display='none';
@@ -1216,6 +1276,115 @@ function adminRender(){
   review.innerHTML=adminDigest.review_papers.length
     ? adminDigest.review_papers.map((p,i)=>adminPaperCard(p,i,true)).join('')
     : '<div class="admin-empty">No review candidates. Sunday search did not hold back incomplete papers.</div>';
+}
+
+function adminFmtDate(value){
+  if(!value) return 'none yet';
+  const d=new Date(value);
+  return Number.isFinite(d.getTime()) ? d.toLocaleString() : String(value);
+}
+
+function adminFreqTitle(freq){
+  return freq==='weekly'?'Weekly':freq==='biweekly'?'Biweekly':freq==='monthly'?'Monthly':freq;
+}
+
+function adminStatusPill(status){
+  if(status==='sent') return '<span class="admin-pill ok">sent</span>';
+  if(status==='not_sent_for_latest_run') return '<span class="admin-pill warn">not sent</span>';
+  return '<span class="admin-pill">no run</span>';
+}
+
+function adminRenderDeliveryTable(delivery){
+  const rows=[];
+  ['weekly','biweekly','monthly'].forEach(freq=>{
+    const block=delivery?.[freq];
+    (block?.recipients || []).forEach(row=>{
+      rows.push(`<tr>
+        <td>${escapeHtml(adminFreqTitle(freq))}</td>
+        <td>${escapeHtml(row.name || '(no name)')}<br><span style="color:var(--dimmer)">${escapeHtml(row.email || '')}</span></td>
+        <td>${adminStatusPill(row.send_status)}<br><span style="color:var(--dimmer)">${escapeHtml(row.delivery_status === 'smtp_accepted_receipt_not_tracked' ? 'SMTP accepted; receipt not tracked' : 'receipt not tracked')}</span></td>
+        <td>${escapeHtml(row.sent_at ? adminFmtDate(row.sent_at) : 'not logged')}</td>
+        <td>${escapeHtml(String(row.paper_count || 0))}</td>
+      </tr>`);
+    });
+  });
+  if(!rows.length) return '<div class="admin-empty">No active subscribers found.</div>';
+  return `<table class="admin-table">
+    <thead><tr><th>Cadence</th><th>Subscriber</th><th>Status</th><th>Sent at</th><th>Papers</th></tr></thead>
+    <tbody>${rows.join('')}</tbody>
+  </table>`;
+}
+
+function adminRenderFeed(items, emptyText, renderItem){
+  return items && items.length
+    ? items.map(renderItem).join('')
+    : `<div class="admin-empty">${escapeHtml(emptyText)}</div>`;
+}
+
+function adminRenderStatus(){
+  if(!adminOps) return;
+  const delivery=adminOps.delivery || {};
+  const cards=document.getElementById('admin-delivery-cards');
+  cards.innerHTML=['weekly','biweekly','monthly'].map(freq=>{
+    const block=delivery[freq] || {};
+    const latest=block.latest_send || {};
+    return `<div class="admin-delivery">
+      <div class="admin-delivery-title">${escapeHtml(adminFreqTitle(freq))}</div>
+      <div class="admin-delivery-count">${escapeHtml(String(block.sent_count || 0))}/${escapeHtml(String(block.subscriber_count || 0))}</div>
+      <div class="admin-delivery-meta">
+        latest: ${escapeHtml(latest.send_date || 'none')}<br>
+        run: ${latest.run_id ? `<a href="https://github.com/Xenodium3/lm-digest-backend/actions/runs/${encodeURIComponent(latest.run_id)}" target="_blank" rel="noopener" style="color:var(--cyan)">${escapeHtml(latest.run_id)}</a>` : 'none'}<br>
+        pending: ${escapeHtml(String(block.pending_count || 0))}
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('admin-recipient-status').innerHTML=adminRenderDeliveryTable(delivery);
+
+  document.getElementById('admin-messages').innerHTML=adminRenderFeed(adminOps.messages, 'No contact messages yet.', item=>`
+    <article class="admin-feed-item">
+      <div class="admin-feed-meta">${escapeHtml(adminFmtDate(item.ts))} · ${escapeHtml(item.email || '')} ${item.read?'<span class="admin-pill ok">included</span>':'<span class="admin-pill warn">new</span>'}</div>
+      <div class="admin-feed-main"><strong>${escapeHtml(item.name || 'Unknown')}</strong><br>${escapeHtml(item.message || '')}</div>
+    </article>`);
+
+  document.getElementById('admin-recommendations').innerHTML=adminRenderFeed(adminOps.recommendations, 'No DOI recommendations yet.', item=>`
+    <article class="admin-feed-item">
+      <div class="admin-feed-meta">${escapeHtml(adminFmtDate(item.ts))} · ${escapeHtml(item.email || 'anonymous')} ${item.used?'<span class="admin-pill ok">used</span>':'<span class="admin-pill warn">open</span>'}</div>
+      <div class="admin-feed-main">${escapeHtml(item.doi || '')}</div>
+    </article>`);
+
+  const recentRatings=adminOps.ratings?.recent || [];
+  document.getElementById('admin-ratings').innerHTML=adminRenderFeed(recentRatings, 'No relevance feedback yet.', item=>`
+    <article class="admin-feed-item">
+      <div class="admin-feed-meta">${escapeHtml(adminFmtDate(item.ts))} · ${escapeHtml(item.email || 'anonymous')} <span class="admin-pill ${item.rating?'ok':'warn'}">${item.rating?'marked':'removed'}</span></div>
+      <div class="admin-feed-main">${escapeHtml(item.title || item.doi || '')}<br><span style="color:var(--dimmer);font-family:var(--mono);font-size:11px">${escapeHtml(item.doi || '')}</span></div>
+    </article>`);
+
+  const topRatings=adminOps.ratings?.top || [];
+  document.getElementById('admin-rating-summary').innerHTML=adminRenderFeed(topRatings, 'No accumulated relevance marks yet.', item=>`
+    <article class="admin-feed-item">
+      <div class="admin-feed-meta"><span class="admin-pill ok">${escapeHtml(String(item.count || 0))} mark${Number(item.count)===1?'':'s'}</span> · latest ${escapeHtml(adminFmtDate(item.latest_at))}</div>
+      <div class="admin-feed-main">${escapeHtml(item.title || item.doi || '')}<br><span style="color:var(--dimmer);font-family:var(--mono);font-size:11px">${escapeHtml(item.doi || '')}</span></div>
+    </article>`);
+
+  adminSetOpsStatus(`Loaded operations dashboard at ${adminFmtDate(adminOps.generated_at)}. ${adminOps.note || ''}`,'ok');
+}
+
+async function adminLoadStatus(){
+  if(!adminToken){
+    adminSetOpsStatus('Sign on before loading status.','err');
+    return;
+  }
+  try{
+    adminSetOpsStatus('Loading operations dashboard…');
+    const resp=await fetch(BACKEND+'/admin/status',{headers:adminAuthHeaders(false)});
+    const data=await resp.json().catch(()=>({}));
+    if(!resp.ok) throw new Error(data.error || ('HTTP '+resp.status));
+    adminOps=data;
+    adminRenderStatus();
+  }catch(e){
+    adminSetOpsStatus('Could not load operations dashboard: '+e.message,'err');
+  }
 }
 
 function adminAddPaper(){
