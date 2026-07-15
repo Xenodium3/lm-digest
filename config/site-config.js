@@ -16,22 +16,23 @@ window.LM_DIGEST_SITE_CONFIG = {
     name: 'liquid metal',
     label: 'Liquid Metal',
     labelPlural: 'Liquid Metals',
-    defaultCategory: 'Biomedical, Robotics & Energy',
+    defaultCategory: 'Biomedical, Soft Robotics & Actuation',
   },
   topics: [
     { id: 'nuclear', label: 'Nuclear, Accelerator & Fusion Applications' },
     { id: 'planetary', label: 'Planetary & Geo/Astrophysics' },
     { id: 'electronics', label: 'Flexible Electronics, Wearables & Soft Matter' },
-    { id: 'biomedical', label: 'Biomedical, Robotics & Energy' },
+    { id: 'biomedical', label: 'Biomedical, Soft Robotics & Actuation' },
   ],
   defaultTopicIds: ['nuclear', 'planetary'],
   categoryOrder: [
     'Planetary & Geo/Astrophysics',
     'Nuclear, Accelerator & Fusion Applications',
     'Flexible Electronics, Wearables & Soft Matter',
-    'Biomedical, Robotics & Energy',
+    'Biomedical, Soft Robotics & Actuation',
   ],
   categoryAliases: {
     'Nuclear & Fusion Applications': 'Nuclear, Accelerator & Fusion Applications',
+    'Biomedical, Robotics & Energy': 'Biomedical, Soft Robotics & Actuation',
   },
 };
