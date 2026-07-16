@@ -159,6 +159,14 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 .admin-card{background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:1.35rem}
 .admin-card.review{border-color:rgba(240,192,96,0.24);border-left:3px solid var(--gold)}
 .admin-toolbar{display:flex;gap:0.55rem;align-items:center;flex-wrap:wrap;margin:1.25rem 0}
+.admin-subnav{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin:1.25rem 0 1rem;padding-bottom:0.85rem;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.admin-view-tabs{display:flex;align-items:center;padding:3px;background:var(--dark2);border:1px solid var(--border2);border-radius:4px}
+.admin-view-tab{border:0;border-radius:2px;padding:0.55rem 0.85rem;background:transparent;color:var(--dimmer);font-family:var(--mono);font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:background 0.15s,color 0.15s}
+.admin-view-tab:hover{color:var(--text)}
+.admin-view-tab.active{background:rgba(0,229,255,0.1);color:var(--cyan)}
+.admin-view-tab:focus-visible{outline:1px solid var(--cyan);outline-offset:-1px}
+.admin-subpage{display:none}
+.admin-subpage.active{display:block}
 .admin-status{font-family:var(--mono);font-size:11px;color:var(--dimmer);letter-spacing:0.04em;min-height:1.2rem}
 .admin-status.ok{color:var(--green)}
 .admin-status.err{color:var(--red)}
@@ -625,57 +633,67 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
     </div>
 
     <div id="admin-editor" style="display:none">
-      <div class="admin-toolbar">
-        <button class="btn-primary" onclick="adminLoadPreview()">Reload preview</button>
-        <button class="btn-secondary" onclick="adminLoadStatus()">Reload status</button>
-        <button class="btn-secondary" onclick="adminAddPaper()">Add paper</button>
-        <button class="btn-secondary" onclick="adminSavePreview()">Save preview</button>
+      <div class="admin-subnav">
+        <div class="admin-view-tabs" role="tablist" aria-label="Admin sections">
+          <button class="admin-view-tab active" id="admin-tab-preview" type="button" role="tab" aria-selected="true" aria-controls="admin-subpage-preview" onclick="adminSwitchView('preview')">Paper preview</button>
+          <button class="admin-view-tab" id="admin-tab-status" type="button" role="tab" aria-selected="false" aria-controls="admin-subpage-status" onclick="adminSwitchView('status')">Status</button>
+        </div>
         <button class="btn-secondary" onclick="adminLogout()">Sign out</button>
       </div>
-      <div class="admin-status" id="admin-status"></div>
 
-      <section class="admin-card admin-ops">
-        <div class="admin-ops-head">
-          <div class="section-tag">Operations dashboard</div>
-          <button class="admin-mini-btn" onclick="adminLoadStatus()">Refresh</button>
+      <section class="admin-subpage active" id="admin-subpage-preview" role="tabpanel" aria-labelledby="admin-tab-preview">
+        <div class="admin-toolbar">
+          <button class="btn-primary" onclick="adminLoadPreview()">Reload preview</button>
+          <button class="btn-secondary" onclick="adminAddPaper()">Add paper</button>
+          <button class="btn-secondary" onclick="adminSavePreview()">Save preview</button>
         </div>
-        <p class="admin-note">Delivery status is based on LM Digest send logs. It confirms that SMTP accepted each message; inbox receipt, opens, bounces, and spam placement are not tracked yet.</p>
-        <div class="admin-status" id="admin-ops-status">Sign on to load send status, messages, recommendations, and relevance feedback.</div>
-        <div class="admin-delivery-grid" id="admin-delivery-cards"></div>
-        <div id="admin-recipient-status"></div>
-        <div class="admin-feedback-grid">
-          <div>
-            <div class="admin-panel-title">Messages</div>
-            <div class="admin-feed" id="admin-messages"></div>
-          </div>
-          <div>
-            <div class="admin-panel-title">Recommendations</div>
-            <div class="admin-feed" id="admin-recommendations"></div>
-          </div>
-          <div>
-            <div class="admin-panel-title">Recent relevance marks</div>
-            <div class="admin-feed" id="admin-ratings"></div>
-          </div>
-          <div>
-            <div class="admin-panel-title">Most marked papers</div>
-            <div class="admin-feed" id="admin-rating-summary"></div>
-          </div>
+        <div class="admin-status" id="admin-status"></div>
+
+        <div class="admin-grid">
+          <section class="admin-card">
+            <div class="section-tag">Included in digest</div>
+            <div class="admin-list" id="admin-papers"></div>
+          </section>
+          <section class="admin-card review">
+            <div class="section-tag">Needs admin review</div>
+            <p style="font-family:var(--display);font-size:13px;color:var(--dim);line-height:1.65;margin-bottom:1rem">
+              These candidates looked relevant but failed metadata checks. Complete the missing fields and promote them, or delete them.
+            </p>
+            <div class="admin-list" id="admin-review-papers"></div>
+          </section>
         </div>
       </section>
 
-      <div class="admin-grid">
-        <section class="admin-card">
-          <div class="section-tag">Included in digest</div>
-          <div class="admin-list" id="admin-papers"></div>
-        </section>
-        <section class="admin-card review">
-          <div class="section-tag">Needs admin review</div>
-          <p style="font-family:var(--display);font-size:13px;color:var(--dim);line-height:1.65;margin-bottom:1rem">
-            These candidates looked relevant but failed metadata checks. Complete the missing fields and promote them, or delete them.
-          </p>
-          <div class="admin-list" id="admin-review-papers"></div>
-        </section>
-      </div>
+      <section class="admin-subpage" id="admin-subpage-status" role="tabpanel" aria-labelledby="admin-tab-status" hidden>
+        <div class="admin-card admin-ops">
+          <div class="admin-ops-head">
+            <div class="section-tag">Operations dashboard</div>
+            <button class="admin-mini-btn" onclick="adminLoadStatus()">Refresh</button>
+          </div>
+          <p class="admin-note">Delivery status is based on LM Digest send logs. It confirms that SMTP accepted each message; inbox receipt, opens, bounces, and spam placement are not tracked yet.</p>
+          <div class="admin-status" id="admin-ops-status">Open Status to load send status, messages, recommendations, and relevance feedback.</div>
+          <div class="admin-delivery-grid" id="admin-delivery-cards"></div>
+          <div id="admin-recipient-status"></div>
+          <div class="admin-feedback-grid">
+            <div>
+              <div class="admin-panel-title">Messages</div>
+              <div class="admin-feed" id="admin-messages"></div>
+            </div>
+            <div>
+              <div class="admin-panel-title">Recommendations</div>
+              <div class="admin-feed" id="admin-recommendations"></div>
+            </div>
+            <div>
+              <div class="admin-panel-title">Recent relevance marks</div>
+              <div class="admin-feed" id="admin-ratings"></div>
+            </div>
+            <div>
+              <div class="admin-panel-title">Most marked papers</div>
+              <div class="admin-feed" id="admin-rating-summary"></div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   </div>
 </div>
@@ -1123,6 +1141,7 @@ let ratingEmail=''; // set when user subscribes or from localStorage
 let adminToken=localStorage.getItem('lmd_admin_token') || '';
 let adminDigest={papers:[],review_papers:[],category_highlights:{}};
 let adminOps=null;
+let adminStatusLoading=false;
 
 function ratingClientId(){
   let id=localStorage.getItem('lmd_client_id');
@@ -1157,6 +1176,22 @@ function adminAuthHeaders(json=true){
   return headers;
 }
 
+function adminSwitchView(view){
+  const selected=view==='status'?'status':'preview';
+  ['preview','status'].forEach(name=>{
+    const active=name===selected;
+    const tab=document.getElementById(`admin-tab-${name}`);
+    const panel=document.getElementById(`admin-subpage-${name}`);
+    tab?.classList.toggle('active',active);
+    tab?.setAttribute('aria-selected',active?'true':'false');
+    if(panel){
+      panel.classList.toggle('active',active);
+      panel.hidden=!active;
+    }
+  });
+  if(selected==='status' && adminToken && !adminOps && !adminStatusLoading) adminLoadStatus();
+}
+
 async function adminLogin(){
   const token=document.getElementById('admin-token').value.trim();
   if(!token){
@@ -1175,9 +1210,9 @@ async function adminLogin(){
     localStorage.setItem('lmd_admin_token',token);
     document.getElementById('admin-login-card').style.display='none';
     document.getElementById('admin-editor').style.display='block';
+    adminSwitchView('preview');
     adminSetStatus('Signed on. Loading preview…','ok');
     await adminLoadPreview();
-    await adminLoadStatus();
   }catch(e){
     document.getElementById('admin-login-status').textContent='Could not sign on: '+e.message;
     document.getElementById('admin-login-status').className='admin-status err';
@@ -1198,7 +1233,14 @@ function adminUseStoredToken(){
 function adminLogout(){
   adminToken='';
   adminOps=null;
+  adminStatusLoading=false;
+  adminSwitchView('preview');
   localStorage.removeItem('lmd_admin_token');
+  ['admin-delivery-cards','admin-recipient-status','admin-messages','admin-recommendations','admin-ratings','admin-rating-summary'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.innerHTML='';
+  });
+  adminSetOpsStatus('Open Status to load send status, messages, recommendations, and relevance feedback.');
   document.getElementById('admin-login-card').style.display='block';
   document.getElementById('admin-editor').style.display='none';
   document.getElementById('admin-token').value='';
@@ -1389,19 +1431,25 @@ function adminRenderStatus(){
 }
 
 async function adminLoadStatus(){
+  if(adminStatusLoading) return;
   if(!adminToken){
     adminSetOpsStatus('Sign on before loading status.','err');
     return;
   }
+  const requestToken=adminToken;
+  adminStatusLoading=true;
   try{
     adminSetOpsStatus('Loading operations dashboard…');
     const resp=await fetch(BACKEND+'/admin/status',{headers:adminAuthHeaders(false)});
     const data=await resp.json().catch(()=>({}));
     if(!resp.ok) throw new Error(data.error || ('HTTP '+resp.status));
+    if(adminToken!==requestToken) return;
     adminOps=data;
     adminRenderStatus();
   }catch(e){
     adminSetOpsStatus('Could not load operations dashboard: '+e.message,'err');
+  }finally{
+    adminStatusLoading=false;
   }
 }
 
