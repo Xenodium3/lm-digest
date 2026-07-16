@@ -149,7 +149,6 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 .recommend-submit{padding:0.5rem 1.25rem;background:var(--cyan);color:#050508;border:none;border-radius:3px;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:all 0.15s}
 .recommend-submit:hover{background:#22f0ff}
 .recommend-submit:disabled{background:var(--dark3);color:var(--dimmer);cursor:not-allowed}
-.recommend-note{font-family:var(--display);font-size:13px;color:var(--dim);line-height:1.65;margin-top:0.75rem}
 .recommend-success{display:none;margin-top:0.75rem;padding:0.75rem 1rem;background:rgba(0,229,138,0.06);border:1px solid rgba(0,229,138,0.2);border-radius:3px;font-family:var(--mono);font-size:11px;color:var(--green);letter-spacing:0.04em}
 .recommend-success.show{display:block}
 
@@ -400,9 +399,6 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
         <button class="recommend-add-btn" onclick="addDoiEntry()">+ Add another DOI</button>
         <div style="flex:1"></div>
         <button class="recommend-submit" id="recommend-submit-btn" onclick="submitRecommendations()">Submit recommendations →</button>
-      </div>
-      <div class="recommend-note" id="recommend-note">
-        Subscribe first to attach recommendations to your profile. Not subscribed yet? Recommendations from anonymous users are still collected.
       </div>
       <div class="recommend-success" id="recommend-success">✓ &nbsp;Recommendations received — these papers will be saved for admin review and future ranking.</div>
     </div>
@@ -911,7 +907,6 @@ async function submitSurvey(){
     const success = document.getElementById('submit-success');
     success.textContent = `✓  Subscription confirmed. Your digest arrives ${selectedFreqLabel()}, with your primary focus area shown first.`;
     success.classList.add('show');
-    document.getElementById('recommend-note').textContent = 'Recommendations will be attached to your subscriber profile.';
   } catch(e) {
     document.getElementById('submit-btn').textContent = 'Activate Subscription →';
     document.getElementById('submit-btn').disabled = false;
