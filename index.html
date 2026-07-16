@@ -105,6 +105,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 .cat-name{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--cyan)}
 .cat-rule{flex:1;height:1px;background:var(--border)}
 .cat-count{font-family:var(--mono);font-size:10px;color:var(--dimmer);letter-spacing:0.08em}
+.cat-highlight{font-family:var(--display);font-size:15px;line-height:1.75;color:rgba(255,255,255,0.76);margin:-0.25rem 0 1.25rem;padding-left:1rem;border-left:2px solid rgba(240,192,96,0.5)}
 .featured-paper{background:var(--panel);border:1px solid rgba(0,229,255,0.18);border-left:3px solid var(--cyan);border-radius:0 4px 4px 0;padding:1.5rem 1.75rem;margin-bottom:0.75rem;transition:border-color 0.15s}
 .featured-paper:hover{border-color:rgba(0,229,255,0.35)}
 .paper-badges{display:flex;gap:0.4rem;margin-bottom:0.75rem;flex-wrap:wrap}
@@ -461,7 +462,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   <!-- SECTION 2: WEEKLY CYCLE -->
   <div style="margin-bottom:3.5rem">
     <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">02 — Weekly cycle<span style="flex:1;height:1px;background:var(--border2)"></span></div>
-    <p class="setup-copy">The schedule has two phases. On Sunday morning ET, the pipeline searches CrossRef and arXiv using the baseline topic vocabulary plus anonymized reader-interest hints. Every candidate must pass relevance, metadata, and abstract checks before it reaches the admin preview. On Monday morning ET, the system reuses the reviewed preview, does no new paper search, publishes the approved website list, and emails each weekly subscriber up to five papers matched to their interests. Rolling biweekly and monthly archives are refreshed from the same reviewed weekly snapshots.</p>
+    <p class="setup-copy">The schedule has two phases. On Sunday morning ET, the pipeline searches CrossRef and arXiv using the baseline topic vocabulary plus anonymized reader-interest hints. Every candidate must pass relevance, metadata, and abstract checks before it reaches the admin preview. On Monday morning ET, the system reuses the reviewed preview, does no new paper search, writes a short evidence-bound highlight for each populated website category, publishes the approved list, and emails each weekly subscriber up to five papers matched to their interests. Rolling biweekly and monthly archives are refreshed from the same reviewed weekly snapshots.</p>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
       <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.25rem 1.5rem">
         <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--cyan);margin-bottom:1rem">Sunday · morning ET</div>
@@ -965,9 +966,13 @@ function renderPaper(paper, compact = false) {
   </article>`;
 }
 
-function renderDigest(papers) {
+function renderDigest(papers, categoryHighlights = {}) {
   const ordered = (papers || []).map(normalisePaper);
   const categories = [...new Set([...CATEGORY_ORDER, ...ordered.map(p => p.category)])];
+  const highlights = Object.fromEntries(Object.entries(categoryHighlights || {}).map(([category, highlight]) => [
+    CATEGORY_ALIASES[category] || category,
+    String(highlight || '').trim()
+  ]));
 
   const html = categories.map(category => {
     const group = ordered.filter(p => p.category === category);
@@ -983,6 +988,7 @@ function renderDigest(papers) {
         <div class="cat-rule"></div>
         <div class="cat-count">${group.length} paper${group.length === 1 ? '' : 's'}</div>
       </div>
+      ${highlights[category] ? `<p class="cat-highlight">${escapeHtml(highlights[category])}</p>` : ''}
       ${renderPaper(featured)}
       ${rest.length ? `<button class="see-more-btn" onclick="document.getElementById('${moreId}').classList.toggle('open')">Show ${rest.length} more</button>
       <div class="more-list" id="${moreId}">${rest.map(p => renderPaper(p, true)).join('')}</div>` : ''}
@@ -1105,7 +1111,7 @@ async function submitRecommendations() {
 const ratings=new Set(); // doi strings rated by current user
 let ratingEmail=''; // set when user subscribes or from localStorage
 let adminToken=localStorage.getItem('lmd_admin_token') || '';
-let adminDigest={papers:[],review_papers:[],summary:null};
+let adminDigest={papers:[],review_papers:[],category_highlights:{}};
 let adminOps=null;
 
 function ratingClientId(){
@@ -1431,7 +1437,7 @@ async function adminSavePreview(){
       body:JSON.stringify({
         papers:adminDigest.papers,
         review_papers:adminDigest.review_papers,
-        summary:adminDigest.summary || null
+        category_highlights:adminDigest.category_highlights || {}
       })
     });
     const data=await resp.json().catch(()=>({}));
@@ -1525,7 +1531,7 @@ buildTopicsGrid();
     if (!data.papers || data.papers.length === 0) throw new Error('No papers stored yet');
 
     document.getElementById('digest-output').innerHTML = '';
-    currentData = renderDigest(data.papers);
+    currentData = renderDigest(data.papers, data.category_highlights || {});
 
     const dateLoaded = new Date(data.created_at).toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
     const servedFreq = data.served_freq || freq;
