@@ -760,7 +760,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
           <section class="admin-card review">
             <div class="section-tag">Needs admin review</div>
             <p style="font-family:var(--display);font-size:13px;color:var(--dim);line-height:1.65;margin-bottom:1rem">
-              These candidates looked relevant but failed metadata checks. Complete the missing fields and promote them, or delete them.
+              Complete the missing fields and promote a candidate to append it to the approved list immediately, or delete it.
             </p>
             <div class="admin-list" id="admin-review-papers"></div>
           </section>
@@ -1407,7 +1407,7 @@ function adminPaperCard(p,index,review=false){
   const cats=[p.category || '', ...ADMIN_CATS.filter(c=>c!==p.category)];
   const catOptions=cats.map(c=>`<option value="${escapeHtml(c)}">${escapeHtml(c || 'Choose category')}</option>`).join('');
   const badgeOptions=['Published','Preprint'].map(b=>`<option value="${b}" ${p.badge===b?'selected':''}>${b}</option>`).join('');
-  return `<article class="admin-paper ${review?'review':''}" data-preprint-doi="${escapeHtml(p.preprint_doi||'')}">
+  return `<article class="admin-paper ${review?'review':''}" data-preprint-doi="${escapeHtml(p.preprint_doi||'')}" data-original-doi="${escapeHtml(p.doi||'')}" data-original-preprint-doi="${escapeHtml(p.preprint_doi||'')}" data-original-title="${escapeHtml(p.title||'')}">
     <div class="admin-paper-head">
       <div class="admin-paper-title">${escapeHtml(p.title || 'Untitled paper')}</div>
       <div class="admin-paper-actions">
@@ -1574,15 +1574,34 @@ function adminAddPaper(){
   adminRender();
 }
 
-function adminPromote(index){
+async function adminPromote(index){
+  const card=document.querySelectorAll('#admin-review-papers .admin-paper')[index];
+  if(!card) return;
+  const original={
+    doi:card.dataset.originalDoi || '',
+    preprint_doi:card.dataset.originalPreprintDoi || '',
+    title:card.dataset.originalTitle || ''
+  };
   adminSyncFromDom();
-  const paper=adminDigest.review_papers.splice(index,1)[0];
+  const paper=adminDigest.review_papers[index];
   if(!paper) return;
-  delete paper.needs_review;
-  delete paper.review_reason;
-  adminDigest.papers.unshift(paper);
-  adminRender();
-  adminSetStatus('Candidate promoted. Review fields, then save preview.','ok');
+  try{
+    adminSetStatus('Promoting candidate and updating the public paper list…');
+    const resp=await fetch(BACKEND+'/admin/preview/promote',{
+      method:'POST',
+      headers:adminAuthHeaders(true),
+      body:JSON.stringify({paper,original})
+    });
+    const data=await resp.json().catch(()=>({}));
+    if(!resp.ok) throw new Error(data.error || ('HTTP '+resp.status));
+    adminDigest=data.digest || adminDigest;
+    adminLoadedPaperCount=adminDigest.papers.length;
+    adminRender();
+    const publicNote=data.public_digest?' Public webpage updated.':'';
+    adminSetStatus(`Paper promoted and appended: ${adminDigest.papers.length} included, ${adminDigest.review_papers.length} still needing review.${publicNote}`,'ok');
+  }catch(e){
+    adminSetStatus('Could not promote paper: '+e.message,'err');
+  }
 }
 
 function adminDelete(review,index){
