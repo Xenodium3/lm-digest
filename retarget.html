@@ -314,7 +314,7 @@ async function copyProfile(){
   try{
     await navigator.clipboard.writeText(JSON.stringify(latestProfile,null,2));
     setStatus('ok','Profile JSON copied.');
-  }catch(err){
+  }catch{
     setStatus('err','Could not copy automatically. Use the output panel instead.');
   }
 }
@@ -326,7 +326,7 @@ function importProfile(){
   let parsed;
   try{
     parsed=JSON.parse(raw);
-  }catch(err){
+  }catch{
     markImportRejected('Import blocked: pasted text is not valid JSON.');
     return;
   }

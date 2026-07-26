@@ -251,10 +251,14 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 .rank-flow-rule strong{color:var(--text)}
 
 @media(max-width:640px){
+  .topbar{height:auto;min-height:76px;padding:0.55rem 0.75rem 0;flex-direction:column;align-items:stretch;gap:0.35rem}
+  .brand{height:22px}
+  .nav-pills{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));width:100%}
+  .nav-pill{min-width:0;height:42px;padding:0 0.2rem;font-size:10px;line-height:1.2;letter-spacing:0.02em;white-space:normal}
+  .nav-pill::after{left:0.35rem;right:0.35rem}
   .two-col,.arch-grid,.admin-grid,.admin-fields,.admin-delivery-grid,.admin-feedback-grid{grid-template-columns:1fr}
   .form-section{padding:1.5rem}
   .hero-title{font-size:2rem}
-  .nav-pill{padding:0 0.75rem;font-size:12px}
   .ec-body,.ec-header,.ec-footer{padding-left:1.25rem;padding-right:1.25rem}
   .setup-copy{text-align:left}
   .rank-flow-stage{grid-template-columns:34px minmax(0,1fr)}
@@ -503,7 +507,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   <!-- SECTION 2: WEEKLY CYCLE -->
   <div style="margin-bottom:3.5rem">
     <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">02 — Weekly cycle<span style="flex:1;height:1px;background:var(--border2)"></span></div>
-    <p class="setup-copy">The schedule has two phases. On Sunday morning ET, the pipeline searches CrossRef and arXiv, then merges the scheduled Sider Scholar candidate inbox, using the baseline topic vocabulary plus anonymized reader-interest hints. Every candidate must pass relevance, metadata, and abstract checks before it reaches the admin preview. On Monday morning ET, the system reuses the reviewed preview, does no new paper search, writes a short evidence-bound highlight for each populated website category, publishes the approved list, and emails each weekly subscriber up to five papers matched to their interests. Rolling biweekly and monthly archives are refreshed from the same reviewed weekly snapshots.</p>
+    <p class="setup-copy">The schedule has two phases. On Sunday morning ET, the pipeline searches CrossRef and arXiv, then merges the scheduled Sider Scholar candidate inbox, using the baseline topic vocabulary plus anonymized reader-interest hints. Every candidate must pass relevance, metadata, and abstract checks before it reaches the admin preview. Each admin save updates the approved website paper list immediately while review candidates remain private. On Monday morning ET, the system reuses that reviewed preview, does no new paper search, writes a short evidence-bound highlight for each populated category, finalizes the weekly archive, and emails each weekly subscriber up to five papers matched to their interests. Rolling biweekly and monthly archives are refreshed from the same reviewed weekly snapshots.</p>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
       <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.25rem 1.5rem">
         <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--cyan);margin-bottom:1rem">Sunday · morning ET</div>
@@ -514,6 +518,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 	          <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">4</span>Store verified pool in the private repo as <em>preview</em></div>
           <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">5</span>Email compact list plus incomplete candidates to admin</div>
           <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">6</span>Admin can add, edit, delete, or promote papers before Monday</div>
+          <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">7</span>Publish each saved approved list to the website immediately</div>
         </div>
       </div>
       <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.25rem 1.5rem">
@@ -730,9 +735,9 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
       </div>
       <div class="admin-toolbar">
         <button class="btn-primary" onclick="adminLogin()">Sign on</button>
-        <button class="btn-secondary" onclick="adminUseStoredToken()">Use stored token</button>
+        <button class="btn-secondary" onclick="adminUseStoredToken()">Use session token</button>
       </div>
-      <div class="admin-status" id="admin-login-status">Token is stored only in this browser and sent to the Worker as a bearer token.</div>
+      <div class="admin-status" id="admin-login-status">Token is kept only in this browser tab and sent to the Worker as a bearer token.</div>
     </div>
 
     <div id="admin-editor" style="display:none">
@@ -1014,7 +1019,7 @@ async function submitSurvey(){
     const success = document.getElementById('submit-success');
     success.textContent = `✓  Subscription confirmed. Your digest arrives ${selectedFreqLabel()}, with your primary focus area shown first.`;
     success.classList.add('show');
-  } catch(e) {
+  } catch {
     document.getElementById('submit-btn').textContent = 'Activate Subscription →';
     document.getElementById('submit-btn').disabled = false;
     markErr('field-email', 'Could not reach server — please try again.');
@@ -1240,7 +1245,8 @@ async function submitRecommendations() {
 /* ── RATINGS ── */
 const ratings=new Set(); // doi strings rated by current user
 let ratingEmail=''; // set when user subscribes or from localStorage
-let adminToken=localStorage.getItem('lmd_admin_token') || '';
+let adminToken=sessionStorage.getItem('lmd_admin_token') || '';
+localStorage.removeItem('lmd_admin_token'); // remove tokens stored by older site versions
 let adminDigest={papers:[],review_papers:[],category_highlights:{}};
 let adminLoadedPaperCount=0;
 let adminOps=null;
@@ -1310,7 +1316,7 @@ async function adminLogin(){
     });
     if(!resp.ok) throw new Error('Invalid token');
     adminToken=token;
-    localStorage.setItem('lmd_admin_token',token);
+    sessionStorage.setItem('lmd_admin_token',token);
     document.getElementById('admin-login-card').style.display='none';
     document.getElementById('admin-editor').style.display='block';
     adminSwitchView('preview');
@@ -1323,9 +1329,9 @@ async function adminLogin(){
 }
 
 function adminUseStoredToken(){
-  const token=localStorage.getItem('lmd_admin_token') || '';
+  const token=sessionStorage.getItem('lmd_admin_token') || '';
   if(!token){
-    document.getElementById('admin-login-status').textContent='No stored token in this browser.';
+    document.getElementById('admin-login-status').textContent='No stored token in this browser tab.';
     document.getElementById('admin-login-status').className='admin-status err';
     return;
   }
@@ -1339,7 +1345,7 @@ function adminLogout(){
   adminOps=null;
   adminStatusLoading=false;
   adminSwitchView('preview');
-  localStorage.removeItem('lmd_admin_token');
+  sessionStorage.removeItem('lmd_admin_token');
   ['admin-delivery-cards','admin-recipient-status','admin-messages','admin-recommendations','admin-ratings','admin-rating-summary'].forEach(id=>{
     const el=document.getElementById(id);
     if(el) el.innerHTML='';
