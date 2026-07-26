@@ -228,6 +228,11 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 .setup-shell tbody td:first-child{color:rgba(255,255,255,0.84)!important}
 .setup-shell tbody td:nth-child(2){color:rgba(255,255,255,0.50)!important}
 .setup-shell [style*="color:var(--dim)"]{color:rgba(255,255,255,0.62)!important}
+.setup-grid{display:grid;gap:1rem}
+.setup-grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.setup-grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.setup-table-scroll{max-width:100%;overflow-x:auto;scrollbar-color:rgba(0,229,255,0.48) var(--dark2);scrollbar-width:thin}
+.setup-table-scroll table{min-width:620px}
 .rank-flow{margin:1.4rem 0 1.5rem;border-top:1px solid var(--border2);border-bottom:1px solid var(--border2)}
 .rank-flow-stage{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:1rem;align-items:center;padding:1.15rem 0}
 .rank-flow-step{font-family:var(--mono);font-size:11px;font-weight:800;color:var(--cyan)}
@@ -261,6 +266,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   .hero-title{font-size:2rem}
   .ec-body,.ec-header,.ec-footer{padding-left:1.25rem;padding-right:1.25rem}
   .setup-copy{text-align:left}
+  .setup-grid{grid-template-columns:1fr}
   .rank-flow-stage{grid-template-columns:34px minmax(0,1fr)}
   .rank-flow-result{grid-column:2;text-align:left}
   .rank-flow-metrics{grid-template-columns:1fr 1fr}
@@ -484,7 +490,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   <div style="margin-bottom:3.5rem">
     <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">01 — Code structure<span style="flex:1;height:1px;background:var(--border2)"></span></div>
     <p class="setup-copy">The private backend repository is both codebase and data store. <code>config/domains/liquid-metal.cjs</code> defines this digest's vocabulary, categories, ranking hints, and prompt context; Paper Express retargeted clones use generated JSON profiles in the same folder. Shared scripts handle Claude calls, DOI checks, CrossRef/arXiv metadata, and anti-hallucination gates. The Cloudflare Worker writes website submissions to private JSONL files, routes the ET schedule from one Cloudflare Cron trigger, and dispatches GitHub Actions for search and email jobs.</p>
-    <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;overflow:hidden">
+    <div class="setup-table-scroll" style="background:var(--panel);border:1px solid var(--border);border-radius:6px">
       <table style="width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12px">
         <thead><tr style="border-bottom:1px solid var(--border2)">
           <td style="padding:10px 16px;color:var(--cyan);font-weight:700">File</td>
@@ -508,7 +514,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   <div style="margin-bottom:3.5rem">
     <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">02 — Weekly cycle<span style="flex:1;height:1px;background:var(--border2)"></span></div>
     <p class="setup-copy">The schedule has two phases. On Sunday morning ET, the pipeline searches CrossRef and arXiv, then merges the scheduled Sider Scholar candidate inbox, using the baseline topic vocabulary plus anonymized reader-interest hints. Every candidate must pass relevance, metadata, and abstract checks before it reaches the admin preview. Each admin save updates the approved website paper list immediately while review candidates remain private. On Monday morning ET, the system reuses that reviewed preview, does no new paper search, writes a short evidence-bound highlight for each populated category, finalizes the weekly archive, and emails each weekly subscriber up to five papers matched to their interests. Rolling biweekly and monthly archives are refreshed from the same reviewed weekly snapshots.</p>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+    <div class="setup-grid setup-grid-2">
       <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.25rem 1.5rem">
         <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--cyan);margin-bottom:1rem">Sunday · morning ET</div>
         <div style="display:flex;flex-direction:column;gap:0.6rem">
@@ -627,7 +633,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
     </div>
 
     <p class="setup-copy">Subscriber preferences shape discovery and ranking without letting the model invent papers. Free-text focus and comments become anonymized search hints in addition to the baseline search. Author-watch names trigger author-field searches. The public Digest tab remains a shared archive, while every Monday email is ranked separately for its recipient.</p>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem">
+    <div class="setup-grid setup-grid-3">
       <div style="background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--cyan);border-radius:0 6px 6px 0;padding:1.25rem 1.25rem">
         <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.6rem">Ratings</div>
         <p style="font-family:var(--display);font-size:13px;color:var(--dim);line-height:1.65">Thumbs up on any paper in the Digest tab. These signals are stored privately and can guide future ranking and admin review.</p>
@@ -647,7 +653,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   <div style="margin-bottom:3.5rem">
     <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">04 — Technology stack<span style="flex:1;height:1px;background:var(--border2)"></span></div>
     <p class="setup-copy">The system runs on lightweight services: GitHub Pages for the website, Cloudflare Workers for intake and scheduled dispatch, a private GitHub repo for storage, GitHub Actions for search/send jobs, SMTP for email, and CrossRef/arXiv for normal discovery. Claude is used for preference scoring and summaries, not as the source of paper metadata.</p>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+    <div class="setup-grid setup-grid-2">
       <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.25rem 1.5rem">
         <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:0.85rem">AI</div>
         <div style="display:flex;flex-direction:column;gap:0.5rem">
@@ -679,7 +685,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
         <p style="font-family:var(--display);font-size:13.5px;color:var(--dim);line-height:1.65;margin:0 0 0.85rem">Use the browser-only builder to create one JSON profile for a clean clone. The starter repo is private during beta; the link works only after the LM Digest maintainer grants GitHub access.</p>
         <a href="retarget.html" style="display:inline-flex;align-items:center;gap:8px;background:var(--cyan);color:#001018;font-family:var(--mono);font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;padding:0.68rem 1rem;border-radius:4px">Open builder</a>
       </div>
-    <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;overflow:hidden">
+    <div class="setup-table-scroll" style="background:var(--panel);border:1px solid var(--border);border-radius:6px">
       <table style="width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12px">
         <thead><tr style="border-bottom:1px solid var(--border2)">
 	          <td style="padding:10px 16px;color:var(--cyan);font-weight:700">Step</td>
@@ -699,7 +705,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   <div>
 	    <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">06 — Private data store<span style="flex:1;height:1px;background:var(--border2)"></span></div>
 	    <p class="setup-copy">Subscriber data lives in private JSONL files in the backend repo. The public website never sees a GitHub token; it only talks to the Cloudflare Worker. Subscriber details are used for delivery, preference matching, anonymized search hints, recommendations, ratings, and unsubscribe/update handling.</p>
-    <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;overflow:hidden">
+    <div class="setup-table-scroll" style="background:var(--panel);border:1px solid var(--border);border-radius:6px">
       <table style="width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12px">
         <thead><tr style="border-bottom:1px solid var(--border2)">
 	          <td style="padding:10px 16px;color:var(--cyan);font-weight:700">File</td>
