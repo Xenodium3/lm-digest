@@ -228,6 +228,27 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 .setup-shell tbody td:first-child{color:rgba(255,255,255,0.84)!important}
 .setup-shell tbody td:nth-child(2){color:rgba(255,255,255,0.50)!important}
 .setup-shell [style*="color:var(--dim)"]{color:rgba(255,255,255,0.62)!important}
+.rank-flow{margin:1.4rem 0 1.5rem;border-top:1px solid var(--border2);border-bottom:1px solid var(--border2)}
+.rank-flow-stage{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:1rem;align-items:center;padding:1.15rem 0}
+.rank-flow-step{font-family:var(--mono);font-size:11px;font-weight:800;color:var(--cyan)}
+.rank-flow-stage h3,.rank-flow-band h3,.rank-flow-branch h3{font-family:var(--display);font-size:15px;color:var(--text);margin:0 0 0.3rem}
+.rank-flow-stage p,.rank-flow-band p,.rank-flow-branch p{font-family:var(--display);font-size:13px;color:rgba(255,255,255,0.66);line-height:1.6;margin:0}
+.rank-flow-result{font-family:var(--mono);font-size:10px;font-weight:800;color:var(--green);text-align:right}
+.rank-flow-arrow{height:28px;display:grid;place-items:center;border-top:1px solid var(--border);border-bottom:1px solid var(--border);font-family:var(--mono);font-size:16px;color:var(--cyan)}
+.rank-flow-band{padding:1.2rem 0}
+.rank-flow-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;margin-top:1rem;background:var(--border);border:1px solid var(--border)}
+.rank-flow-metric{min-width:0;background:var(--dark2);padding:0.85rem}
+.rank-flow-metric strong{display:block;font-family:var(--mono);font-size:10px;color:var(--text);line-height:1.35;margin-bottom:0.35rem}
+.rank-flow-metric span{display:block;font-family:var(--mono);font-size:12px;font-weight:800;color:var(--gold);margin-bottom:0.3rem}
+.rank-flow-metric small{display:block;font-family:var(--display);font-size:11.5px;color:rgba(255,255,255,0.57);line-height:1.45}
+.rank-flow-branches{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--border)}
+.rank-flow-branch{padding:1.15rem 0}
+.rank-flow-branch:first-child{padding-right:1.25rem;border-right:1px solid var(--border)}
+.rank-flow-branch:last-child{padding-left:1.25rem}
+.rank-flow-branch-label{font-family:var(--mono);font-size:10px;font-weight:800;color:var(--cyan);margin-bottom:0.45rem}
+.rank-flow-formula{margin-top:0.75rem;font-family:var(--mono);font-size:11px;color:var(--gold);line-height:1.6}
+.rank-flow-rule{padding:0.95rem 0;border-top:1px solid var(--border);font-family:var(--display);font-size:13px;color:rgba(255,255,255,0.72);line-height:1.6}
+.rank-flow-rule strong{color:var(--text)}
 
 @media(max-width:640px){
   .two-col,.arch-grid,.admin-grid,.admin-fields,.admin-delivery-grid,.admin-feedback-grid{grid-template-columns:1fr}
@@ -236,6 +257,12 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   .nav-pill{padding:0 0.75rem;font-size:12px}
   .ec-body,.ec-header,.ec-footer{padding-left:1.25rem;padding-right:1.25rem}
   .setup-copy{text-align:left}
+  .rank-flow-stage{grid-template-columns:34px minmax(0,1fr)}
+  .rank-flow-result{grid-column:2;text-align:left}
+  .rank-flow-metrics{grid-template-columns:1fr 1fr}
+  .rank-flow-branches{grid-template-columns:1fr}
+  .rank-flow-branch:first-child{padding-right:0;border-right:0}
+  .rank-flow-branch:last-child{padding-left:0;border-top:1px solid var(--border)}
 }
 </style>
 </head>
@@ -476,12 +503,12 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   <!-- SECTION 2: WEEKLY CYCLE -->
   <div style="margin-bottom:3.5rem">
     <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">02 — Weekly cycle<span style="flex:1;height:1px;background:var(--border2)"></span></div>
-    <p class="setup-copy">The schedule has two phases. On Sunday morning ET, the pipeline searches CrossRef and arXiv using the baseline topic vocabulary plus anonymized reader-interest hints. Every candidate must pass relevance, metadata, and abstract checks before it reaches the admin preview. On Monday morning ET, the system reuses the reviewed preview, does no new paper search, writes a short evidence-bound highlight for each populated website category, publishes the approved list, and emails each weekly subscriber up to five papers matched to their interests. Rolling biweekly and monthly archives are refreshed from the same reviewed weekly snapshots.</p>
+    <p class="setup-copy">The schedule has two phases. On Sunday morning ET, the pipeline searches CrossRef and arXiv, then merges the scheduled Sider Scholar candidate inbox, using the baseline topic vocabulary plus anonymized reader-interest hints. Every candidate must pass relevance, metadata, and abstract checks before it reaches the admin preview. On Monday morning ET, the system reuses the reviewed preview, does no new paper search, writes a short evidence-bound highlight for each populated website category, publishes the approved list, and emails each weekly subscriber up to five papers matched to their interests. Rolling biweekly and monthly archives are refreshed from the same reviewed weekly snapshots.</p>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
       <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.25rem 1.5rem">
         <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--cyan);margin-bottom:1rem">Sunday · morning ET</div>
         <div style="display:flex;flex-direction:column;gap:0.6rem">
-          <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">1</span>Search CrossRef and arXiv with configured topic vocabulary plus anonymized reader-interest phrases</div>
+          <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">1</span>Search CrossRef and arXiv, then merge scheduled Sider candidates and anonymized reader-interest phrases</div>
           <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">2</span>Verify every DOI/arXiv ID, title, author list, and abstract source</div>
           <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">3</span>Hydrate metadata from CrossRef, arXiv, or reviewed digest history</div>
 	          <div style="font-family:var(--display);font-size:14px;color:var(--text);display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--mono);font-size:10px;color:var(--cyan);min-width:20px">4</span>Store verified pool in the private repo as <em>preview</em></div>
@@ -511,10 +538,90 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
     </div>
   </div>
 
-  <!-- SECTION 3: READER SIGNALS -->
+  <!-- SECTION 3: SCORING AND READER SIGNALS -->
   <div style="margin-bottom:3.5rem">
-    <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">03 — Reader signals<span style="flex:1;height:1px;background:var(--border2)"></span></div>
-    <p class="setup-copy">Subscriber preferences shape discovery and ranking without letting the model invent papers. Free-text focus and comments become anonymized search hints in addition to the baseline search. Author-watch names trigger author-field searches. For Monday emails, topic choices and free text rank the already verified paper pool; if no preferred-topic papers are available, the subscriber still receives the top five overall papers on time. The public Digest tab always shows the full approved archive.</p>
+    <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">03 — Scoring & reader signals<span style="flex:1;height:1px;background:var(--border2)"></span></div>
+    <p class="setup-copy">Only verified papers are scored. A shared score orders the public pool; Monday then adds each subscriber's profile signals to produce a separate email ranking. Score ranges below are ranking weights, not probabilities or citation metrics.</p>
+
+    <div class="rank-flow" aria-label="Paper scoring and ranking flow">
+      <div class="rank-flow-stage">
+        <div class="rank-flow-step">01</div>
+        <div>
+          <h3>Eligibility gate</h3>
+          <p>Raw source hits overlap heavily and are not the digest count. Deduplicate DOI and arXiv records, enforce the date and research scope, verify title and authors, require a trusted abstract, then apply admin review.</p>
+        </div>
+        <div class="rank-flow-result">verified pool</div>
+      </div>
+
+      <div class="rank-flow-arrow" aria-hidden="true">↓</div>
+
+      <div class="rank-flow-band">
+        <h3>02 · Shared score</h3>
+        <p>Every eligible paper receives the same evidence-based components. Recommendations and relevance marks can raise a score; recent repeat appearances apply only a small capped penalty.</p>
+        <div class="rank-flow-metrics">
+          <div class="rank-flow-metric">
+            <strong>Research relevance</strong>
+            <span>0 to +41</span>
+            <small>Strong title or abstract match, category terms, and abstract availability.</small>
+          </div>
+          <div class="rank-flow-metric">
+            <strong>Journal reputation</strong>
+            <span>0 to +20</span>
+            <small>Configured field reputation, including journals whose influence is not captured by impact factor alone.</small>
+          </div>
+          <div class="rank-flow-metric">
+            <strong>Publication status</strong>
+            <span>+3 / +6 / +12</span>
+            <small>Other verified record, arXiv preprint, or published journal article.</small>
+          </div>
+          <div class="rank-flow-metric">
+            <strong>Recency</strong>
+            <span>0 to +14</span>
+            <small>Newest papers receive the strongest bounded boost through 90 days.</small>
+          </div>
+          <div class="rank-flow-metric">
+            <strong>Prior appearances</strong>
+            <span>0 to −10</span>
+            <small>A modest repeat penalty across distinct weekly editions; publication upgrades receive a grace pass.</small>
+          </div>
+          <div class="rank-flow-metric">
+            <strong>Paper recommendations</strong>
+            <span>0 to +20</span>
+            <small>Subscriber-submitted DOI recommendations that match the verified paper.</small>
+          </div>
+          <div class="rank-flow-metric">
+            <strong>Mark relevant</strong>
+            <span>0 to +24</span>
+            <small>Accumulated active relevance marks, scaled logarithmically and capped.</small>
+          </div>
+          <div class="rank-flow-metric">
+            <strong>Aggregate reader demand · Sunday</strong>
+            <span>0 to +42</span>
+            <small>Anonymized focus phrases up to +18 and watched-author matches up to +24.</small>
+          </div>
+        </div>
+        <div class="rank-flow-formula">shared rank = sum of applicable components → highest score first</div>
+      </div>
+
+      <div class="rank-flow-arrow" aria-hidden="true">↓</div>
+
+      <div class="rank-flow-branches">
+        <div class="rank-flow-branch">
+          <div class="rank-flow-branch-label">Public webpage</div>
+          <h3>Global ordering</h3>
+          <p>The administrator can add, edit, or remove papers. The website shows the complete approved pool; no five-paper cap is applied.</p>
+        </div>
+        <div class="rank-flow-branch">
+          <div class="rank-flow-branch-label">Subscriber email</div>
+          <h3>Personalized ordering</h3>
+          <p>Add preferred category (+12 or +22), matching profile terms (up to +24), and guarded Claude preference fit (up to +25). Send the top five preferred-topic papers, or the general top five when no preferred topic appears.</p>
+        </div>
+      </div>
+
+      <div class="rank-flow-rule"><strong>Count and order are separate:</strong> verification and admin review determine which papers remain; ranking only changes their order. Ties prefer published papers, then newer papers.</div>
+    </div>
+
+    <p class="setup-copy">Subscriber preferences shape discovery and ranking without letting the model invent papers. Free-text focus and comments become anonymized search hints in addition to the baseline search. Author-watch names trigger author-field searches. The public Digest tab remains a shared archive, while every Monday email is ranked separately for its recipient.</p>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem">
       <div style="background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--cyan);border-radius:0 6px 6px 0;padding:1.25rem 1.25rem">
         <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.6rem">Ratings</div>
@@ -1135,6 +1242,7 @@ const ratings=new Set(); // doi strings rated by current user
 let ratingEmail=''; // set when user subscribes or from localStorage
 let adminToken=localStorage.getItem('lmd_admin_token') || '';
 let adminDigest={papers:[],review_papers:[],category_highlights:{}};
+let adminLoadedPaperCount=0;
 let adminOps=null;
 let adminStatusLoading=false;
 
@@ -1227,6 +1335,7 @@ function adminUseStoredToken(){
 
 function adminLogout(){
   adminToken='';
+  adminLoadedPaperCount=0;
   adminOps=null;
   adminStatusLoading=false;
   adminSwitchView('preview');
@@ -1251,6 +1360,7 @@ async function adminLoadPreview(){
       papers:Array.isArray(data.papers)?data.papers:[],
       review_papers:Array.isArray(data.review_papers)?data.review_papers:[]
     };
+    adminLoadedPaperCount=adminDigest.papers.length;
     adminRender();
     const when=data.created_at?new Date(data.created_at).toLocaleString():'unknown time';
     adminSetStatus(`Loaded preview from ${when}: ${adminDigest.papers.length} included, ${adminDigest.review_papers.length} needing review.`,'ok');
@@ -1482,8 +1592,27 @@ function adminDelete(review,index){
   adminRender();
 }
 
+function adminNeedsRemovalConfirmation(loadedCount,nextCount){
+  const removedCount=Math.max(0,loadedCount-nextCount);
+  return loadedCount>=10
+    && removedCount>=10
+    && nextCount<Math.ceil(loadedCount*0.75);
+}
+
 async function adminSavePreview(){
   adminSyncFromDom();
+  const nextCount=adminDigest.papers.length;
+  const removedCount=Math.max(0,adminLoadedPaperCount-nextCount);
+  const removesLargeShare=adminNeedsRemovalConfirmation(adminLoadedPaperCount,nextCount);
+  if(removesLargeShare){
+    const confirmed=window.confirm(
+      `This save replaces the public paper list and removes ${removedCount} of ${adminLoadedPaperCount} included papers, leaving ${nextCount}. Continue?`
+    );
+    if(!confirmed){
+      adminSetStatus('Save cancelled. The current public paper list was not changed.','ok');
+      return;
+    }
+  }
   try{
     adminSetStatus('Saving preview…');
     const resp=await fetch(BACKEND+'/admin/preview',{
@@ -1498,6 +1627,7 @@ async function adminSavePreview(){
     const data=await resp.json().catch(()=>({}));
     if(!resp.ok) throw new Error(data.error || ('HTTP '+resp.status));
     adminDigest=data.digest || adminDigest;
+    adminLoadedPaperCount=adminDigest.papers.length;
     adminRender();
     const publicNote = data.public_digest ? ' Public webpage updated.' : '';
     adminSetStatus(`Saved preview: ${adminDigest.papers.length} included, ${adminDigest.review_papers.length} still needing review.${publicNote}`,'ok');
