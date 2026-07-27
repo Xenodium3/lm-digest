@@ -211,6 +211,8 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 .admin-pill{display:inline-block;border:1px solid var(--border2);border-radius:2px;padding:0.12rem 0.35rem;font-family:var(--mono);font-size:9px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--dimmer)}
 .admin-pill.ok{border-color:rgba(0,229,138,0.32);color:var(--green)}
 .admin-pill.warn{border-color:rgba(255,176,32,0.34);color:var(--gold)}
+.admin-paper-total{color:var(--text);font-weight:800;white-space:nowrap}
+.admin-paper-delta{color:var(--cyan);font-weight:700;margin-left:0.25rem}
 .admin-feedback-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1rem}
 .admin-panel-title{font-family:var(--mono);font-size:10px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.65rem}
 .admin-feed{display:flex;flex-direction:column;gap:0.65rem}
@@ -1470,6 +1472,17 @@ function adminStatusPill(status){
   return '<span class="admin-pill">no run</span>';
 }
 
+function adminPaperCount(row){
+  const total=Number(row.paper_count_total ?? row.paper_count) || 0;
+  const trackingSince=String(row.paper_identity_tracking_since || '');
+  if(!trackingSince) return `<span class="admin-paper-total" title="Cumulative recorded paper count">${escapeHtml(String(total))}</span>`;
+  const added=Math.max(0,Number(row.paper_count_added) || 0);
+  const removed=Math.max(0,Number(row.paper_count_removed) || 0);
+  const delta=added && removed ? `+${added} / -${removed}` : removed ? `-${removed}` : `+${added}`;
+  const title=`${total} cumulative recorded papers; latest tracked email added ${added} and removed ${removed}. Exact identity tracking began ${trackingSince}.`;
+  return `<span class="admin-paper-total" title="${escapeHtml(title)}">${escapeHtml(String(total))}<span class="admin-paper-delta">${escapeHtml(delta)}</span></span>`;
+}
+
 function adminRenderDeliveryTable(delivery){
   const rows=[];
   ['weekly','biweekly','monthly'].forEach(freq=>{
@@ -1480,14 +1493,14 @@ function adminRenderDeliveryTable(delivery){
         <td>${escapeHtml(row.name || '(no name)')}<br><span style="color:var(--dimmer)">${escapeHtml(row.email || '')}</span></td>
         <td>${adminStatusPill(row.send_status)}<br><span style="color:var(--dimmer)">${escapeHtml(row.delivery_status === 'smtp_accepted_receipt_not_tracked' ? 'SMTP accepted; receipt not tracked' : 'receipt not tracked')}</span></td>
         <td>${escapeHtml(row.sent_at ? adminFmtDate(row.sent_at) : 'not logged')}</td>
-        <td>${escapeHtml(String(row.paper_count || 0))}</td>
+        <td>${adminPaperCount(row)}</td>
       </tr>`);
     });
   });
   if(!rows.length) return '<div class="admin-empty">No active subscribers found.</div>';
   return `<div class="admin-recipient-scroll" tabindex="0" aria-label="Subscriber delivery status; scroll for additional subscribers">
     <table class="admin-table">
-      <thead><tr><th>Cadence</th><th>Subscriber</th><th>Status</th><th>Sent at</th><th>Papers</th></tr></thead>
+      <thead><tr><th>Cadence</th><th>Subscriber</th><th>Status</th><th>Sent at</th><th>Cumulative papers</th></tr></thead>
       <tbody>${rows.join('')}</tbody>
     </table>
   </div>`;
