@@ -61,6 +61,15 @@ if (!/sessionStorage\.(?:getItem|setItem)\(['"]lmd_admin_token/.test(indexSource
 if (!/never displays hard-coded demo papers/i.test(indexSource)) {
   fail('index.html is missing the no-demo-data maintenance guard');
 }
+if (!/let adminMutationInFlight=false/.test(indexSource)) {
+  fail('admin mutation lock is missing');
+}
+if (!/async function adminDelete[\s\S]{0,2000}await adminPersistPreview/.test(indexSource)) {
+  fail('admin deletion must persist before another mutation can reload the digest');
+}
+if (!/list\.splice\(index,0,removed\)/.test(indexSource)) {
+  fail('failed admin deletion must restore the local paper row');
+}
 
 if (failures.length) {
   console.error('Site verification failed:');

@@ -1257,6 +1257,7 @@ let adminDigest={papers:[],review_papers:[],category_highlights:{}};
 let adminLoadedPaperCount=0;
 let adminOps=null;
 let adminStatusLoading=false;
+let adminMutationInFlight=false;
 
 function ratingClientId(){
   let id=localStorage.getItem('lmd_client_id');
@@ -1589,6 +1590,10 @@ function adminAddPaper(){
 async function adminPromote(index){
   const card=document.querySelectorAll('#admin-review-papers .admin-paper')[index];
   if(!card) return;
+  if(adminMutationInFlight){
+    adminSetStatus('Another admin change is still saving. Wait for it to finish.','err');
+    return;
+  }
   const original={
     doi:card.dataset.originalDoi || '',
     preprint_doi:card.dataset.originalPreprintDoi || '',
@@ -1597,6 +1602,7 @@ async function adminPromote(index){
   adminSyncFromDom();
   const paper=adminDigest.review_papers[index];
   if(!paper) return;
+  adminMutationInFlight=true;
   try{
     adminSetStatus('Promoting candidate and updating the public paper list…');
     const resp=await fetch(BACKEND+'/admin/preview/promote',{
@@ -1613,14 +1619,37 @@ async function adminPromote(index){
     adminSetStatus(`Paper promoted and appended: ${adminDigest.papers.length} included, ${adminDigest.review_papers.length} still needing review.${publicNote}`,'ok');
   }catch(e){
     adminSetStatus('Could not promote paper: '+e.message,'err');
+  }finally{
+    adminMutationInFlight=false;
   }
 }
 
-function adminDelete(review,index){
+async function adminDelete(review,index){
+  if(adminMutationInFlight){
+    adminSetStatus('Another admin change is still saving. Wait for it to finish.','err');
+    return;
+  }
   adminSyncFromDom();
   const list=review?adminDigest.review_papers:adminDigest.papers;
+  const removed=list[index];
+  if(!removed) return;
+  adminMutationInFlight=true;
   list.splice(index,1);
   adminRender();
+  try{
+    const label=review?'review candidate':'paper';
+    const result=await adminPersistPreview(
+      `Deleting ${label} and updating the public paper list…`,
+      `Deleted ${label}`
+    );
+    if(!result.ok){
+      list.splice(index,0,removed);
+      adminRender();
+      adminSetStatus(`Could not delete ${label}; it was restored in this tab. ${result.error}`,'err');
+    }
+  }finally{
+    adminMutationInFlight=false;
+  }
 }
 
 function adminNeedsRemovalConfirmation(loadedCount,nextCount){
@@ -1644,8 +1673,21 @@ async function adminSavePreview(){
       return;
     }
   }
+  if(adminMutationInFlight){
+    adminSetStatus('Another admin change is still saving. Wait for it to finish.','err');
+    return;
+  }
+  adminMutationInFlight=true;
   try{
-    adminSetStatus('Saving preview…');
+    await adminPersistPreview();
+  }finally{
+    adminMutationInFlight=false;
+  }
+}
+
+async function adminPersistPreview(savingMessage='Saving preview…',successPrefix='Saved preview'){
+  try{
+    adminSetStatus(savingMessage);
     const resp=await fetch(BACKEND+'/admin/preview',{
       method:'POST',
       headers:adminAuthHeaders(true),
@@ -1661,9 +1703,11 @@ async function adminSavePreview(){
     adminLoadedPaperCount=adminDigest.papers.length;
     adminRender();
     const publicNote = data.public_digest ? ' Public webpage updated.' : '';
-    adminSetStatus(`Saved preview: ${adminDigest.papers.length} included, ${adminDigest.review_papers.length} still needing review.${publicNote}`,'ok');
+    adminSetStatus(`${successPrefix}: ${adminDigest.papers.length} included, ${adminDigest.review_papers.length} still needing review.${publicNote}`,'ok');
+    return {ok:true};
   }catch(e){
     adminSetStatus('Could not save preview: '+e.message,'err');
+    return {ok:false,error:e.message};
   }
 }
 
