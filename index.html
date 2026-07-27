@@ -1389,29 +1389,55 @@ function adminSyncFromDom(){
   adminDigest.review_papers=adminCollectList('admin-review-papers',true);
 }
 
+function adminPaperFromCard(card,review=false){
+  const val=name=>card?.querySelector(`[data-field="${name}"]`)?.value.trim() || '';
+  const paper={
+    category:val('category') || UI_DOMAIN.defaultCategory,
+    title:val('title'),
+    authors:val('authors'),
+    journal:val('journal'),
+    date:val('date'),
+    doi:val('doi'),
+    badge:val('badge') || 'Published',
+    abstract:val('abstract'),
+    feat:card?.querySelector('[data-field="feat"]')?.checked || false
+  };
+  const preprint=card?.dataset.preprintDoi || '';
+  if(preprint) paper.preprint_doi=preprint;
+  const reason=val('review_reason');
+  if(review){
+    paper.needs_review=true;
+    paper.review_reason=reason || 'Needs admin review';
+  }
+  return paper;
+}
+
+function adminPaperIdentity(paper){
+  const rawId=String(paper?.preprint_doi || paper?.doi || '').trim().toLowerCase()
+    .replace(/^https?:\/\/doi\.org\//,'')
+    .replace(/^https?:\/\/arxiv\.org\/abs\//,'arxiv:');
+  if(rawId){
+    const arxivDoi=rawId.match(/^10\.48550\/arxiv\.(.+)$/);
+    if(arxivDoi) return `id:arxiv:${arxivDoi[1].replace(/v\d+$/,'')}`;
+    if(rawId.startsWith('arxiv:')) return `id:${rawId.replace(/v\d+$/,'')}`;
+    if(/^\d{4}\.\d+(v\d+)?$/.test(rawId)) return `id:arxiv:${rawId.replace(/v\d+$/,'')}`;
+    return `id:${rawId}`;
+  }
+  const title=String(paper?.title || '').trim().toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+  return title ? `title:${title}` : '';
+}
+
+function adminFindPaperIndex(list,target){
+  const targetIdentity=adminPaperIdentity(target);
+  return targetIdentity
+    ? list.findIndex(paper=>adminPaperIdentity(paper)===targetIdentity)
+    : -1;
+}
+
 function adminCollectList(containerId,review){
-  return [...document.querySelectorAll(`#${containerId} .admin-paper`)].map(card=>{
-    const val=name=>card.querySelector(`[data-field="${name}"]`)?.value.trim() || '';
-    const paper={
-      category:val('category') || UI_DOMAIN.defaultCategory,
-      title:val('title'),
-      authors:val('authors'),
-      journal:val('journal'),
-      date:val('date'),
-      doi:val('doi'),
-      badge:val('badge') || 'Published',
-      abstract:val('abstract'),
-      feat:card.querySelector('[data-field="feat"]')?.checked || false
-    };
-    const preprint=card.dataset.preprintDoi || '';
-    if(preprint) paper.preprint_doi=preprint;
-    const reason=val('review_reason');
-    if(review){
-      paper.needs_review=true;
-      paper.review_reason=reason || 'Needs admin review';
-    }
-    return paper;
-  }).filter(p=>p.title || p.doi);
+  return [...document.querySelectorAll(`#${containerId} .admin-paper`)]
+    .map(card=>adminPaperFromCard(card,review))
+    .filter(p=>p.title || p.doi || p.preprint_doi);
 }
 
 function adminField(label,field,value,type='text',wide=false){
@@ -1642,12 +1668,28 @@ async function adminDelete(review,index){
     adminSetStatus('Another admin change is still saving. Wait for it to finish.','err');
     return;
   }
+  const containerId=review?'admin-review-papers':'admin-papers';
+  const card=document.querySelectorAll(`#${containerId} .admin-paper`)[index];
+  if(!card) return;
+  const target=adminPaperFromCard(card,review);
+  if(!adminPaperIdentity(target)){
+    card.remove();
+    adminSyncFromDom();
+    adminRender();
+    adminSetStatus('Blank draft removed. The saved paper list was not changed.','ok');
+    return;
+  }
+
   adminSyncFromDom();
   const list=review?adminDigest.review_papers:adminDigest.papers;
-  const removed=list[index];
-  if(!removed) return;
+  const deleteIndex=adminFindPaperIndex(list,target);
+  const removed=list[deleteIndex];
+  if(deleteIndex<0 || !removed){
+    adminSetStatus('Could not identify the selected paper. Reload the preview and try again.','err');
+    return;
+  }
   adminMutationInFlight=true;
-  list.splice(index,1);
+  list.splice(deleteIndex,1);
   adminRender();
   try{
     const label=review?'review candidate':'paper';
@@ -1656,7 +1698,7 @@ async function adminDelete(review,index){
       `Deleted ${label}`
     );
     if(!result.ok){
-      list.splice(index,0,removed);
+      list.splice(deleteIndex,0,removed);
       adminRender();
       adminSetStatus(`Could not delete ${label}; it was restored in this tab. ${result.error}`,'err');
     }
