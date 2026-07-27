@@ -237,12 +237,13 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 .setup-table-scroll table{min-width:620px}
 .rank-flow{margin:1.4rem 0 1.5rem;border-top:1px solid var(--border2);border-bottom:1px solid var(--border2)}
 .rank-flow-stage{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:1rem;align-items:center;padding:1.15rem 0}
-.rank-flow-step{font-family:var(--mono);font-size:11px;font-weight:800;color:var(--cyan)}
+.rank-flow-step{width:24px;height:24px;display:grid;place-items:center;border:1px solid rgba(0,229,255,0.38);border-radius:50%;background:rgba(0,229,255,0.06);font-family:var(--mono);font-size:10px;font-weight:800;color:var(--cyan)}
 .rank-flow-stage h3,.rank-flow-band h3,.rank-flow-branch h3{font-family:var(--display);font-size:15px;color:var(--text);margin:0 0 0.3rem}
 .rank-flow-stage p,.rank-flow-band p,.rank-flow-branch p{font-family:var(--display);font-size:13px;color:rgba(255,255,255,0.66);line-height:1.6;margin:0}
 .rank-flow-result{font-family:var(--mono);font-size:10px;font-weight:800;color:var(--green);text-align:right}
 .rank-flow-arrow{height:28px;display:grid;place-items:center;border-top:1px solid var(--border);border-bottom:1px solid var(--border);font-family:var(--mono);font-size:16px;color:var(--cyan)}
 .rank-flow-band{padding:1.2rem 0}
+.rank-flow-band-heading{display:grid;grid-template-columns:52px minmax(0,1fr);gap:1rem;align-items:start}
 .rank-flow-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;margin-top:1rem;background:var(--border);border:1px solid var(--border)}
 .rank-flow-metric{min-width:0;background:var(--dark2);padding:0.85rem}
 .rank-flow-metric strong{display:block;font-family:var(--mono);font-size:10px;color:var(--text);line-height:1.35;margin-bottom:0.35rem}
@@ -271,6 +272,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   .setup-grid{grid-template-columns:1fr}
   .rank-flow-stage{grid-template-columns:34px minmax(0,1fr)}
   .rank-flow-result{grid-column:2;text-align:left}
+  .rank-flow-band-heading{grid-template-columns:34px minmax(0,1fr)}
   .rank-flow-metrics{grid-template-columns:1fr 1fr}
   .rank-flow-branches{grid-template-columns:1fr}
   .rank-flow-branch:first-child{padding-right:0;border-right:0}
@@ -558,7 +560,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 
     <div class="rank-flow" aria-label="Paper scoring and ranking flow">
       <div class="rank-flow-stage">
-        <div class="rank-flow-step">01</div>
+        <div class="rank-flow-step" aria-label="Substep A">A</div>
         <div>
           <h3>Eligibility gate</h3>
           <p>Raw source hits overlap heavily and are not the digest count. Deduplicate DOI and arXiv records, enforce the date and research scope, verify title and authors, require a trusted abstract, then apply admin review.</p>
@@ -569,8 +571,13 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
       <div class="rank-flow-arrow" aria-hidden="true">↓</div>
 
       <div class="rank-flow-band">
-        <h3>02 · Shared score</h3>
-        <p>Every eligible paper receives the same evidence-based components. Recommendations and relevance marks can raise a score; recent repeat appearances apply only a small capped penalty.</p>
+        <div class="rank-flow-band-heading">
+          <div class="rank-flow-step" aria-label="Substep B">B</div>
+          <div>
+            <h3>Shared score</h3>
+            <p>Every eligible paper receives the same evidence-based components. Recommendations and relevance marks can raise a score; recent repeat appearances apply only a small capped penalty.</p>
+          </div>
+        </div>
         <div class="rank-flow-metrics">
           <div class="rank-flow-metric">
             <strong>Research relevance</strong>
