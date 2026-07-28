@@ -9,7 +9,7 @@ window.LM_DIGEST_SITE_CONFIG = {
     pageTitle: 'LM·DIGEST — Liquid Metal Research Intelligence',
     heroTitle: 'Liquid Metals Research Digest',
     digestHeading: 'Recent research in liquid metals',
-    focusPlaceholder: 'liquid lithium blankets · heavy-ion beam strippers · soft robotics · thermal management · 3D printing · alloy design · catalysis · magnetostrophic convection',
+    focusPlaceholder: 'liquid lithium blankets · heavy-ion beam strippers · liquid metal batteries · soft robotics · thermal management · alloy design · magnetostrophic convection',
     commentsPlaceholder: 'Keywords, applications, materials, journals, or paper types you want LM Digest to pay attention to',
   },
   domain: {
@@ -21,6 +21,7 @@ window.LM_DIGEST_SITE_CONFIG = {
   topics: [
     { id: 'nuclear', label: 'Nuclear, Accelerator & Fusion Applications' },
     { id: 'planetary', label: 'Planetary & Geo/Astrophysics' },
+    { id: 'energy-storage', label: 'Energy Storage & Electrochemical Systems' },
     { id: 'electronics', label: 'Flexible Electronics, Wearables & Soft Matter' },
     { id: 'biomedical', label: 'Biomedical, Soft Robotics & Actuation' },
   ],
@@ -28,6 +29,7 @@ window.LM_DIGEST_SITE_CONFIG = {
   categoryOrder: [
     'Planetary & Geo/Astrophysics',
     'Nuclear, Accelerator & Fusion Applications',
+    'Energy Storage & Electrochemical Systems',
     'Flexible Electronics, Wearables & Soft Matter',
     'Biomedical, Soft Robotics & Actuation',
   ],
