@@ -550,7 +550,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
     </div>
     <div style="margin-top:1rem;background:rgba(255,176,32,0.06);border:1px solid rgba(255,176,32,0.22);border-left:3px solid var(--gold);border-radius:0 6px 6px 0;padding:1.1rem 1.25rem">
       <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);margin-bottom:0.55rem">Anti-hallucination gates</div>
-      <p class="setup-copy" style="font-size:13.5px;line-height:1.65;margin:0">Paper identity must come from CrossRef, arXiv, reviewed digest history, or an explicit admin edit. Claude fallback search is off during normal scheduled runs; when enabled manually, its candidates remain untrusted until DOI or arXiv metadata validates them. Public and email papers also need a trusted abstract source or admin review.</p>
+      <p class="setup-copy" style="font-size:13.5px;line-height:1.65;margin:0">Paper identity must come from CrossRef, arXiv, reviewed digest history, or an explicit admin edit. Supplements, corrections, issue artwork, invalid identifiers, and title mismatches are rejected before review. Public and email papers need a trusted abstract source or admin approval. The admin page shows the highest-ranked 20 unresolved candidates plus the full source count; deleting an unchanged incomplete candidate suppresses it in later searches.</p>
     </div>
   </div>
 
@@ -726,7 +726,8 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
           <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">subscriptions.jsonl</td><td style="padding:10px 16px;color:var(--dimmer)">email, topics[], focus, watch_authors, affil, comments</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Subscriber profiles used for anonymized Sunday search hints, author-watch queries, personalized selection, and guarded preference scoring</td></tr>
 	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">digests/*/latest.json</td><td style="padding:10px 16px;color:var(--dimmer)">freq, papers</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Stores preview, weekly, biweekly, and monthly paper archives — this page reads paper data from here</td></tr>
 		          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">ratings.jsonl</td><td style="padding:10px 16px;color:var(--dimmer)">email/client, doi, rating 0/1</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Mark relevant events — accumulated as active relevance marks and used in preview, archive, and email ranking</td></tr>
-	          <tr><td style="padding:10px 16px;color:var(--text)">recommendations.jsonl</td><td style="padding:10px 16px;color:var(--dimmer)">doi, email, consumed marker</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">User-submitted DOIs — saved for admin review and marked used once covered</td></tr>
+	          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 16px;color:var(--text)">recommendations.jsonl</td><td style="padding:10px 16px;color:var(--dimmer)">doi, email, consumed marker</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">User-submitted DOIs — saved for admin review and marked used once covered</td></tr>
+	          <tr><td style="padding:10px 16px;color:var(--text)">review_decisions.jsonl</td><td style="padding:10px 16px;color:var(--dimmer)">doi/title, action, timestamp</td><td style="padding:10px 16px;color:var(--dim);font-family:var(--display);font-size:13px">Remembers dismissed incomplete candidates so unchanged records do not consume future review slots</td></tr>
         </tbody>
       </table>
     </div>
@@ -780,7 +781,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
           </section>
           <section class="admin-card review">
             <div class="section-tag">Needs admin review</div>
-            <p style="font-family:var(--display);font-size:13px;color:var(--dim);line-height:1.65;margin-bottom:1rem">
+            <p id="admin-review-summary" style="font-family:var(--display);font-size:13px;color:var(--dim);line-height:1.65;margin-bottom:1rem">
               Complete the missing fields and promote a candidate to append it to the approved list immediately, or delete it.
             </p>
             <div class="admin-list" id="admin-review-papers"></div>
@@ -1386,10 +1387,24 @@ async function adminLoadPreview(){
     adminLoadedPaperCount=adminDigest.papers.length;
     adminRender();
     const when=data.created_at?new Date(data.created_at).toLocaleString():'unknown time';
-    adminSetStatus(`Loaded preview from ${when}: ${adminDigest.papers.length} included, ${adminDigest.review_papers.length} needing review.`,'ok');
+    adminSetStatus(`Loaded preview from ${when}: ${adminDigest.papers.length} included, ${adminReviewQueueLabel(adminDigest)}.`,'ok');
   }catch(e){
     adminSetStatus('Could not load preview: '+e.message,'err');
   }
+}
+
+function adminReviewQueueLabel(digest=adminDigest){
+  const shown=Array.isArray(digest?.review_papers)?digest.review_papers.length:0;
+  const hasStats=Boolean(digest?.review_stats && typeof digest.review_stats==='object');
+  const unresolved=Number(digest?.review_stats?.unresolved_discovered) || 0;
+  const limit=Number(digest?.review_stats?.queue_limit) || 0;
+  if(unresolved>shown){
+    return `${shown} shown for review out of ${unresolved} unresolved discovery records${limit?` (queue limit ${limit})`:''}`;
+  }
+  if(!hasStats && shown){
+    return `${shown} shown for review; uncapped source total unavailable for this older snapshot`;
+  }
+  return `${shown} needing review`;
 }
 
 function adminSyncFromDom(){
@@ -1488,6 +1503,13 @@ function adminRender(){
   review.innerHTML=adminDigest.review_papers.length
     ? adminDigest.review_papers.map((p,i)=>adminPaperCard(p,i,true)).join('')
     : '<div class="admin-empty">No review candidates. Sunday search did not hold back incomplete papers.</div>';
+  const summary=document.getElementById('admin-review-summary');
+  if(summary){
+    const stats=adminDigest.review_stats || {};
+    const dismissed=Number(stats.dismissed_unchanged) || 0;
+    const rejected=(Number(stats.source_records_rejected) || 0)+(Number(stats.metadata_rejected) || 0);
+    summary.textContent=`${adminReviewQueueLabel(adminDigest)}. Complete a candidate to promote it, or delete it so the same unchanged record is suppressed in future searches.${dismissed||rejected?` This run also suppressed ${dismissed} prior dismissal(s) and rejected ${rejected} invalid record(s).`:''}`;
+  }
 }
 
 function adminFmtDate(value){
@@ -1701,9 +1723,16 @@ async function adminDelete(review,index){
   adminRender();
   try{
     const label=review?'review candidate':'paper';
+    const dismissedReviewPapers=review?[{
+      ...removed,
+      doi:card.dataset.originalDoi || removed.doi || '',
+      preprint_doi:card.dataset.originalPreprintDoi || removed.preprint_doi || '',
+      title:card.dataset.originalTitle || removed.title || ''
+    }]:[];
     const result=await adminPersistPreview(
       `Deleting ${label} and updating the public paper list…`,
-      `Deleted ${label}`
+      `Deleted ${label}`,
+      {dismissedReviewPapers}
     );
     if(!result.ok){
       list.splice(deleteIndex,0,removed);
@@ -1748,7 +1777,7 @@ async function adminSavePreview(){
   }
 }
 
-async function adminPersistPreview(savingMessage='Saving preview…',successPrefix='Saved preview'){
+async function adminPersistPreview(savingMessage='Saving preview…',successPrefix='Saved preview',options={}){
   try{
     adminSetStatus(savingMessage);
     const resp=await fetch(BACKEND+'/admin/preview',{
@@ -1757,6 +1786,7 @@ async function adminPersistPreview(savingMessage='Saving preview…',successPref
       body:JSON.stringify({
         papers:adminDigest.papers,
         review_papers:adminDigest.review_papers,
+        dismissed_review_papers:options.dismissedReviewPapers || [],
         category_highlights:adminDigest.category_highlights || {}
       })
     });
