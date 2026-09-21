@@ -16,7 +16,7 @@ window.LM_DIGEST_SITE_CONFIG = {
     name: 'liquid metal',
     label: 'Liquid Metal',
     labelPlural: 'Liquid Metals',
-    defaultCategory: 'Biomedical, Soft Robotics & Actuation',
+    defaultCategory: 'Others',
   },
   topics: [
     { id: 'nuclear', label: 'Nuclear, Accelerator & Fusion Applications' },
@@ -32,6 +32,7 @@ window.LM_DIGEST_SITE_CONFIG = {
     'Energy Storage & Electrochemical Systems',
     'Flexible Electronics, Wearables & Soft Matter',
     'Biomedical, Soft Robotics & Actuation',
+    'Others',
   ],
   categoryAliases: {
     'Nuclear & Fusion Applications': 'Nuclear, Accelerator & Fusion Applications',

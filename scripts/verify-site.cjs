@@ -62,6 +62,11 @@ if (!config || typeof config !== 'object') fail('site config does not define win
 if (!/^https:\/\//.test(config?.backendUrl || '')) fail('site config backendUrl must use HTTPS');
 if (!Array.isArray(config?.topics) || !config.topics.length) fail('site config must define at least one topic');
 if (!config?.domain?.defaultCategory) fail('site config must define domain.defaultCategory');
+if (config?.domain?.defaultCategory !== 'Others'
+  || !config?.categoryOrder?.includes('Others')
+  || config?.topics?.some(topic => topic.label === 'Others')) {
+  fail('Others must appear in digest/admin ordering, not subscriber topic choices');
+}
 
 const indexSource = read('index.html');
 if (/localStorage\.(?:getItem|setItem)\(['"]lmd_admin_token/.test(indexSource)) {
