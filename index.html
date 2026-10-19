@@ -391,11 +391,11 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   </div>
   <div style="max-width:680px;margin:0 auto;padding:0 1.5rem 1.5rem;text-align:center">
     <p style="font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.56);line-height:1.7">
-      Already subscribed? Resubmit this form with the same email to replace your saved preferences, or
+      Already subscribed? Resubmit this form with the same email, then confirm the change from your inbox, or
       <button onclick="showUnsubscribe()" style="background:none;border:none;font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.62);cursor:pointer;padding:0;text-decoration:underline">unsubscribe</button>.
     </p>
     <p id="privacy-note" style="font-family:var(--mono);font-size:10px;color:rgba(255,255,255,0.48);line-height:1.7;max-width:620px;margin:0.75rem auto 0">
-      Privacy note: your email, affiliation, topic preferences, author-watch names, ratings, and recommendations are stored in a private backend repository and used only to send and personalize LM Digest. Anonymized preference phrases and explicit author-watch names may help improve future searches. They are not sold or shared.
+      Privacy note: account details are stored in a private backend repository for delivery and personalization. Contributed research phrases and watched author names help enrich the shared search pool and may appear in public discovery data. Subscriber email addresses and account records are not public or sold.
     </p>
     <div id="unsub-form" style="display:none;margin-top:1rem;display:none">
       <div style="display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap">
@@ -546,7 +546,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
     </div>
     <div style="margin-top:1rem;background:rgba(100,216,255,0.055);border:1px solid rgba(100,216,255,0.22);border-left:3px solid var(--cyan);border-radius:0 6px 6px 0;padding:1.05rem 1.25rem">
       <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.55rem">Scheduler</div>
-      <p class="setup-copy" style="font-size:13.5px;line-height:1.65;margin:0">Cloudflare Cron runs the Worker once per minute. The Worker checks Eastern Time and starts jobs only at the due slots: Sunday preview at 8:00 AM, weekly Monday digest at 8:00 AM with an 8:36 AM backup, biweekly at 8:10 AM with an 8:46 AM backup, and monthly on the 1st at 8:20 AM with an 8:56 AM backup. Backup slots are second attempts; the send log prevents duplicate emails if the primary send already succeeded.</p>
+      <p class="setup-copy" style="font-size:13.5px;line-height:1.65;margin:0">Cloudflare checks Eastern Time once per minute: Sunday preview at 8:00 AM, weekly Monday digest at 8:00 AM with an 8:36 AM backup, biweekly on alternating Mondays at 8:10 AM with an 8:46 AM backup, and monthly on the 1st at 8:20 AM with an 8:56 AM backup. Backups skip recipients with saved delivery receipts. Any failed recipient triggers an admin alert; interrupted sends with unsaved receipts need reconciliation before retrying.</p>
     </div>
     <div style="margin-top:1rem;background:rgba(255,176,32,0.06);border:1px solid rgba(255,176,32,0.22);border-left:3px solid var(--gold);border-radius:0 6px 6px 0;padding:1.1rem 1.25rem">
       <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);margin-bottom:0.55rem">Anti-hallucination gates</div>
@@ -714,7 +714,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   <!-- SECTION 6: DATABASE -->
   <div>
 	    <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:0.75rem;display:flex;align-items:center;gap:10px">06 — Private data store<span style="flex:1;height:1px;background:var(--border2)"></span></div>
-	    <p class="setup-copy">Subscriber data lives in private JSONL files in the backend repo. The public website never sees a GitHub token; it only talks to the Cloudflare Worker. Subscriber details are used for delivery, preference matching, anonymized search hints, recommendations, ratings, and unsubscribe/update handling.</p>
+	    <p class="setup-copy">Subscriber data stays in the private backend; the website never receives a GitHub token. Signup, preference changes, and unsubscribe requests take effect only after email confirmation. Links expire after 24 hours. New subscribers then receive a welcome email; failed account emails enter an hourly retry queue. Research phrases and watched author names contribute to shared discovery, while account records remain private.</p>
     <div class="setup-table-scroll" style="background:var(--panel);border:1px solid var(--border);border-radius:6px">
       <table style="width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12px">
         <thead><tr style="border-bottom:1px solid var(--border2)">
@@ -857,7 +857,7 @@ function applySiteCopy(){
   setText('digest-heading',BRAND.digestHeading);
   setPlaceholder('s-focus',BRAND.focusPlaceholder);
   setPlaceholder('s-comments',BRAND.commentsPlaceholder);
-  setText('privacy-note',`Privacy note: your email, affiliation, topic preferences, author-watch names, ratings, and recommendations are stored in a private backend repository and used only to send and personalize ${digestName}. Anonymized preference phrases and explicit author-watch names may help improve future searches. They are not sold or shared.`);
+  setText('privacy-note',`Privacy note: account details are stored privately for delivery and personalization of ${digestName}. Contributed research phrases and watched author names enrich the shared search pool and may appear in public discovery data. Subscriber email addresses and account records are not public or sold.`);
 }
 applySiteCopy();
 
@@ -1032,9 +1032,9 @@ async function submitSurvey(){
     });
     if (!resp.ok) throw new Error('Server error ' + resp.status);
     setRatingEmail(email);
-    document.getElementById('submit-btn').textContent = '✓ Subscribed';
+    document.getElementById('submit-btn').textContent = 'Check your email';
     const success = document.getElementById('submit-success');
-    success.textContent = `✓  Subscription confirmed. Your digest arrives ${selectedFreqLabel()}, with your primary focus area shown first.`;
+    success.textContent = 'Check your inbox for a confirmation link. Your subscription and preferences will not change until you confirm. Please check spam too.';
     success.classList.add('show');
   } catch {
     document.getElementById('submit-btn').textContent = 'Activate Subscription →';
@@ -1784,6 +1784,7 @@ async function adminPersistPreview(savingMessage='Saving preview…',successPref
       method:'POST',
       headers:adminAuthHeaders(true),
       body:JSON.stringify({
+        expected_digest_id:adminDigest.id,
         papers:adminDigest.papers,
         review_papers:adminDigest.review_papers,
         dismissed_review_papers:options.dismissedReviewPapers || [],
@@ -1970,7 +1971,7 @@ async function submitUnsubscribe() {
     });
     if (!resp.ok) throw new Error();
     msg.style.color = 'var(--green)';
-    msg.textContent = '✓ Unsubscribed. You will no longer receive digests.';
+    msg.textContent = 'Check your email to confirm unsubscribing. Your subscription stays active until you confirm.';
     msg.style.display = 'block';
     document.getElementById('unsub-email').value = '';
   } catch {

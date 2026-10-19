@@ -69,6 +69,10 @@ if (config?.domain?.defaultCategory !== 'Others'
 }
 
 const indexSource = read('index.html');
+if (!indexSource.includes('expected_digest_id:adminDigest.id')) fail('admin saves must carry the loaded preview revision');
+if (!indexSource.includes('will not change until you confirm') || !indexSource.includes('Check your email to confirm unsubscribing')) {
+  fail('account forms must explain pending email confirmation, not immediate activation');
+}
 if (/localStorage\.(?:getItem|setItem)\(['"]lmd_admin_token/.test(indexSource)) {
   fail('admin token must not be persisted in localStorage');
 }
