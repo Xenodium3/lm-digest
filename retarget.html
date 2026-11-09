@@ -47,7 +47,7 @@ a{color:var(--cyan)}code{font-family:var(--mono);font-size:.88em;color:var(--gol
 
       <div class="section">
         <h2>2. Source discovery</h2>
-        <p class="hint">Use broad source queries here. Subscriber free text will be added later as extra hints, not as a replacement.</p>
+        <p class="hint">Use broad source queries here. Multiword entries are matched as phrases. Subscriber free text is added later as an extra hint, not as a replacement.</p>
         <div class="field"><label>Discovery terms, one per line <span class="req">(at least 5)</span></label><textarea id="discoveryTerms">robotics
 robot learning
 soft robotics
@@ -69,11 +69,13 @@ control policy</textarea></div>
         <div class="field"><label>Exclusion terms, one per line</label><textarea id="exclusionTerms">software robot
 web crawler
 bot traffic</textarea></div>
+        <div class="field"><label>Context-only relevance rules, one per line <span class="req">(optional)</span></label><textarea id="compositeRules" placeholder="required term + required term => one context term, another context term"></textarea></div>
+        <p class="hint">Use context rules for broad words that count only when they co-occur with trusted context. Example format: <code>lithium + wetting =&gt; fusion, plasma facing</code>.</p>
       </div>
 
       <div class="section">
         <h2>3. Topic categories <span class="req">(at least 2)</span></h2>
-        <p class="hint">Each category becomes a subscribe-page checkbox and a ranking/classification bucket.</p>
+        <p class="hint">Each category becomes a subscriber choice. Give it at least one Sider query containing both the research field and its subtopic; these run automatically in Sunday's cloud search. Unmatched papers go to Others.</p>
         <div id="categories"></div>
         <button class="btn" type="button" onclick="addCategory()">Add Category</button>
       </div>
@@ -110,19 +112,19 @@ Prefer recent peer-reviewed articles and high-quality preprints with stable meta
         <p class="hint">The generated JSON is safe to commit. Set operational values in GitHub <code>Settings > Secrets and variables > Actions</code> or Cloudflare <code>Worker > Settings > Variables and Secrets</code> only.</p>
         <div class="setup-label">GitHub Actions secrets</div>
         <ul class="setup-list">
-          <li><code>ANTHROPIC_API_KEY</code> for Claude search, ranking, and summaries.</li>
+          <li><code>ANTHROPIC_API_KEY</code> for preference scoring, summaries, and optional fallback search. Normal discovery and abstract recovery do not call Claude.</li>
           <li><code>SMTP_HOST</code>, <code>SMTP_PORT</code>, <code>SMTP_USER</code>, <code>SMTP_PASS</code> for email delivery.</li>
-          <li><code>FROM_EMAIL</code> and <code>ADMIN_EMAIL</code> for sender identity and Sunday review.</li>
+          <li><code>FROM_EMAIL</code>, <code>ADMIN_EMAIL</code>, and <code>SITE_URL</code> for sender identity, Sunday review, and email links.</li>
         </ul>
         <div class="setup-label">GitHub Actions variables</div>
         <ul class="setup-list">
           <li><code>RESEARCH_DOMAIN_PROFILE</code> set to <code>&lt;profile-id&gt;.json</code>.</li>
-          <li><code>SITE_URL</code> set to the public GitHub Pages URL.</li>
+          <li><code>DIGEST_NAME</code>, <code>SENDER_NAME</code>, and optional <code>ADMIN_ALERT_EMAIL</code>.</li>
           <li>Optional tuning: <code>EMAIL_MAX_PAPERS</code>, <code>DISCOVERY_WINDOW_DAYS</code>, <code>CLAUDE_SEARCH_MODEL</code>, <code>CLAUDE_FAST_MODEL</code>.</li>
         </ul>
         <div class="setup-label">Cloudflare Worker secrets</div>
         <ul class="setup-list">
-          <li><code>GITHUB_TOKEN</code>: fine-grained token for the private repo with Contents read/write and Metadata read-only.</li>
+          <li><code>GITHUB_TOKEN</code>: fine-grained token for the private repo with Contents and Actions read/write plus Metadata read-only.</li>
           <li><code>ADMIN_TOKEN</code>: long random token used by the admin page.</li>
         </ul>
         <div class="setup-label">Cloudflare Worker variables</div>
@@ -130,6 +132,15 @@ Prefer recent peer-reviewed articles and high-quality preprints with stable meta
           <li><code>GITHUB_OWNER</code>, <code>GITHUB_REPO</code>, <code>GITHUB_BRANCH</code>, <code>ALLOWED_ORIGIN</code>, and <code>DEFAULT_CATEGORY</code>.</li>
           <li>After deployment, put the Worker URL into this builder and into the public site config.</li>
         </ul>
+        <div class="setup-label">Cloud search and launch</div>
+        <ol class="setup-list">
+          <li>Keep the operational repo private and publish only <code>site/</code>, never <code>data/</code>. Replace <code>window.LM_DIGEST_SITE_CONFIG</code> in <code>site/config/site-config.js</code> with the JSON profile's <code>site</code> object.</li>
+          <li>Set <code>RESEARCH_DOMAIN_PROFILE</code> to the JSON filename and validate it with <code>npm run validate:config</code>. Run <code>npm run check</code>.</li>
+          <li>In Actions, run <strong>Verify Backend</strong> with both cloud checks enabled, then a fixture <strong>Sunday Preview</strong>. These checks send no email.</li>
+          <li>Run a real Sunday preview, review it, and test delivery to your own address before adding subscribers.</li>
+          <li>Enable the Worker's <code>* * * * *</code> Cron only when ready. It routes the Eastern Time schedule; no local computer is needed.</li>
+        </ol>
+        <p class="hint">Sider category discovery and Scholar abstract recovery use the public read-only endpoint; no Sider or Google key is required. Primary-source text is verified and cached. Failed cloud searches stop the preview and alert your admin address; unrecovered abstracts are omitted.</p>
       </div>
       <h2>Output file</h2>
       <p class="hint">Save as <code>config/domains/&lt;profile-id&gt;.json</code> in a fresh Paper Express clone. Never paste keys, tokens, passwords, subscribers, ratings, or digest archives into the profile.</p>
@@ -159,6 +170,18 @@ let latestProfileSafe=false;
 
 function lines(id){return document.getElementById(id).value.split(/\r?\n/).map(s=>s.trim()).filter(Boolean)}
 function csv(value){return String(value||'').split(',').map(s=>s.trim()).filter(Boolean)}
+function parseCompositeRules(value){
+  return String(value||'').split(/\r?\n/).map(line=>{
+    const [allText='',anyText='']=line.split('=>',2);
+    return {
+      all:allText.split('+').map(s=>s.trim()).filter(Boolean),
+      any:csv(anyText)
+    };
+  }).filter(rule=>rule.all.length||rule.any.length);
+}
+function formatCompositeRules(rules){
+  return (Array.isArray(rules)?rules:[]).map(rule=>`${(rule.all||[]).join(' + ')} => ${(rule.any||[]).join(', ')}`).join('\n');
+}
 function slug(value){return String(value||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,48)||'research'}
 function topicId(value){return String(value||'').toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'').slice(0,48)||'research'}
 function escapeHtml(value){return String(value||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
@@ -188,6 +211,7 @@ function categoryCard(data={}){
     <div class="field"><label>Aliases, comma separated</label><input data-field="aliases" value="${escapeHtml((data.aliases||['learning','embodied ai']).join(', '))}"></div>
     <div class="field"><label>Category terms, one per line <span class="req">(at least 1)</span></label><textarea data-field="terms">${escapeHtml((data.terms||['imitation learning','reinforcement learning','policy learning']).join('\n'))}</textarea></div>
     <div class="field"><label>Journal / venue tiers, one per line <span class="req">(at least 1)</span></label><textarea data-field="journals">${escapeHtml((data.journals||['Science Robotics','IEEE Transactions on Robotics','The International Journal of Robotics Research']).join('\n'))}</textarea></div>
+    <div class="field"><label>Sider Scholar queries, one per line <span class="req">(at least 1)</span></label><textarea data-field="queries">${escapeHtml((data.queries||[`"${data.label||'robotics'}"`]).join('\n'))}</textarea></div>
   </div>`;
 }
 
@@ -200,7 +224,8 @@ function collectCategories(){
       id:topicId(get('id').value.trim()||get('label').value),
       aliases:csv(get('aliases').value),
       terms:get('terms').value.split(/\r?\n/).map(s=>s.trim()).filter(Boolean),
-      journals:get('journals').value.split(/\r?\n/).map(s=>s.trim()).filter(Boolean)
+      journals:get('journals').value.split(/\r?\n/).map(s=>s.trim()).filter(Boolean),
+      queries:get('queries').value.split(/\r?\n/).map(s=>s.trim()).filter(Boolean)
     };
   }).filter(c=>c.label);
 }
@@ -212,7 +237,9 @@ function checkProfile(profile){
     ['At least two topic categories',cats.length>=2],
     ['Each category has terms',Object.values(profile.backend.CATEGORY_RULES).every(r=>r.length&&r[0].terms.length)],
     ['Each category has journal tiers',Object.values(profile.backend.JOURNAL_TIERS).every(j=>j.length)],
+    ['Each category has Sider Scholar queries',Object.values(profile.backend.SIDER_SEARCH_QUERIES).every(q=>q.length)],
     ['At least five discovery terms',profile.backend.DISCOVERY_TERMS.length>=5],
+    ['Context rules include required and contextual terms',profile.backend.COMPOSITE_RELEVANCE_RULES.every(rule=>rule.all.length&&rule.any.length)],
     ['No obvious secrets, private data fields, tokens, private keys, or email addresses',!hasUnsafeText(text)]
   ];
   renderChecks(checks);
@@ -228,6 +255,7 @@ function buildProfile(){
     for(const alias of cat.aliases) aliases[alias.toLowerCase()]=cat.label;
   }
   const journalTiers=Object.fromEntries(categories.map(c=>[c.label,c.journals]));
+  const siderSearchQueries=Object.fromEntries(categories.map(c=>[c.label,c.queries]));
   const categoryRules=Object.fromEntries(categories.map(c=>[c.label,[{points:3,terms:c.terms}]]));
   const categoryTerms=Object.fromEntries(categories.map(c=>[c.label,c.terms]));
   const profileId=slug(document.getElementById('profileId').value);
@@ -243,13 +271,15 @@ function buildProfile(){
     DOMAIN_LABEL:label,
     DOMAIN_LABEL_PLURAL:labelPlural,
     CAT_NAMES:catNames,
-    DEFAULT_CATEGORY:catNames[0]||'Research',
+    DEFAULT_CATEGORY:'Others',
     JOURNAL_TIERS:journalTiers,
+    SIDER_SEARCH_QUERIES:siderSearchQueries,
     TOPIC_ALIASES:aliases,
     DISCOVERY_TERMS:discovery,
     ABSTRACT_SEARCH_TERMS:strong.slice(0,6),
     RELEVANCE_TERMS:[...new Set([...strong,...weak])],
     STRONG_RELEVANCE_TERMS:strong,
+    COMPOSITE_RELEVANCE_RULES:parseCompositeRules(document.getElementById('compositeRules').value),
     WEAK_RELEVANCE_TERMS:weak,
     EXCLUSION_TERMS:lines('exclusionTerms'),
     CATEGORY_RULES:categoryRules,
@@ -314,7 +344,7 @@ async function copyProfile(){
   try{
     await navigator.clipboard.writeText(JSON.stringify(latestProfile,null,2));
     setStatus('ok','Profile JSON copied.');
-  }catch{
+  }catch(err){
     setStatus('err','Could not copy automatically. Use the output panel instead.');
   }
 }
@@ -326,7 +356,7 @@ function importProfile(){
   let parsed;
   try{
     parsed=JSON.parse(raw);
-  }catch{
+  }catch(err){
     markImportRejected('Import blocked: pasted text is not valid JSON.');
     return;
   }
@@ -347,6 +377,7 @@ function importProfile(){
   document.getElementById('strongTerms').value=(backend.STRONG_RELEVANCE_TERMS||[]).join('\n');
   document.getElementById('weakTerms').value=(backend.WEAK_RELEVANCE_TERMS||[]).join('\n');
   document.getElementById('exclusionTerms').value=(backend.EXCLUSION_TERMS||[]).join('\n');
+  document.getElementById('compositeRules').value=formatCompositeRules(backend.COMPOSITE_RELEVANCE_RULES);
   document.getElementById('sourceLines').value=(backend.SEARCH_SOURCE_LINES||[]).join('\n');
   document.getElementById('contextNote').value=backend.SEARCH_CONTEXT_NOTE||'';
   document.getElementById('authorLines').value=(backend.AUTHOR_WATCHLIST_LINES||[]).join('\n');
@@ -354,14 +385,21 @@ function importProfile(){
   for(const label of backend.CAT_NAMES||[]){
     const topic=(site.topics||[]).find(t=>t.label===label)||{};
     const aliases=Object.entries(backend.TOPIC_ALIASES||{}).filter(([,cat])=>cat===label).map(([alias])=>alias).filter(alias=>alias!==topic.id);
-    addCategory({label,id:topic.id||topicId(label),aliases,terms:backend.CATEGORY_TERMS?.[label]||[],journals:backend.JOURNAL_TIERS?.[label]||[]});
+    addCategory({
+      label,
+      id:topic.id||topicId(label),
+      aliases,
+      terms:backend.CATEGORY_TERMS?.[label]||[],
+      journals:backend.JOURNAL_TIERS?.[label]||[],
+      queries:backend.SIDER_SEARCH_QUERIES?.[label]||[`"${backend.DOMAIN_NAME||'research'}" "${label}"`]
+    });
   }
   buildProfile();
 }
 
-addCategory({label:'Robot Learning',id:'robot_learning',aliases:['learning','embodied ai'],terms:['imitation learning','reinforcement learning','policy learning'],journals:['Science Robotics','IEEE Transactions on Robotics','The International Journal of Robotics Research']});
-addCategory({label:'Manipulation & Control',id:'manipulation_control',aliases:['manipulation','control'],terms:['grasping','dexterous manipulation','model predictive control'],journals:['IEEE Robotics and Automation Letters','Autonomous Robots','Robotics and Automation Letters']});
-addCategory({label:'Soft & Bio-inspired Robotics',id:'soft_robotics',aliases:['soft','bio-inspired'],terms:['soft actuator','continuum robot','bio-inspired robot'],journals:['Soft Robotics','Advanced Intelligent Systems','Nature Machine Intelligence']});
+addCategory({label:'Robot Learning',id:'robot_learning',aliases:['learning','embodied ai'],terms:['imitation learning','reinforcement learning','policy learning'],journals:['Science Robotics','IEEE Transactions on Robotics','The International Journal of Robotics Research'],queries:['robot learning robotics','embodied AI robotics']});
+addCategory({label:'Manipulation & Control',id:'manipulation_control',aliases:['manipulation','control'],terms:['grasping','dexterous manipulation','model predictive control'],journals:['IEEE Robotics and Automation Letters','Autonomous Robots','Robotics and Automation Letters'],queries:['robot manipulation control','dexterous robotic grasping']});
+addCategory({label:'Soft & Bio-inspired Robotics',id:'soft_robotics',aliases:['soft','bio-inspired'],terms:['soft actuator','continuum robot','bio-inspired robot'],journals:['Soft Robotics','Advanced Intelligent Systems','Nature Machine Intelligence'],queries:['soft robotics actuator','bio-inspired robotics']});
 buildProfile();
 </script>
 </body>
